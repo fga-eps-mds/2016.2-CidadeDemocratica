@@ -1,7 +1,8 @@
 package com.mdsgpp.cidadedemocratica.requester;
 
 import android.os.AsyncTask;
-import android.text.GetChars;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
  * Created by andreanmasiro on 9/8/16.
@@ -13,15 +14,14 @@ public class Requester {
     }
 
     private String url = "";
-    private AsyncTask<Void, Void, Void> requestHandler;
+    private AsyncHttpResponseHandler responseHandler;
 
-    public Requester(String url, AsyncTask<Void, Void, Void> requestHandler) {
+    public Requester(String url, AsyncHttpResponseHandler responseHandler) {
         this.url = url;
-        this.requestHandler = requestHandler;
+        this.responseHandler = responseHandler;
     }
 
     public void request(RequestType method) {
 
-        this.requestHandler.execute();
     }
 }
