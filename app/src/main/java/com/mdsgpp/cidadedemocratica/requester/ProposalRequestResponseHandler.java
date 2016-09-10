@@ -1,14 +1,15 @@
 package com.mdsgpp.cidadedemocratica.requester;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+
 import org.json.JSONArray;
+
 import cz.msebera.android.httpclient.Header;
 
 /**
- * Created by andreanmasiro on 9/8/16.
+ * Created by andreanmasiro on 9/9/16.
  */
-public class UserRequestResponseHandler extends JsonHttpResponseHandler {
-
+public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
 
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
