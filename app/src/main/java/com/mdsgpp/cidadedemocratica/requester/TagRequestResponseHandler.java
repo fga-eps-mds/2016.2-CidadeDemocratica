@@ -1,8 +1,11 @@
 package com.mdsgpp.cidadedemocratica.requester;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.mdsgpp.cidadedemocratica.model.Tag;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -14,6 +17,19 @@ public class TagRequestResponseHandler extends JsonHttpResponseHandler {
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
         super.onSuccess(statusCode, headers, response);
+        if (statusCode == 200) {
+            for (int i = 0; i < response.length(); ++i)
+                try {
+                    JSONObject tagJson = response.getJSONObject(i);
+                    String tagName = tagJson.getString("name");
+
+                    Tag tag = new Tag(tagName, 0);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+        }
     }
 
     @Override
