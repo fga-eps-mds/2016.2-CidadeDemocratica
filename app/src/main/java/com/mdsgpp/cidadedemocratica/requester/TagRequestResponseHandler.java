@@ -2,6 +2,7 @@ package com.mdsgpp.cidadedemocratica.requester;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.model.Tag;
+import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,9 +15,11 @@ import cz.msebera.android.httpclient.Header;
  */
 public class TagRequestResponseHandler extends JsonHttpResponseHandler {
 
+    DataContainer dataContainer = DataContainer.getInstance();
+
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-        super.onSuccess(statusCode, headers, response);
+
         if (statusCode == 200) {
             for (int i = 0; i < response.length(); ++i)
                 try {
@@ -24,7 +27,7 @@ public class TagRequestResponseHandler extends JsonHttpResponseHandler {
                     String tagName = tagJson.getString("name");
 
                     Tag tag = new Tag(tagName, 0);
-
+                    dataContainer.addTag(tag);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
