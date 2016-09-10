@@ -28,4 +28,28 @@ public class DataContainer {
 
         return DataContainer.instance;
     }
+
+    public ArrayList<Tag> getTags() {
+        return tags;
+    }
+
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+
+    public ArrayList<Proposal> getProposals() {
+        return proposals;
+    }
+
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
+    }
+
+    public void addUser(User user) {
+        this.users.add(user);
+    }
+
+    public void addProposal(Proposal proposal) {
+        this.proposals.add(proposal);
+    }
 }
