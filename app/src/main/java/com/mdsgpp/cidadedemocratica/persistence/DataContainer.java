@@ -14,6 +14,7 @@ public class DataContainer {
     private ArrayList<Tag> tags = new ArrayList<Tag>();
     private ArrayList<User> users = new ArrayList<User>();
     private ArrayList<Proposal> proposals = new ArrayList<Proposal>();
+    private DataUpdateListener dataUpdateListener;
 
     private static DataContainer instance;
 
@@ -41,15 +42,37 @@ public class DataContainer {
         return proposals;
     }
 
+    public void setDataUpdateListener(DataUpdateListener dataUpdateListener) {
+        this.dataUpdateListener = dataUpdateListener;
+    }
+
     public void addTag(Tag tag) {
         this.tags.add(tag);
+        this.dataUpdateListener.tagsUpdated();
     }
 
     public void addUser(User user) {
         this.users.add(user);
+        this.dataUpdateListener.usersUpdated();
     }
 
     public void addProposal(Proposal proposal) {
         this.proposals.add(proposal);
+        this.dataUpdateListener.proposalsUpdated();
+    }
+
+    public void addTags(ArrayList<Tag> tags) {
+        this.tags.addAll(tags);
+        this.dataUpdateListener.tagsUpdated();
+    }
+
+    public void addUsers(ArrayList<User> users) {
+        this.users.addAll(users);
+        this.dataUpdateListener.usersUpdated();
+    }
+
+    public void addProposals(ArrayList<Proposal> proposals) {
+        this.proposals.addAll(proposals);
+        this.dataUpdateListener.proposalsUpdated();
     }
 }
