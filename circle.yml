@@ -24,9 +24,11 @@ test:
     # run tests  against the emulator.
     - ./gradlew connectedCheck
     # copy the build outputs to artifacts
-    - cp -r ./app/build/outputs Artifacts
+    - cp -r ./app/build/outputs $CIRCLE_ARTIFACTS/
     # copy the test results to the test results directory.
-    - cp -r ./app/build/reports/* Reports
+    - cp -r ./app/build/reports/* $CIRCLE_TEST_REPORTS/
+
+    - ./CheckCoverageGoal.sh
 
   post:
     - bash <(curl -s https://codecov.io/bash)
