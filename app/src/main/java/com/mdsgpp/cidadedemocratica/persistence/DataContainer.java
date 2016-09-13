@@ -14,7 +14,22 @@ public class DataContainer {
     private ArrayList<Tag> tags = new ArrayList<Tag>();
     private ArrayList<User> users = new ArrayList<User>();
     private ArrayList<Proposal> proposals = new ArrayList<Proposal>();
-    private DataUpdateListener dataUpdateListener;
+    private DataUpdateListener dataUpdateListener = new DataUpdateListener() {
+        @Override
+        public void tagsUpdated() {
+
+        }
+
+        @Override
+        public void proposalsUpdated() {
+
+        }
+
+        @Override
+        public void usersUpdated() {
+
+        }
+    };
 
     private static DataContainer instance;
 
