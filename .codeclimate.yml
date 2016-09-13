@@ -2,13 +2,12 @@
 engines:
   fixme:
     enabled: true
-   pmd:
-    enabled: true
-    channel: "beta"    
-   checkstyle:
+  pmd:
     enabled: true
     channel: "beta"
-
+  checkstyle:
+    enabled: true
+    channel: "beta"
 ratings:
   - "**.java"
 
