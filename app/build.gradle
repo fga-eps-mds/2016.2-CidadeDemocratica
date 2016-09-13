@@ -23,7 +23,6 @@ android {
     }
     productFlavors {
         free {}
-        paid {}
     }
 }
 
