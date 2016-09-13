@@ -17,7 +17,10 @@ public class Tag {
         return this.name;
     }
 
-    public int getNumberOfAppearances() {
-        return this.numberOfAppearances;
+    public int getNumberOfAppearances() { return this.numberOfAppearances;}
+    @Override
+    public String toString()
+    {
+        return this.name;
     }
 }
