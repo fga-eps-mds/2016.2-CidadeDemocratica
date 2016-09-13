@@ -2,6 +2,14 @@
 engines:
   fixme:
     enabled: true
+   pmd:
+    enabled: true
+    channel: "beta"    
+   checkstyle:
+    enabled: true
+    channel: "beta"
+
 ratings:
-  paths: []
+  - "**.java"
+
 exclude_paths: []
