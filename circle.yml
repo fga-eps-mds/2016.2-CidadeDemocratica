@@ -28,6 +28,8 @@ test:
     # copy the test results to the test results directory.
     - cp -r ./app/build/reports/* $CIRCLE_TEST_REPORTS/
 
+    - chmod +x ./CheckCoverageGoal.sh
+
     - ./CheckCoverageGoal.sh
 
   post:
