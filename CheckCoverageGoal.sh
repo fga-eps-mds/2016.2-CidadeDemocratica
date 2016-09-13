@@ -1,6 +1,6 @@
 #!/bin/bash
 
-coverageExpected="0.0"
+coverageExpected="30.0"
 
 coverageResult=$(grep -oE '[0-9.]+%' ./app/build/reports/jacoco/jacocoTestFreeDebugUnitTestReport/html/index.html | head -n1)
 coverageResult="${coverageResult//%}"
