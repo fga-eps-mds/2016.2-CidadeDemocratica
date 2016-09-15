@@ -14,22 +14,7 @@ public class DataContainer {
     private ArrayList<Tag> tags = new ArrayList<Tag>();
     private ArrayList<User> users = new ArrayList<User>();
     private ArrayList<Proposal> proposals = new ArrayList<Proposal>();
-    private DataUpdateListener dataUpdateListener = new DataUpdateListener() {
-        @Override
-        public void tagsUpdated() {
-
-        }
-
-        @Override
-        public void proposalsUpdated() {
-
-        }
-
-        @Override
-        public void usersUpdated() {
-
-        }
-    };
+    private DataUpdateListener dataUpdateListener;
 
     private static DataContainer instance;
 
@@ -63,31 +48,49 @@ public class DataContainer {
 
     public void addTag(Tag tag) {
         this.tags.add(tag);
-        this.dataUpdateListener.tagsUpdated();
+        this.notifyTagsUpdate();
     }
 
     public void addUser(User user) {
         this.users.add(user);
-        this.dataUpdateListener.usersUpdated();
+        this.notifyUsersUpdate();
     }
 
     public void addProposal(Proposal proposal) {
         this.proposals.add(proposal);
-        this.dataUpdateListener.proposalsUpdated();
+        this.notifyProposalsUpdate();
     }
 
     public void addTags(ArrayList<Tag> tags) {
         this.tags.addAll(tags);
-        this.dataUpdateListener.tagsUpdated();
+        this.notifyTagsUpdate();
     }
 
     public void addUsers(ArrayList<User> users) {
         this.users.addAll(users);
-        this.dataUpdateListener.usersUpdated();
+        this.notifyUsersUpdate();
     }
 
     public void addProposals(ArrayList<Proposal> proposals) {
         this.proposals.addAll(proposals);
-        this.dataUpdateListener.proposalsUpdated();
+        this.notifyProposalsUpdate();
+    }
+
+    private void notifyTagsUpdate() {
+        if (this.dataUpdateListener != null) {
+            this.dataUpdateListener.tagsUpdated();
+        }
+    }
+
+    private void notifyProposalsUpdate() {
+        if (this.dataUpdateListener != null) {
+            this.dataUpdateListener.proposalsUpdated();
+        }
+    }
+
+    private void notifyUsersUpdate() {
+        if (this.dataUpdateListener != null) {
+            this.dataUpdateListener.usersUpdated();
+        }
     }
 }
