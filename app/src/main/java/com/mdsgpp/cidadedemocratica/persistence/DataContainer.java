@@ -76,6 +76,21 @@ public class DataContainer {
         this.notifyProposalsUpdate();
     }
 
+    public void setTags(ArrayList<Tag> tags) {
+        this.tags = tags;
+        this.notifyTagsUpdate();
+    }
+
+    public void setProposals(ArrayList<Proposal> proposals) {
+        this.proposals = proposals;
+        this.notifyProposalsUpdate();
+    }
+
+    public void setUsers(ArrayList<User> users) {
+        this.users = users;
+        this.notifyUsersUpdate();
+    }
+
     private void notifyTagsUpdate() {
         if (this.dataUpdateListener != null) {
             this.dataUpdateListener.tagsUpdated();
