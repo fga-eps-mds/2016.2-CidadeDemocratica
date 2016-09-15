@@ -14,6 +14,7 @@ public class DataContainer {
     private ArrayList<Tag> tags = new ArrayList<Tag>();
     private ArrayList<User> users = new ArrayList<User>();
     private ArrayList<Proposal> proposals = new ArrayList<Proposal>();
+    private DataUpdateListener dataUpdateListener;
 
     private static DataContainer instance;
 
@@ -41,15 +42,55 @@ public class DataContainer {
         return proposals;
     }
 
+    public void setDataUpdateListener(DataUpdateListener dataUpdateListener) {
+        this.dataUpdateListener = dataUpdateListener;
+    }
+
     public void addTag(Tag tag) {
         this.tags.add(tag);
+        this.notifyTagsUpdate();
     }
 
     public void addUser(User user) {
         this.users.add(user);
+        this.notifyUsersUpdate();
     }
 
     public void addProposal(Proposal proposal) {
         this.proposals.add(proposal);
+        this.notifyProposalsUpdate();
+    }
+
+    public void addTags(ArrayList<Tag> tags) {
+        this.tags.addAll(tags);
+        this.notifyTagsUpdate();
+    }
+
+    public void addUsers(ArrayList<User> users) {
+        this.users.addAll(users);
+        this.notifyUsersUpdate();
+    }
+
+    public void addProposals(ArrayList<Proposal> proposals) {
+        this.proposals.addAll(proposals);
+        this.notifyProposalsUpdate();
+    }
+
+    private void notifyTagsUpdate() {
+        if (this.dataUpdateListener != null) {
+            this.dataUpdateListener.tagsUpdated();
+        }
+    }
+
+    private void notifyProposalsUpdate() {
+        if (this.dataUpdateListener != null) {
+            this.dataUpdateListener.proposalsUpdated();
+        }
+    }
+
+    private void notifyUsersUpdate() {
+        if (this.dataUpdateListener != null) {
+            this.dataUpdateListener.usersUpdated();
+        }
     }
 }
