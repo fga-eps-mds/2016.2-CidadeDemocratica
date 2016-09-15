@@ -10,6 +10,7 @@ import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.Tag;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.requester.TagRequestResponseHandler;
 
@@ -29,7 +30,7 @@ public class ProposalsList extends AppCompatActivity {
 
         ArrayList<Proposal> proposalList = getProposalList();
         ArrayAdapter<Proposal> proposalAdapter = new ArrayAdapter<Proposal>(
-                getApplicationContext(),
+                this,
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
                 proposalList
@@ -38,7 +39,7 @@ public class ProposalsList extends AppCompatActivity {
     }
 
     public final static void pullProposalData() {
-        Requester requester = new Requester("https://cidadedemocratica.herokuapp.com/data/topicos", new TagRequestResponseHandler());
+        Requester requester = new Requester("https://cidadedemocratica.herokuapp.com/data/topicos", new ProposalRequestResponseHandler());
         requester.request(Requester.RequestType.GET);
         requester = null;
     }

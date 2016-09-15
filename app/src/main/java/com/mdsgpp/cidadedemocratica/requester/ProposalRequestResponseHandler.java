@@ -2,6 +2,7 @@ package com.mdsgpp.cidadedemocratica.requester;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
+import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,6 +18,7 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
         super.onSuccess(statusCode, headers, response);
+        DataContainer dataContainer = DataContainer.getInstance();
         if(statusCode == 200)
         {
             for(int i=0; i<response.length();++i)
@@ -30,6 +32,7 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
                     String proposalRelevance = proposalJson.getString("relevancia");
 
                     Proposal proposal = new Proposal(proposalTitle, proposalID, proposalDescription, proposalRelevance);
+                    dataContainer.addProposal(proposal);
 
 
                 } catch (JSONException e) {

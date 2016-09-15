@@ -9,7 +9,10 @@ public class    Proposal {
 
     private String title = "";
     private String content = "";
+    private String id = "";
+    private String relevance = "";
     private ArrayList<Tag> tags = new ArrayList<Tag>();
+
 
     public Proposal(String title, String content, ArrayList<Tag> tags) {
         this.title = title;
@@ -17,6 +20,14 @@ public class    Proposal {
         this.tags = tags;
     }
 
+
+    public Proposal(String proposalTitle, String proposalID, String proposalDescription, String proposalRelevance) {
+        this.title = proposalTitle;
+        this.content = proposalDescription;
+        this.id = proposalID;
+        this.relevance = proposalRelevance;
+
+    }
 
 
     public String getTitle() {
@@ -29,5 +40,10 @@ public class    Proposal {
 
     public ArrayList<Tag> getTags() {
         return this.tags;
+    }
+
+    @Override
+    public String toString() {
+        return this.title;
     }
 }
