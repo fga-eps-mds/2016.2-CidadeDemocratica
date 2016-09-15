@@ -122,6 +122,54 @@ public class DataContainerTest extends AndroidTestCase {
     }
 
     @Test
+    public void testClearTags() {
+
+        ArrayList<Tag> tags = new ArrayList<Tag>();
+        tags.add(new Tag("Name1", 0));
+        tags.add(new Tag("Name2", 0));
+        tags.add(new Tag("Name3", 0));
+
+        dataContainer.setTags(tags);
+
+        assertEquals(tags, dataContainer.getTags());
+
+        dataContainer.clearTags();
+        assertEquals(dataContainer.getTags().size(), 0);
+    }
+
+    @Test
+    public void testClearProposals() {
+
+        ArrayList<Proposal> proposals = new ArrayList<Proposal>();
+        proposals.add(new Proposal("Title1", "Content", null));
+        proposals.add(new Proposal("Title2", "Content", null));
+        proposals.add(new Proposal("Title3", "Content", null));
+
+        dataContainer.setProposals(proposals);
+
+        assertEquals(proposals, dataContainer.getProposals());
+
+        dataContainer.clearProposals();
+        assertEquals(dataContainer.getProposals().size(), 0);
+    }
+
+    @Test
+    public void testClearUsers() {
+
+        ArrayList<User> users = new ArrayList<User>();
+        users.add(new User("Name1", 0, "", "", null, null));
+        users.add(new User("Name2", 0, "", "", null, null));
+        users.add(new User("Name3", 0, "", "", null, null));
+
+        dataContainer.setUsers(users);
+
+        assertEquals(users, dataContainer.getUsers());
+
+        dataContainer.clearUsers();
+        assertEquals(dataContainer.getUsers().size(), 0);
+    }
+
+    @Test
     public void testUpdateListener() {
 
         final boolean[] tagsUpdated = {false};

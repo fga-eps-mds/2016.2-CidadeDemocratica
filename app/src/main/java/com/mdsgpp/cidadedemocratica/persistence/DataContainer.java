@@ -91,6 +91,21 @@ public class DataContainer {
         this.notifyUsersUpdate();
     }
 
+    public void clearTags() {
+        this.tags.clear();
+        this.notifyTagsUpdate();
+    }
+
+    public void clearProposals() {
+        this.proposals.clear();
+        this.notifyProposalsUpdate();
+    }
+
+    public void clearUsers() {
+        this.users.clear();
+        this.notifyUsersUpdate();
+    }
+
     private void notifyTagsUpdate() {
         if (this.dataUpdateListener != null) {
             this.dataUpdateListener.tagsUpdated();
