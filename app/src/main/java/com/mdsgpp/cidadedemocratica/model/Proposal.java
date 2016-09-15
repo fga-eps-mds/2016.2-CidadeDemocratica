@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by andreanmasiro on 9/8/16.
  */
-public class Proposal {
+public class    Proposal {
 
     private String title = "";
     private String content = "";
@@ -16,6 +16,8 @@ public class Proposal {
         this.content = content;
         this.tags = tags;
     }
+
+
 
     public String getTitle() {
         return this.title;

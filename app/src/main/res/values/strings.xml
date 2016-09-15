@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">CidadeDemocratica</string>
     <string name="tags">Tags</string>
+    <string name="texto_Proposals">Propostas</string>
 </resources>

@@ -1,13 +1,17 @@
 package com.mdsgpp.cidadedemocratica;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
+import com.mdsgpp.cidadedemocratica.controller.ProposalsList;
 import com.mdsgpp.cidadedemocratica.controller.TagsList;
 
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,6 +19,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TagsList.pullTagData();
+        ProposalsList.pullProposalData();
+
+    }
+
+    public  void showProposalList(View view){
+        Intent proposalIntent = new Intent(this, ProposalsList.class);
+        startActivity(proposalIntent);
+
     }
 
     public void showTagsList(View view){

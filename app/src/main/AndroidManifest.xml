@@ -17,7 +17,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.TagsList"></activity>
+        <activity android:name=".controller.TagsList" />
+        <activity android:name=".controller.ProposalsList"></activity>
     </application>
 
 </manifest>

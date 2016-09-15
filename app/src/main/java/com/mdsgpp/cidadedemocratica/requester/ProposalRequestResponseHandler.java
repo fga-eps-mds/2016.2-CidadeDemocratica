@@ -1,8 +1,11 @@
 package com.mdsgpp.cidadedemocratica.requester;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.mdsgpp.cidadedemocratica.model.Proposal;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -14,6 +17,29 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
         super.onSuccess(statusCode, headers, response);
+        if(statusCode == 200)
+        {
+            for(int i=0; i<response.length();++i)
+            {
+
+                try {
+                    JSONObject proposalJson = response.getJSONObject(i);
+                    String proposalTitle = proposalJson.getString("titulo");
+                    String proposalID = proposalJson.getString("id");
+                    String proposalDescription = proposalJson.getString("descricao");
+                    String proposalRelevance = proposalJson.getString("relevancia");
+
+                    Proposal proposal = new Proposal(proposalTitle, proposalID, proposalDescription, proposalRelevance);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+
+            }
+        }
     }
 
     @Override
