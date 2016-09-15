@@ -42,6 +42,14 @@ public class    Proposal {
         return this.tags;
     }
 
+    public String getId(){
+        return this.id;
+    }
+
+    public String getRelevance(){
+        return  this.relevance;
+    }
+
     @Override
     public String toString() {
         return this.title;
