@@ -16,10 +16,10 @@ public class Requester {
     }
 
     private String url = "";
-    private JsonHttpResponseHandler responseHandler;
+    private AsyncHttpResponseHandler responseHandler;
     private AsyncHttpClient client = new AsyncHttpClient();
 
-    public Requester(String url, JsonHttpResponseHandler responseHandler) {
+    public Requester(String url, AsyncHttpResponseHandler responseHandler) {
         this.url = url;
         this.responseHandler = responseHandler;
     }
