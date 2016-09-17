@@ -184,6 +184,20 @@ public class DataContainerTest extends AndroidTestCase {
         assertNotNull(this.dataContainer.getTagForId(99));
     }
 
+    public void testGetProposalForId() {
+
+        this.dataContainer.addProposal(newProposal(1));
+        this.dataContainer.addProposal(newProposal(2));
+        this.dataContainer.addProposal(newProposal(3));
+        this.dataContainer.addProposal(newProposal(4));
+
+        assertNull(this.dataContainer.getProposalForId(100));
+
+        this.dataContainer.addProposal(newProposal(100));
+
+        assertNotNull(this.dataContainer.getProposalForId(100));
+    }
+
     private Tag newTag() {
         return new Tag(0, "name", 0, 0);
     }

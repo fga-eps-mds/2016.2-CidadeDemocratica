@@ -57,6 +57,17 @@ public class DataContainer {
         return tag;
     }
 
+    public Proposal getProposalForId(long id) {
+        Proposal proposal = null;
+        for (Proposal p : this.proposals) {
+            if (p.getId() == id) {
+                proposal = p;
+                break;
+            } else { /* Not this one, continue */ }
+        }
+        return proposal;
+    }
+
     public void addTag(Tag tag) {
         this.tags.add(tag);
         this.notifyTagsUpdate();
