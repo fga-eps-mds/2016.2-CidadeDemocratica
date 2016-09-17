@@ -46,6 +46,17 @@ public class DataContainer {
         this.dataUpdateListener = dataUpdateListener;
     }
 
+    public Tag getTagForId(long id) {
+        Tag tag = null;
+        for (Tag t : this.tags) {
+            if (t.getId() == id) {
+                tag = t;
+                break;
+            } else { /* Not this one, continue */ }
+        }
+        return tag;
+    }
+
     public void addTag(Tag tag) {
         this.tags.add(tag);
         this.notifyTagsUpdate();

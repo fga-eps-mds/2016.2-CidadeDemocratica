@@ -24,7 +24,7 @@ public class DataContainerTest extends AndroidTestCase {
 
     @Test
     public void testAddTag() {
-        Tag tag = new Tag("CidadeDemocratica", 0);
+        Tag tag = newTag();
 
         dataContainer.addTag(tag);
 
@@ -33,7 +33,7 @@ public class DataContainerTest extends AndroidTestCase {
         ArrayList<Tag> tags = new ArrayList<Tag>();
 
         for (int i = 0; i < 10; i++) {
-            Tag tagn = new Tag("Tag" + i, 0);
+            Tag tagn = newTag();
             tags.add(tagn);
         }
 
@@ -44,7 +44,7 @@ public class DataContainerTest extends AndroidTestCase {
 
     @Test
     public void testAddProposal() {
-        Proposal proposal = new Proposal("Title", "Content", null);
+        Proposal proposal = newProposal();
 
         dataContainer.addProposal(proposal);
 
@@ -53,7 +53,7 @@ public class DataContainerTest extends AndroidTestCase {
         ArrayList<Proposal> proposals = new ArrayList<Proposal>();
 
         for (int i = 0; i < 10; i++) {
-            Proposal propn = new Proposal("Title" + i, "Content", null);
+            Proposal propn = newProposal();
             proposals.add(propn);
         }
 
@@ -64,7 +64,7 @@ public class DataContainerTest extends AndroidTestCase {
 
     @Test
     public void testAddUser() {
-        User user = new User("Name", 0, "Location", "com.url", null, null);
+        User user = newUser();
 
         dataContainer.addUser(user);
 
@@ -73,7 +73,7 @@ public class DataContainerTest extends AndroidTestCase {
         ArrayList<User> users = new ArrayList<User>();
 
         for (int i = 0; i < 10; i++) {
-            User usern = new User("Name" + i, 0, "Location", "com.url", null, null);
+            User usern = newUser();
             users.add(usern);
         }
 
@@ -86,9 +86,9 @@ public class DataContainerTest extends AndroidTestCase {
     public void testSetTags() {
 
         ArrayList<Tag> tags = new ArrayList<Tag>();
-        tags.add(new Tag("Name1", 0));
-        tags.add(new Tag("Name2", 0));
-        tags.add(new Tag("Name3", 0));
+        tags.add(newTag());
+        tags.add(newTag());
+        tags.add(newTag());
 
         dataContainer.setTags(tags);
 
@@ -99,9 +99,9 @@ public class DataContainerTest extends AndroidTestCase {
     public void testSetProposals() {
 
         ArrayList<Proposal> proposals = new ArrayList<Proposal>();
-        proposals.add(new Proposal("Title1", "Content", null));
-        proposals.add(new Proposal("Title2", "Content", null));
-        proposals.add(new Proposal("Title3", "Content", null));
+        proposals.add(newProposal());
+        proposals.add(newProposal());
+        proposals.add(newProposal());
 
         dataContainer.setProposals(proposals);
 
@@ -112,9 +112,9 @@ public class DataContainerTest extends AndroidTestCase {
     public void testSetUsers() {
 
         ArrayList<User> users = new ArrayList<User>();
-        users.add(new User("Name1", 0, "", "", null, null));
-        users.add(new User("Name2", 0, "", "", null, null));
-        users.add(new User("Name3", 0, "", "", null, null));
+        users.add(newUser());
+        users.add(newUser());
+        users.add(newUser());
 
         dataContainer.setUsers(users);
 
@@ -125,9 +125,9 @@ public class DataContainerTest extends AndroidTestCase {
     public void testClearTags() {
 
         ArrayList<Tag> tags = new ArrayList<Tag>();
-        tags.add(new Tag("Name1", 0));
-        tags.add(new Tag("Name2", 0));
-        tags.add(new Tag("Name3", 0));
+        tags.add(newTag());
+        tags.add(newTag());
+        tags.add(newTag());
 
         dataContainer.setTags(tags);
 
@@ -141,9 +141,9 @@ public class DataContainerTest extends AndroidTestCase {
     public void testClearProposals() {
 
         ArrayList<Proposal> proposals = new ArrayList<Proposal>();
-        proposals.add(new Proposal("Title1", "Content", null));
-        proposals.add(new Proposal("Title2", "Content", null));
-        proposals.add(new Proposal("Title3", "Content", null));
+        proposals.add(newProposal());
+        proposals.add(newProposal());
+        proposals.add(newProposal());
 
         dataContainer.setProposals(proposals);
 
@@ -157,9 +157,9 @@ public class DataContainerTest extends AndroidTestCase {
     public void testClearUsers() {
 
         ArrayList<User> users = new ArrayList<User>();
-        users.add(new User("Name1", 0, "", "", null, null));
-        users.add(new User("Name2", 0, "", "", null, null));
-        users.add(new User("Name3", 0, "", "", null, null));
+        users.add(newUser());
+        users.add(newUser());
+        users.add(newUser());
 
         dataContainer.setUsers(users);
 
@@ -169,45 +169,15 @@ public class DataContainerTest extends AndroidTestCase {
         assertEquals(dataContainer.getUsers().size(), 0);
     }
 
-    @Test
-    public void testUpdateListener() {
+    private Tag newTag() {
+        return new Tag(0, "name", 0, 0);
+    }
 
-        final boolean[] tagsUpdated = {false};
-        final boolean[] proposalsUpdated = {false};
-        final boolean[] usersUpdated = {false};
+    private Proposal newProposal() {
+        return new Proposal("title", "content", null);
+    }
 
-        dataContainer.setDataUpdateListener(new DataUpdateListener() {
-            @Override
-            public void tagsUpdated() {
-                tagsUpdated[0] = true;
-            }
-
-            @Override
-            public void proposalsUpdated() {
-                proposalsUpdated[0] = true;
-            }
-
-            @Override
-            public void usersUpdated() {
-                usersUpdated[0] = true;
-            }
-        });
-
-        Tag tag = new Tag("Name", 0);
-        dataContainer.addTag(tag);
-
-        assertTrue(tagsUpdated[0]);
-
-
-        Proposal proposal = new Proposal("Proposal", "Content", null);
-        dataContainer.addProposal(proposal);
-
-        assertTrue(proposalsUpdated[0]);
-
-
-        User user = new User("User", 0, "Location", "com.url", null, null);
-        dataContainer.addUser(user);
-
-        assertTrue(usersUpdated[0]);
+    private User newUser() {
+        return new User("name", 0, "location", "url", null, null);
     }
 }
