@@ -103,7 +103,7 @@ public class DataUpdateListenerTest extends AndroidTestCase {
     }
 
     private Proposal newProposal() {
-        return new Proposal("title", "content", null);
+        return new Proposal(0, "title", "content", 0);
     }
 
     private User newUser() {

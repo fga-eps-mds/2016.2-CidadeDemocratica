@@ -19,6 +19,10 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
 
     DataContainer dataContainer = DataContainer.getInstance();
     private final String jsonProposalType = "Proposta";
+    private final String proposalTitleKey = "titulo";
+    private final String proposalContentKey = "descricao";
+    private final String proposalIdKey = "id";
+    private final String proposalRelevanceKey = "relevancia";
 
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -34,19 +38,16 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
 
                     if (topicType == jsonProposalType) {
 
-                        String jsonTitleKey = "titulo";
-                        String jsonContentKey = "descricao";
+                        long id = topicJson.getLong(proposalIdKey);
+                        String title = topicJson.getString(proposalTitleKey);
+                        String content = topicJson.getString(proposalContentKey);
+                        long relevance = topicJson.getLong(proposalRelevanceKey);
 
-                        String title = topicJson.getString(jsonTitleKey);
-                        String content = topicJson.getString(jsonContentKey);
-
-                        Proposal proposal = new Proposal(title, content, null);
+                        Proposal proposal = new Proposal(id, title, content, relevance);
 
                         proposals.add(proposal);
 
-                    } else { // Not a proposal
-
-                    }
+                    } else { /* Not a proposal */ }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
