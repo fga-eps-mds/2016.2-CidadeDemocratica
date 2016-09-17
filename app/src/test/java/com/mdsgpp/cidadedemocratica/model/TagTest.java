@@ -8,29 +8,35 @@ import org.junit.Test;
  * Created by guilherme on 15/09/16.
  */
 public class TagTest extends AndroidTestCase {
-    Tag tags;
 
-    @Override
-    public void setUp() {
-        tags = newTag();
-    }
+    Tag tag = newTag();
+    final long tagId = 100;
+    final long tagRelevance = 100;
+    final String tagName = "name";
+    final long tagNumberOfAppearances = 10;
 
     @Test
     public void testGetName() {
-        assertTrue(this.tags.getName().equals("name"));
+        assertNotNull(tag.getName());
+        assertEquals(tag.getName(), tagName);
     }
 
     @Test
     public void testGetNumberOfAppearances() {
-        assertEquals(17, this.tags.getNumberOfAppearances());
+        assertEquals(tag.getNumberOfAppearances(), tagNumberOfAppearances);
     }
 
     @Test
     public void testToString() {
-        assertTrue(this.tags.toString().equals("name"));
+        assertEquals(tag.toString(), tag.getName());
+    }
+
+    @Test
+    public void testGetRelevance() {
+        assertEquals(tag.getRelevance(), tagRelevance);
     }
 
     private Tag newTag() {
-        return new Tag(0, "name", 17, 0);
+        return new Tag(tagId, tagName, tagNumberOfAppearances, tagRelevance);
     }
 }
