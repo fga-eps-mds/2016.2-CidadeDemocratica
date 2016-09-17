@@ -14,21 +14,24 @@ import org.junit.Test;
 public class ReportTest extends AndroidTestCase {
 
     Report report;
+    final String reportTitle = "Title";
+    final String reportDescription = "Description";
 
     @Override
     public void setUp() {
-        report = new Report("Title","Description");
-
+        report = new Report(reportTitle, reportDescription);
     }
 
     @Test
     public void testGetTitle() {
-        assertTrue(report.getTitle().equals("Title"));
+        assertNotNull(report.getTitle());
+        assertEquals(report.getTitle(), reportTitle);
     }
 
     @Test
     public void testGetDescription() {
-        assertTrue(this.report.getDescription().equals("Description"));
+        assertNotNull(report.getDescription());
+        assertEquals(report.getDescription(), reportDescription);
     }
 
 }
