@@ -18,7 +18,7 @@ public class DataContainerTest extends AndroidTestCase {
     protected DataContainer dataContainer;
 
     @Override
-    protected void setUp() throws Exception {
+    protected void setUp() {
         this.dataContainer = DataContainer.getInstance();
     }
 

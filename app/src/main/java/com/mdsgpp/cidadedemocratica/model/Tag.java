@@ -32,4 +32,9 @@ public class Tag {
     public long getNumberOfAppearances() {
         return this.numberOfAppearances;
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }
