@@ -39,4 +39,8 @@ public class Proposal {
     public ArrayList<Tag> getTags() {
         return this.tags;
     }
+
+    public void setTags(ArrayList<Tag> tags) {
+        this.tags = tags;
+    }
 }
