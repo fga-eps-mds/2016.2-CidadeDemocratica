@@ -169,12 +169,35 @@ public class DataContainerTest extends AndroidTestCase {
         assertEquals(dataContainer.getUsers().size(), 0);
     }
 
+    @Test
+    public void testGetTagForId() {
+
+        this.dataContainer.addTag(newTag(1));
+        this.dataContainer.addTag(newTag(2));
+        this.dataContainer.addTag(newTag(3));
+        this.dataContainer.addTag(newTag(4));
+
+        assertNull(this.dataContainer.getTagForId(99));
+
+        this.dataContainer.addTag(newTag(99));
+
+        assertNotNull(this.dataContainer.getTagForId(99));
+    }
+
     private Tag newTag() {
         return new Tag(0, "name", 0, 0);
     }
 
+    private Tag newTag(long id) {
+        return new Tag(id, "name", 0, 0);
+    }
+
     private Proposal newProposal() {
         return new Proposal(0, "title", "content", 0);
+    }
+
+    private Proposal newProposal(long id) {
+        return new Proposal(id, "title", "content", 0);
     }
 
     private User newUser() {
