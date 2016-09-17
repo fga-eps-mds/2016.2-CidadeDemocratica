@@ -53,7 +53,7 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
                 }
             }
             
-            dataContainer.addProposals(proposals);
+            dataContainer.setProposals(proposals);
         }
 
     }

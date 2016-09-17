@@ -36,7 +36,7 @@ public class TagRequestResponseHandler extends JsonHttpResponseHandler {
                 }
             }
 
-            dataContainer.addTags(tags);
+            dataContainer.setTags(tags);
         }
 
     }
