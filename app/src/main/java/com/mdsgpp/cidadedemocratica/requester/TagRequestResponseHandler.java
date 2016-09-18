@@ -8,6 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import cz.msebera.android.httpclient.Header;
 
 /**
@@ -17,22 +19,32 @@ public class TagRequestResponseHandler extends JsonHttpResponseHandler {
 
     DataContainer dataContainer = DataContainer.getInstance();
 
+    private final String tagNameKey = "name";
+    private final String tagIdKey = "id";
+    private final String tagRelevanceKey = "relevancia";
+
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
 
         if (statusCode == 200) {
-            for (int i = 0; i < response.length(); ++i)
+            ArrayList<Tag> tags = new ArrayList<Tag>();
+            for (int i = 0; i < response.length(); ++i) {
                 try {
                     JSONObject tagJson = response.getJSONObject(i);
-                    String tagName = tagJson.getString("name");
+                    String tagName = tagJson.getString(tagNameKey);
+                    long tagId = tagJson.getLong(tagIdKey);
+                    long tagRelevance = tagJson.getLong(tagRelevanceKey);
 
-                    Tag tag = new Tag(tagName, 0);
-                    dataContainer.addTag(tag);
-
+                    Tag tag = new Tag(tagId, tagName, 0, tagRelevance);
+                    tags.add(tag);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }
+
+            dataContainer.setTags(tags);
         }
+
     }
 
     @Override

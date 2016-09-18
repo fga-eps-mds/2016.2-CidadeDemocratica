@@ -8,6 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import cz.msebera.android.httpclient.Header;
 
 /**
@@ -15,34 +17,46 @@ import cz.msebera.android.httpclient.Header;
  */
 public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
 
+    DataContainer dataContainer = DataContainer.getInstance();
+    private final String jsonProposalType = "Proposta";
+    private final String proposalTitleKey = "titulo";
+    private final String proposalContentKey = "descricao";
+    private final String proposalIdKey = "id";
+    private final String proposalRelevanceKey = "relevancia";
+
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-        super.onSuccess(statusCode, headers, response);
-        DataContainer dataContainer = DataContainer.getInstance();
-        if(statusCode == 200)
-        {
-            for(int i=0; i<response.length();++i)
-            {
+        if (statusCode == 200) {
+
+            ArrayList<Proposal> proposals = new ArrayList<Proposal>();
+
+            for (int i = 0; i < response.length(); ++i) {
 
                 try {
-                    JSONObject proposalJson = response.getJSONObject(i);
-                    String proposalTitle = proposalJson.getString("titulo");
-                    String proposalID = proposalJson.getString("id");
-                    String proposalDescription = proposalJson.getString("descricao");
-                    String proposalRelevance = proposalJson.getString("relevancia");
+                    JSONObject topicJson = response.getJSONObject(i);
+                    String topicType = topicJson.getString("type");
 
-                    Proposal proposal = new Proposal(proposalTitle, proposalID, proposalDescription, proposalRelevance);
-                    dataContainer.addProposal(proposal);
+                    if (topicType == jsonProposalType) {
 
+                        long id = topicJson.getLong(proposalIdKey);
+                        String title = topicJson.getString(proposalTitleKey);
+                        String content = topicJson.getString(proposalContentKey);
+                        long relevance = topicJson.getLong(proposalRelevanceKey);
+
+                        Proposal proposal = new Proposal(id, title, content, relevance);
+
+                        proposals.add(proposal);
+
+                    } else { /* Not a proposal */ }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
-
             }
+
+            dataContainer.setProposals(proposals);
         }
+
     }
 
     @Override
