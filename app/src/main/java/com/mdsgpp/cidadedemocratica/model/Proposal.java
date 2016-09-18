@@ -43,4 +43,9 @@ public class Proposal {
     public void setTags(ArrayList<Tag> tags) {
         this.tags = tags;
     }
+
+    @Override
+    public String toString() {
+        return this.title;
+    }
 }

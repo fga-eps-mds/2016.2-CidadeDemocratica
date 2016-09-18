@@ -34,9 +34,9 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
 
                 try {
                     JSONObject topicJson = response.getJSONObject(i);
-                    String topicType = topicJson.getString("type");
+                    String topicType = topicJson.getString("titulo");
 
-                    if (topicType == jsonProposalType) {
+
 
                         long id = topicJson.getLong(proposalIdKey);
                         String title = topicJson.getString(proposalTitleKey);
@@ -47,7 +47,7 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
 
                         proposals.add(proposal);
 
-                    } else { /* Not a proposal */ }
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
