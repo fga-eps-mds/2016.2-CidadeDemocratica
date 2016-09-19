@@ -61,7 +61,7 @@ public class ProposalsList extends AppCompatActivity {
     }
 
     public final static void pullProposalData() {
-        Requester requester = new Requester("https://cidadedemocratica.herokuapp.com/data/topicos", new ProposalRequestResponseHandler());
+        Requester requester = new Requester("http://cidadedemocraticaapi.herokuapp.com/api/v0/propouses", new ProposalRequestResponseHandler());
         requester.request(Requester.RequestType.GET);
         requester = null;
     }

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
@@ -27,7 +28,14 @@ public class TagginsList extends AppCompatActivity {
 
 
         tagginsListView = (ListView) findViewById(R.id.listaTagsDaPropostaID);
-        ArrayList<Tag> tagginsList = getTagginsList();
+        ArrayList<Tag> tagginsList = new ArrayList<Tag>();
+        if(getTagginsList().size()>0){
+            tagginsList=getTagginsList();
+        }
+        else
+        {
+            Toast.makeText(getApplicationContext(),"Proposta não possui TAGS",Toast.LENGTH_SHORT);
+        }
         ArrayAdapter<Tag> tagginsAdapter = new ArrayAdapter<Tag>(
                 this,
                 android.R.layout.simple_list_item_1,
@@ -39,14 +47,14 @@ public class TagginsList extends AppCompatActivity {
     }
 
     public final static void pullTagginsData() {
-        Requester requester = new Requester("https://cidadedemocratica.herokuapp.com/data/taggings", new TaggingsRequestResponseHandler());
+        Requester requester = new Requester("http://cidadedemocraticaapi.herokuapp.com/api/v0/taggings", new TaggingsRequestResponseHandler());
         requester.request(Requester.RequestType.GET);
     }
 
     private ArrayList<Tag> getTagginsList() {
         DataContainer dataContainer = DataContainer.getInstance();
         Intent i = getIntent();
-        long proposalId = i.getLongExtra("ProposalID",4);
+        long proposalId = i.getLongExtra("ProposalID",0);
         Proposal proposal = dataContainer.getProposalForId(proposalId);
         return proposal.getTags();
 
