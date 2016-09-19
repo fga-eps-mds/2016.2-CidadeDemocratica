@@ -2,4 +2,6 @@
     <string name="app_name">CidadeDemocratica</string>
     <string name="tags">Tags</string>
     <string name="texto_Proposals">Propostas</string>
+    <string name="propostas_tags_titulo">TAGS DA PROPOSTA</string>
+    <string name="titulo_tags_da_proposta">TAGS da Proposta</string>
 </resources>

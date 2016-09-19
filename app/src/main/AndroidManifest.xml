@@ -18,7 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".controller.TagsList" />
-        <activity android:name=".controller.ProposalsList"></activity>
+        <activity android:name=".controller.ProposalsList" />
+        <activity android:name=".controller.TagginsList"></activity>
     </application>
 
 </manifest>

@@ -5,13 +5,18 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.mdsgpp.cidadedemocratica.controller.ProposalsList;
+import com.mdsgpp.cidadedemocratica.controller.TagginsList;
 import com.mdsgpp.cidadedemocratica.controller.TagsList;
 
 public class MainActivity extends AppCompatActivity {
 
+    ListView proposalListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         TagsList.pullTagData();
         ProposalsList.pullProposalData();
+
 
     }
 
