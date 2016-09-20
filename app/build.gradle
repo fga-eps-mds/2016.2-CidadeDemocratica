@@ -18,8 +18,8 @@ android {
         applicationId "com.mdsgpp.cidadedemocratica"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionName "${getVersionNameTimestamp()}"
+        versionCode getVersionCodeTimestamp()
     }
     buildTypes {
         release {
@@ -39,6 +39,8 @@ android {
     productFlavors {
         free {}
     }
+
+
 }
 
 dependencies {
@@ -47,4 +49,22 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.loopj.android:android-async-http:1.4.9'
 
+}
+
+
+play {
+    serviceAccountEmail = 'cidadedemocraticaandroid@api-5152221638731831188-576059.iam.gserviceaccount.com'
+    pk12File = file('cidadedeploy.p12')
+}
+
+def getVersionNameTimestamp() {
+    return new Date().format('yy.MM.ddHHmm')
+}
+
+def getVersionCodeTimestamp() {
+    def date = new Date()
+    def formattedDate = date.format('yyMMddHHmm')
+    def code = formattedDate.toInteger()
+    println sprintf("VersionCode: %d", code)
+    return code
 }
