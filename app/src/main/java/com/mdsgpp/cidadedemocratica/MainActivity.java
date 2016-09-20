@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.mdsgpp.cidadedemocratica.controller.TagsList;
+import com.mdsgpp.cidadedemocratica.controller.UsersList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TagsList.pullTagData();
+        UsersList.pullUsersData();
     }
 
     public void showTagsList(View view){
