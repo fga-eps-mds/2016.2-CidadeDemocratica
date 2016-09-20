@@ -23,4 +23,9 @@ public class MainActivity extends AppCompatActivity {
         Intent tagsIntent = new Intent(this,TagsList.class);
         startActivity(tagsIntent);
     }
+    public void showUsersList(View view){
+        Intent usersIntent = new Intent(this,UsersList.class);
+        startActivity(usersIntent);
+    }
+
 }
