@@ -10,8 +10,6 @@ public class User {
     private String name = "";
     private int proposalCount = 0;
     private int id = 0;
-    private String location = "";
-    private String pictureURL = "";
     private ArrayList<Proposal> proposals = new ArrayList<Proposal>();
     private ArrayList<Tag> mostUsedTags = new ArrayList<Tag>();
 
@@ -29,20 +27,20 @@ public class User {
         return this.proposalCount;
     }
 
-    public String getLocation() {
-        return this.location;
-    }
-
-    public String getPictureURL() {
-        return this.pictureURL;
-    }
-
     public ArrayList<Proposal> getProposals() {
         return this.proposals;
     }
 
     public ArrayList<Tag> getMostUsedTags() {
         return this.mostUsedTags;
+    }
+
+    public void setProposals(ArrayList<Proposal> proposals) {
+        this.proposals = proposals;
+    }
+
+    public void setMostUsedTags(ArrayList<Tag> mostUsedTags) {
+        this.mostUsedTags = mostUsedTags;
     }
 
     @Override

@@ -18,13 +18,13 @@ public class DataContainerTest extends AndroidTestCase {
     protected DataContainer dataContainer;
 
     @Override
-    protected void setUp() throws Exception {
+    protected void setUp() {
         this.dataContainer = DataContainer.getInstance();
     }
 
     @Test
     public void testAddTag() {
-        Tag tag = new Tag("CidadeDemocratica", 0);
+        Tag tag = newTag();
 
         dataContainer.addTag(tag);
 
@@ -33,7 +33,7 @@ public class DataContainerTest extends AndroidTestCase {
         ArrayList<Tag> tags = new ArrayList<Tag>();
 
         for (int i = 0; i < 10; i++) {
-            Tag tagn = new Tag("Tag" + i, 0);
+            Tag tagn = newTag();
             tags.add(tagn);
         }
 
@@ -44,7 +44,7 @@ public class DataContainerTest extends AndroidTestCase {
 
     @Test
     public void testAddProposal() {
-        Proposal proposal = new Proposal("Title", "Content", null);
+        Proposal proposal = newProposal();
 
         dataContainer.addProposal(proposal);
 
@@ -53,7 +53,7 @@ public class DataContainerTest extends AndroidTestCase {
         ArrayList<Proposal> proposals = new ArrayList<Proposal>();
 
         for (int i = 0; i < 10; i++) {
-            Proposal propn = new Proposal("Title" + i, "Content", null);
+            Proposal propn = newProposal();
             proposals.add(propn);
         }
 
@@ -64,7 +64,8 @@ public class DataContainerTest extends AndroidTestCase {
 
     @Test
     public void testAddUser() {
-        User user = new User("Name", 0, 0);
+
+        User user = newUser();
 
         dataContainer.addUser(user);
 
@@ -73,7 +74,8 @@ public class DataContainerTest extends AndroidTestCase {
         ArrayList<User> users = new ArrayList<User>();
 
         for (int i = 0; i < 10; i++) {
-            User usern = new User("Name" + i, 0, 0);
+
+            User usern = newUser();
             users.add(usern);
         }
 
@@ -83,44 +85,139 @@ public class DataContainerTest extends AndroidTestCase {
     }
 
     @Test
-    public void testUpdateListener() {
+    public void testSetTags() {
 
-        final boolean[] tagsUpdated = {false};
-        final boolean[] proposalsUpdated = {false};
-        final boolean[] usersUpdated = {false};
+        ArrayList<Tag> tags = new ArrayList<Tag>();
+        tags.add(newTag());
+        tags.add(newTag());
+        tags.add(newTag());
 
-        dataContainer.setDataUpdateListener(new DataUpdateListener() {
-            @Override
-            public void tagsUpdated() {
-                tagsUpdated[0] = true;
-            }
+        dataContainer.setTags(tags);
 
-            @Override
-            public void proposalsUpdated() {
-                proposalsUpdated[0] = true;
-            }
+        assertEquals(tags, dataContainer.getTags());
+    }
 
-            @Override
-            public void usersUpdated() {
-                usersUpdated[0] = true;
-            }
-        });
+    @Test
+    public void testSetProposals() {
 
-        Tag tag = new Tag("Name", 0);
-        dataContainer.addTag(tag);
+        ArrayList<Proposal> proposals = new ArrayList<Proposal>();
+        proposals.add(newProposal());
+        proposals.add(newProposal());
+        proposals.add(newProposal());
 
-        assertTrue(tagsUpdated[0]);
+        dataContainer.setProposals(proposals);
+
+        assertEquals(proposals, dataContainer.getProposals());
+    }
+
+    @Test
+    public void testSetUsers() {
+
+        ArrayList<User> users = new ArrayList<User>();
+        users.add(newUser());
+        users.add(newUser());
+        users.add(newUser());
+
+        dataContainer.setUsers(users);
+
+        assertEquals(users, dataContainer.getUsers());
+    }
+
+    @Test
+    public void testClearTags() {
+
+        ArrayList<Tag> tags = new ArrayList<Tag>();
+        tags.add(newTag());
+        tags.add(newTag());
+        tags.add(newTag());
+
+        dataContainer.setTags(tags);
+
+        assertEquals(tags, dataContainer.getTags());
+
+        dataContainer.clearTags();
+        assertEquals(dataContainer.getTags().size(), 0);
+    }
+
+    @Test
+    public void testClearProposals() {
+
+        ArrayList<Proposal> proposals = new ArrayList<Proposal>();
+        proposals.add(newProposal());
+        proposals.add(newProposal());
+        proposals.add(newProposal());
+
+        dataContainer.setProposals(proposals);
+
+        assertEquals(proposals, dataContainer.getProposals());
+
+        dataContainer.clearProposals();
+        assertEquals(dataContainer.getProposals().size(), 0);
+    }
+
+    @Test
+    public void testClearUsers() {
+
+        ArrayList<User> users = new ArrayList<User>();
+        users.add(newUser());
+        users.add(newUser());
+        users.add(newUser());
+
+        dataContainer.setUsers(users);
+
+        assertEquals(users, dataContainer.getUsers());
+
+        dataContainer.clearUsers();
+        assertEquals(dataContainer.getUsers().size(), 0);
+    }
+
+    @Test
+    public void testGetTagForId() {
+
+        this.dataContainer.addTag(newTag(1));
+        this.dataContainer.addTag(newTag(2));
+        this.dataContainer.addTag(newTag(3));
+        this.dataContainer.addTag(newTag(4));
+
+        assertNull(this.dataContainer.getTagForId(99));
+
+        this.dataContainer.addTag(newTag(99));
+
+        assertNotNull(this.dataContainer.getTagForId(99));
+    }
+
+    public void testGetProposalForId() {
+
+        this.dataContainer.addProposal(newProposal(1));
+        this.dataContainer.addProposal(newProposal(2));
+        this.dataContainer.addProposal(newProposal(3));
+        this.dataContainer.addProposal(newProposal(4));
+
+        assertNull(this.dataContainer.getProposalForId(100));
+
+        this.dataContainer.addProposal(newProposal(100));
+
+        assertNotNull(this.dataContainer.getProposalForId(100));
+    }
+
+    private Tag newTag() {
+        return new Tag(0, "name", 0, 0);
+    }
+
+    private Tag newTag(long id) {
+        return new Tag(id, "name", 0, 0);
+    }
+
+    private Proposal newProposal() {
+        return new Proposal(0, "title", "content", 0);
+    }
+
+    private Proposal newProposal(long id) {
+        return new Proposal(id, "title", "content", 0);
+    }
 
 
-        Proposal proposal = new Proposal("Proposal", "Content", null);
-        dataContainer.addProposal(proposal);
-
-        assertTrue(proposalsUpdated[0]);
-
-
-        User user = new User("User", 0, 0);
-        dataContainer.addUser(user);
-
-        assertTrue(usersUpdated[0]);
+    private User newUser() {
+        return new User("Name", 0, 0);
     }
 }

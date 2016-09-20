@@ -19,6 +19,10 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
 
     DataContainer dataContainer = DataContainer.getInstance();
     private final String jsonProposalType = "Proposta";
+    private final String proposalTitleKey = "titulo";
+    private final String proposalContentKey = "descricao";
+    private final String proposalIdKey = "id";
+    private final String proposalRelevanceKey = "relevancia";
 
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -30,30 +34,25 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
 
                 try {
                     JSONObject topicJson = response.getJSONObject(i);
-                    String topicType = topicJson.getString("type");
+                    String topicType = topicJson.getString("titulo");
 
-                    if (topicType == jsonProposalType) {
+                    long id = topicJson.getLong(proposalIdKey);
+                    String title = topicJson.getString(proposalTitleKey);
+                    String content = topicJson.getString(proposalContentKey);
+                    long relevance = topicJson.getLong(proposalRelevanceKey);
 
-                        String jsonTitleKey = "titulo";
-                        String jsonContentKey = "descricao";
+                    Proposal proposal = new Proposal(id, title, content, relevance);
 
-                        String title = topicJson.getString(jsonTitleKey);
-                        String content = topicJson.getString(jsonContentKey);
+                    proposals.add(proposal);
 
-                        Proposal proposal = new Proposal(title, content, null);
 
-                        proposals.add(proposal);
-
-                    } else { // Not a proposal
-
-                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-            
-            dataContainer.addProposals(proposals);
+
+            dataContainer.setProposals(proposals);
         }
 
     }
