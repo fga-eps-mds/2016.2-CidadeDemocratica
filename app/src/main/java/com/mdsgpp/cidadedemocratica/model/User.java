@@ -46,4 +46,7 @@ public class User {
     public ArrayList<Tag> getMostUsedTags() {
         return this.mostUsedTags;
     }
+
+    @Override
+    public String toString(){return  this.getName();}
 }
