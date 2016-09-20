@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mdsgpp.cidadedemocratica.R;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 public class TagginsList extends AppCompatActivity {
 
     ListView tagginsListView;
+    TextView proposalTitle;
+    TextView proposalDescripition;
 
 
 
@@ -26,6 +29,16 @@ public class TagginsList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_taggins_list);
+
+        proposalTitle = (TextView)findViewById(R.id.titleProposalID);
+        proposalTitle.setText(getProposalTitle());
+
+
+        proposalDescripition = (TextView)findViewById(R.id.proposalDescripitionID);
+        proposalDescripition.setText(getDescription());
+
+
+
 
 
         tagginsListView = (ListView) findViewById(R.id.listaTagsDaPropostaID);
@@ -65,6 +78,31 @@ public class TagginsList extends AppCompatActivity {
         return  null;
 
 
+    }
+
+    private String getDescription()
+    {
+        DataContainer dataContainer = DataContainer.getInstance();
+        Bundle extra = getIntent().getExtras();
+        String idPassed = extra.getString("ProposalId");
+        if(idPassed != null)
+        {
+            Long proposalId = Long.parseLong(idPassed);
+            Proposal proposal = dataContainer.getProposalForId(proposalId);
+            return proposal.getContent();
+        }
+        return  null;
+    }
+
+    private String getProposalTitle()
+    {
+        Bundle extra = getIntent().getExtras();
+        if(extra!=null)
+        {
+            String proposalTitlePassed = extra.getString("ProposalTitle");
+            return proposalTitlePassed;
+        }
+        return null;
     }
 
 }
