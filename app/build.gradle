@@ -53,6 +53,7 @@ dependencies {
 
 
 play {
+    track = "${track}"
     serviceAccountEmail = 'cidadedemocraticaandroid@api-5152221638731831188-576059.iam.gserviceaccount.com'
     pk12File = file('cidadedeploy.p12')
 }
