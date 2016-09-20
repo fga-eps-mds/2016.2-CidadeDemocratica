@@ -32,7 +32,9 @@ package com.mdsgpp.cidadedemocratica.External;
         import android.widget.LinearLayout;
         import android.widget.TextView;
 
-        import lab262.leituradebolso.R;
+        import com.mdsgpp.cidadedemocratica.R;
+
+
 
 /**
  * To be used with ViewPager to provide a tab indicator component which give constant feedback as to
@@ -228,16 +230,12 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 tabView.setSelected(true);
             }
 
-            //Customize view
-            typeface = Typeface.create("sans-serif-light",0);
-            //typeface =Typeface.createFromAsset(getContext().getAssets(),"fonts/Quicksand-Bold.otf");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                tabTitleView.setTextColor(getResources().getColor(R.color.white,null));
+                tabTitleView.setTextColor(getResources().getColor(R.color.colorAccent,null));
             }else {
-                tabTitleView.setTextColor(getResources().getColor(R.color.white));
+                tabTitleView.setTextColor(getResources().getColor(R.color.colorAccent));
             }
 
-            tabTitleView.setTypeface(typeface);
             tabTitleView.setTextSize(16);
             tabTitleView.setAllCaps(false);
         }
