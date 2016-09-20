@@ -36,16 +36,14 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
                     JSONObject topicJson = response.getJSONObject(i);
                     String topicType = topicJson.getString("titulo");
 
+                    long id = topicJson.getLong(proposalIdKey);
+                    String title = topicJson.getString(proposalTitleKey);
+                    String content = topicJson.getString(proposalContentKey);
+                    long relevance = topicJson.getLong(proposalRelevanceKey);
 
+                    Proposal proposal = new Proposal(id, title, content, relevance);
 
-                        long id = topicJson.getLong(proposalIdKey);
-                        String title = topicJson.getString(proposalTitleKey);
-                        String content = topicJson.getString(proposalContentKey);
-                        long relevance = topicJson.getLong(proposalRelevanceKey);
-
-                        Proposal proposal = new Proposal(id, title, content, relevance);
-
-                        proposals.add(proposal);
+                    proposals.add(proposal);
 
 
 

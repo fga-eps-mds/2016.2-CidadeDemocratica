@@ -37,7 +37,7 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
                     JSONObject taggingJson = response.getJSONObject(i);
                     String taggableType = taggingJson.getString(taggingTaggableTypeKey);
 
-                    if (taggableType == "Topico") {
+                    if (taggableType.equals("Topico")) {
 
                         long tagId = taggingJson.getLong(taggingTagIdKey);
                         long proposalId = taggingJson.getLong(taggingTaggableIdKey);
