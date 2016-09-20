@@ -41,14 +41,14 @@ test:
 deployment:
   production: # just a label; label names are completely up to you
     branch: master
-    tag: /release-.*/
+    # tag: /release-.*/
     commands:
       - ./gradlew assembleRelease
       - ./gradlew publishFreeRelease
         -Dorg.gradle.project.track=production
-  beta:
-    branch: master
-    commands:
-      - ./gradlew assembleRelease
-      - ./gradlew publishFreeRelease
-        -Dorg.gradle.project.track=alpha
+  # beta:
+  #   branch: master
+  #   commands:
+  #     - ./gradlew assembleRelease
+  #     - ./gradlew publishFreeRelease
+  #       -Dorg.gradle.project.track=alpha
