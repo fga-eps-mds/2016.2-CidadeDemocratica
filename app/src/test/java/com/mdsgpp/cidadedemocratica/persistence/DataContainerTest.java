@@ -218,6 +218,6 @@ public class DataContainerTest extends AndroidTestCase {
 
 
     private User newUser() {
-        return new User("Name", 0, 0);
+        return new User("Name", 0, 0 ,0);
     }
 }

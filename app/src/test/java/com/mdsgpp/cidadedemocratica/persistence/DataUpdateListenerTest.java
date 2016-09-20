@@ -108,6 +108,6 @@ public class DataUpdateListenerTest extends AndroidTestCase {
     }
 
     private User newUser() {
-        return new User("name", 0, 0);
+        return new User("name", 0, 0, 0);
     }
 }
