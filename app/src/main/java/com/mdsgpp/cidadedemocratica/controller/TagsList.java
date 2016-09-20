@@ -28,7 +28,7 @@ public class TagsList extends AppCompatActivity {
     }
 
     public final static void pullTagData() {
-        Requester requester = new Requester("https://cidadedemocratica.herokuapp.com/data/tags", new TagRequestResponseHandler());
+        Requester requester = new Requester("http://cidadedemocraticaapi.herokuapp.com/api/v0/tags", new TagRequestResponseHandler());
         requester.request(Requester.RequestType.GET);
         requester = null;
     }
