@@ -36,6 +36,10 @@ public class Tag {
         return this.numberOfAppearances;
     }
 
+    public ArrayList<Proposal> getProposals() {
+        return proposals;
+    }
+
     public void setProposals(ArrayList<Proposal> proposals) {
         this.proposals = proposals;
     }
