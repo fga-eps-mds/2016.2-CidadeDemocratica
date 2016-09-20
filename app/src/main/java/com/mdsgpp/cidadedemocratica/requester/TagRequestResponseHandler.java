@@ -19,6 +19,10 @@ public class TagRequestResponseHandler extends JsonHttpResponseHandler {
 
     DataContainer dataContainer = DataContainer.getInstance();
 
+    private final String tagNameKey = "name";
+    private final String tagIdKey = "id";
+    private final String tagRelevanceKey = "relevancia";
+
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
 
@@ -27,16 +31,18 @@ public class TagRequestResponseHandler extends JsonHttpResponseHandler {
             for (int i = 0; i < response.length(); ++i) {
                 try {
                     JSONObject tagJson = response.getJSONObject(i);
-                    String tagName = tagJson.getString("name");
+                    String tagName = tagJson.getString(tagNameKey);
+                    long tagId = tagJson.getLong(tagIdKey);
+                    long tagRelevance = tagJson.getLong(tagRelevanceKey);
 
-                    Tag tag = new Tag(tagName, 0);
+                    Tag tag = new Tag(tagId, tagName, 0, tagRelevance);
                     tags.add(tag);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
 
-            dataContainer.addTags(tags);
+            dataContainer.setTags(tags);
         }
 
     }
