@@ -21,6 +21,7 @@ public class TagginsList extends AppCompatActivity {
     ListView tagginsListView;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,11 +54,16 @@ public class TagginsList extends AppCompatActivity {
 
     private ArrayList<Tag> getTagginsList() {
         DataContainer dataContainer = DataContainer.getInstance();
-        Intent i = getIntent();
-        String idPassed = i.getExtras().getString("ProposalID");
-        Long proposalId = Long.parseLong(idPassed);
-        Proposal proposal = dataContainer.getProposalForId(proposalId);
-        return proposal.getTags();
+        Bundle extra = getIntent().getExtras();
+        String idPassed = extra.getString("ProposalId");
+        if(idPassed != null)
+        {
+            Long proposalId = Long.parseLong(idPassed);
+            Proposal proposal = dataContainer.getProposalForId(proposalId);
+            return proposal.getTags();
+        }
+        return  null;
+
 
     }
 
