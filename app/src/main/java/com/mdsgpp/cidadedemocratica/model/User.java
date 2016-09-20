@@ -8,22 +8,24 @@ import java.util.ArrayList;
 public class User {
 
     private String name = "";
-    private int proposalCount = 0;
-    private int id = 0;
+    private long proposalCount = 0;
+    private long id = 0;
+    private long relevance = 0;
     private ArrayList<Proposal> proposals = new ArrayList<Proposal>();
     private ArrayList<Tag> mostUsedTags = new ArrayList<Tag>();
 
-    public User(String name, int proposalCount,int id) {
+    public User(String name, long proposalCount,long id, long relevance) {
         this.name = name;
         this.proposalCount = proposalCount;
         this.id = id;
+        this.relevance = relevance;
     }
 
     public String getName() {
         return this.name;
     }
 
-    public int getProposalCount() {
+    public long getProposalCount() {
         return this.proposalCount;
     }
 
