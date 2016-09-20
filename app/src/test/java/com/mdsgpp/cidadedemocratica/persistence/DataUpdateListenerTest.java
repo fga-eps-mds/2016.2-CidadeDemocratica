@@ -92,7 +92,7 @@ public class DataUpdateListenerTest extends AndroidTestCase {
             }
         });
 
-        User user = new User("Name", 0, "Location", "com.picture", null, null);
+        User user = new User("Name", 0, 0);
         dataContainer.addUser(user);
 
         assertTrue(updated[0]);

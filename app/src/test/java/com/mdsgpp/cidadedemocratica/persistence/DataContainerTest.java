@@ -64,7 +64,7 @@ public class DataContainerTest extends AndroidTestCase {
 
     @Test
     public void testAddUser() {
-        User user = new User("Name", 0, "Location", "com.url", null, null);
+        User user = new User("Name", 0, 0);
 
         dataContainer.addUser(user);
 
@@ -73,7 +73,7 @@ public class DataContainerTest extends AndroidTestCase {
         ArrayList<User> users = new ArrayList<User>();
 
         for (int i = 0; i < 10; i++) {
-            User usern = new User("Name" + i, 0, "Location", "com.url", null, null);
+            User usern = new User("Name" + i, 0, 0);
             users.add(usern);
         }
 
@@ -118,7 +118,7 @@ public class DataContainerTest extends AndroidTestCase {
         assertTrue(proposalsUpdated[0]);
 
 
-        User user = new User("User", 0, "Location", "com.url", null, null);
+        User user = new User("User", 0, 0);
         dataContainer.addUser(user);
 
         assertTrue(usersUpdated[0]);

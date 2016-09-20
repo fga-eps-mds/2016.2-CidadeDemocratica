@@ -25,8 +25,8 @@ public class UserTest {
     @Before
     public void setup()
     {
-        user = new User("Lucas",3,"distrito federal","www.google.com",proposals,tags);
-        ciclismo = new Tag("ciclismo",15);
+        user = new User("Lucas", 3, 2);
+        ciclismo = new Tag("ciclismo", 15);
         tags.add(ciclismo);
         proposal = new Proposal("Title","Content",tags);
     }
