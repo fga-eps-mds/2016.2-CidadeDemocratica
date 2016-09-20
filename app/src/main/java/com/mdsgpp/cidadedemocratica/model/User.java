@@ -9,18 +9,16 @@ public class User {
 
     private String name = "";
     private int proposalCount = 0;
+    private int id = 0;
     private String location = "";
     private String pictureURL = "";
     private ArrayList<Proposal> proposals = new ArrayList<Proposal>();
     private ArrayList<Tag> mostUsedTags = new ArrayList<Tag>();
 
-    public User(String name, int proposalCount, String location, String pictureURL, ArrayList<Proposal> proposals, ArrayList<Tag> mostUsedTags) {
+    public User(String name, int proposalCount,int id) {
         this.name = name;
         this.proposalCount = proposalCount;
-        this.location = location;
-        this.pictureURL = pictureURL;
-        this.proposals = proposals;
-        this.mostUsedTags = mostUsedTags;
+        this.id = id;
     }
 
     public String getName() {
