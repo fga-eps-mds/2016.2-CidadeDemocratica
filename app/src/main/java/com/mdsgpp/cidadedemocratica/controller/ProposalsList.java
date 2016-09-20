@@ -49,9 +49,11 @@ public class ProposalsList extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                Proposal proposalClicked = proposalAdapter.getItem(i);
                 Long id = proposalClicked.getId();
+                String proposalName = proposalClicked.getTitle();
                 String proposalStringID = Long.toString(id);
                 Intent intent = new Intent(getApplicationContext(),TagginsList.class);
                 intent.putExtra("ProposalId", proposalStringID);
+                intent.putExtra("ProposalTitle",proposalName);
                 startActivity(intent);
 
             }
