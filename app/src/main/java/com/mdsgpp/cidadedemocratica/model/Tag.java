@@ -1,5 +1,7 @@
 package com.mdsgpp.cidadedemocratica.model;
 
+import java.util.ArrayList;
+
 /**
  * Created by andreanmasiro on 9/8/16.
  */
@@ -9,6 +11,7 @@ public class Tag {
     private String name = "";
     private long numberOfAppearances = 0;
     private long relevance = 0;
+    private ArrayList<Proposal> proposals = new ArrayList<Proposal>();
 
     public Tag(long id, String name, long numberOfAppearances, long relevance) {
         this.id = id;
@@ -31,6 +34,10 @@ public class Tag {
 
     public long getNumberOfAppearances() {
         return this.numberOfAppearances;
+    }
+
+    public void setProposals(ArrayList<Proposal> proposals) {
+        this.proposals = proposals;
     }
 
     @Override

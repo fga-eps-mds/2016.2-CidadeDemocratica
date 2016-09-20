@@ -26,11 +26,14 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
     private final String taggingTaggableIdKey = "taggable_id";
     private final String taggingTaggableTypeKey = "taggable_type";
 
+    HashMap<Long, ArrayList<Tag>> proposalTaggings = new HashMap<Long, ArrayList<Tag>>();
+    HashMap<Long, ArrayList<Proposal>> tagTaggings = new HashMap<Long, ArrayList<Proposal>>();
+
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+
         if (statusCode == 200) {
 
-            HashMap<Long, ArrayList<Tag>> taggings = new HashMap<Long, ArrayList<Tag>>();
             for (int i = 0; i < response.length(); ++i) {
                 try {
 
@@ -43,18 +46,14 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
                         long proposalId = taggingJson.getLong(taggingTaggableIdKey);
 
                         Tag tag = dataContainer.getTagForId(tagId);
+                        Proposal proposal = dataContainer.getProposalForId(proposalId);
 
-                        if (tag != null) {
+                        if (tag != null && proposal != null) {
 
-                            ArrayList<Tag> tags;
-                            if (taggings.containsKey(proposalId)) {
-                                tags = taggings.get(proposalId);
-                            } else {
-                                tags = new ArrayList<Tag>();
-                            }
-                            tags.add(tag);
-                            taggings.put(proposalId, tags);
-                        } else { /* Tag does not exist */ }
+                            addTagForProposalId(proposalId, tag);
+                            addProposalForTagId(tagId, proposal);
+
+                        } else { /* Tag or Proposal does not exist */ }
 
                     } else { /* Taggable is not a topic */ }
 
@@ -63,15 +62,55 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
                 }
             }
 
-            Set<Long> keySet = taggings.keySet();
-            for (Long key : keySet) {
-
-                Proposal proposal = dataContainer.getProposalForId(key);
-                if (proposal != null) {
-                    proposal.setTags(taggings.get(key));
-                } else { /* Proposal does not exist */ }
-            }
+            setProposalsTags();
+            setTagsProposals();
         }
+    }
+
+    private void setTagsProposals() {
+
+        Set<Long> tagIdKeySet = tagTaggings.keySet();
+        for (Long key : tagIdKeySet) {
+            Tag tag = dataContainer.getTagForId(key);
+            tag.setProposals(tagTaggings.get(key));
+        }
+    }
+
+    private void setProposalsTags() {
+
+        Set<Long> proposalIdKeySet = proposalTaggings.keySet();
+        for (Long key : proposalIdKeySet) {
+            Proposal proposal = dataContainer.getProposalForId(key);
+            proposal.setTags(proposalTaggings.get(key));
+        }
+    }
+
+    private void addProposalForTagId(long tagId, Proposal proposal) {
+
+        ArrayList<Proposal> proposals;
+        if (tagTaggings.containsKey(tagId)) {
+            proposals = tagTaggings.get(tagId);
+        } else {
+            proposals = new ArrayList<Proposal>();
+        }
+
+        proposals.add(proposal);
+
+        tagTaggings.put(tagId, proposals);
+    }
+
+    private void addTagForProposalId(long proposalId, Tag tag) {
+
+        ArrayList<Tag> tags;
+        if (proposalTaggings.containsKey(proposalId)) {
+            tags = proposalTaggings.get(proposalId);
+        } else {
+            tags = new ArrayList<Tag>();
+        }
+
+        tags.add(tag);
+
+        proposalTaggings.put(proposalId, tags);
     }
 
     @Override
