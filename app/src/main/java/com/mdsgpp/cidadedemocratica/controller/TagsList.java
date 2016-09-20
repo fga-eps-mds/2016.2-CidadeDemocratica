@@ -20,7 +20,7 @@ public class TagsList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tags_list);
 
-        ListView tagsListView = (ListView) findViewById(R.id.tags_list);
+        ListView tagsListView = (ListView) findViewById(R.id.tagsList);
 
         ArrayList<Tag> tagsList = getTagsList();
         ArrayAdapter<Tag> tagsAdapter = new ArrayAdapter<Tag>(this,android.R.layout.simple_list_item_1, tagsList);
