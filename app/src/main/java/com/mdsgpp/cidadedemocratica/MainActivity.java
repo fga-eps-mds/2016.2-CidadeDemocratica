@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         TagsList.pullTagData();
         ProposalsList.pullProposalData();
+        TagginsList.pullTagginsData();
 
 
     }

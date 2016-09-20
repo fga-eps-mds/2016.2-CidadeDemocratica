@@ -54,7 +54,8 @@ public class TagginsList extends AppCompatActivity {
     private ArrayList<Tag> getTagginsList() {
         DataContainer dataContainer = DataContainer.getInstance();
         Intent i = getIntent();
-        long proposalId = i.getLongExtra("ProposalID",0);
+        String idPassed = i.getExtras().getString("ProposalID");
+        Long proposalId = Long.parseLong(idPassed);
         Proposal proposal = dataContainer.getProposalForId(proposalId);
         return proposal.getTags();
 

@@ -48,10 +48,10 @@ public class ProposalsList extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                Proposal proposalClicked = proposalAdapter.getItem(i);
-                String name = proposalClicked.getTitle();
                 Long id = proposalClicked.getId();
+                String proposalStringID = Long.toString(id);
                 Intent intent = new Intent(getApplicationContext(),TagginsList.class);
-                intent.putExtra("ProposalId", id);
+                intent.putExtra("ProposalId", proposalStringID);
                 startActivity(intent);
 
             }
