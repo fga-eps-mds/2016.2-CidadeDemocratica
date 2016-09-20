@@ -59,5 +59,5 @@ public class UserTest extends AndroidTestCase {
     private Proposal newProposal() {
         return new Proposal(0, "title", "content", 0);
     }
-    private User newUser() {return new User("Name", 0, 0);}
+    private User newUser() {return new User("Name", 0, 0,0);}
 }
