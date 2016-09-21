@@ -1,5 +1,8 @@
 package com.mdsgpp.cidadedemocratica.model;
+import android.provider.ContactsContract;
 import android.test.AndroidTestCase;
+
+import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
 
 import java.util.ArrayList;
 import org.junit.Test;
@@ -10,17 +13,33 @@ import org.junit.Test;
 public class UserTest extends AndroidTestCase {
 
     User user;
+    User userIgual;
+
+    User userLarger;
+    User userSecondBuider;
+
     Tag ciclismo;
-    Proposal proposal;
-    ArrayList<Tag> tags = new ArrayList<>(0);
-    ArrayList<Proposal> proposals  = new ArrayList<>(0);
+    Proposal proposalTest;
+    Proposal proposalTest2;
+    ArrayList<Tag> tags = new ArrayList<Tag>();
+    ArrayList<Proposal> proposals  = new ArrayList<Proposal>();
+
 
     @Override
     public void setUp() {
-        user = new User("Lucas", 3, "distrito federal", "www.google.com", proposals, tags);
+        user = newUser();
+
         ciclismo = newTag();
         tags.add(ciclismo);
-        proposal = newProposal();
+        proposalTest = newProposal();
+        proposalTest2 = new Proposal(0,"Titulo","content_2",1,1);
+        proposals.add(proposalTest);
+
+        userIgual = new User("Name",14,1,0);
+        userLarger = new User("User name",15,2,1);
+        user.setMostUsedTags(tags);
+        DataContainer.getInstance().addProposal(proposalTest);
+        DataContainer.getInstance().addProposal(proposalTest2);
     }
 
     @Test
@@ -30,22 +49,12 @@ public class UserTest extends AndroidTestCase {
 
     @Test
     public void testGetName() {
-        assertTrue(user.getName().equals("Lucas"));
+        assertTrue(user.getName().equals("Name"));
     }
 
     @Test
     public void testGetProposalCount() {
-        assertEquals(3,user.getProposalCount());
-    }
-
-    @Test
-    public void testGetLocation() {
-        assertTrue(user.getLocation().equals("distrito federal"));
-    }
-
-    @Test
-    public void testGetPictureUrl() {
-        assertTrue(this.user.getPictureURL().equals("www.google.com"));
+        assertEquals(0,user.getProposalCount());
     }
 
     @Test
@@ -56,8 +65,32 @@ public class UserTest extends AndroidTestCase {
 
     @Test
     public void testGetProposal(){
-        proposals.add(proposal);
-        assertTrue(this.user.getProposals().equals(proposals));
+        assertEquals(this.user.getProposals(),proposals);
+    }
+
+    @Test
+    public void testBuider(){
+        userSecondBuider = new User("Lucas","descrição",15,24,1);
+        assertTrue(userSecondBuider.getName().equals("Lucas"));
+        assertTrue(userSecondBuider.getDescription().equals("descrição"));
+        assertEquals(15,userSecondBuider.getProposalCount());
+        assertEquals(24,userSecondBuider.getId());
+        assertEquals(1,userSecondBuider.getRelevance());
+    }
+    @Test
+    public void testToString(){
+        assertTrue(user.toString().equals("Name"));
+    }
+
+    @Test
+    public void testCompareTo(){
+        assertEquals(1,user.compareTo(userLarger));
+        assertEquals(-1,userLarger.compareTo(user));
+        assertEquals(0,user.compareTo(userIgual));
+    }
+    @Override
+    protected void tearDown() throws Exception {
+        DataContainer.getInstance().clearProposals();
     }
 
     private Tag newTag() {
@@ -65,6 +98,7 @@ public class UserTest extends AndroidTestCase {
     }
 
     private Proposal newProposal() {
-        return new Proposal(0, "title", "content", 0);
+        return new Proposal(0, "title", "content", 0, 0);
     }
+    private User newUser() {return new User("Name", 0, 0,0);}
 }
