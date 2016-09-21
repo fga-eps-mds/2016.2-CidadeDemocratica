@@ -1,21 +1,31 @@
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco-android'
+apply plugin: 'com.github.triplet.play'
 
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
 
+    signingConfigs {
+           release {
+               storeFile file("release.jks")
+               storePassword "123456"
+               keyAlias "CidadeDemocratica"
+               keyPassword "123456"
+           }
+    }
     defaultConfig {
         applicationId "com.mdsgpp.cidadedemocratica"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionName "${getVersionNameTimestamp()}"
+        versionCode getVersionCodeTimestamp()
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
         debug {
             testCoverageEnabled true
@@ -42,4 +52,23 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.android.support:support-v4:23.4.0'
+}
+
+
+play {
+    track = "${track}"
+    serviceAccountEmail = 'cidadedemocraticaandroid@api-5152221638731831188-576059.iam.gserviceaccount.com'
+    pk12File = file('cidadedeploy.p12')
+}
+
+def getVersionNameTimestamp() {
+    return new Date().format('yy.MM.ddHHmm')
+}
+
+def getVersionCodeTimestamp() {
+    def date = new Date()
+    def formattedDate = date.format('yyMMddHHmm')
+    def code = formattedDate.toInteger()
+    println sprintf("VersionCode: %d", code)
+    return code
 }

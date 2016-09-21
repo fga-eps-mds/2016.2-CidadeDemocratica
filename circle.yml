@@ -36,3 +36,18 @@ test:
 
   post:
     - bash <(curl -s https://codecov.io/bash)
+
+
+deployment:
+  production: # just a label; label names are completely up to you
+    branch: production
+    commands:
+      - ./gradlew assembleRelease
+      - ./gradlew publishFreeRelease
+        -Dorg.gradle.project.track=production
+  beta:
+    branch: beta
+    commands:
+      - ./gradlew assembleRelease
+      - ./gradlew publishFreeRelease
+        -Dorg.gradle.project.track=alpha
