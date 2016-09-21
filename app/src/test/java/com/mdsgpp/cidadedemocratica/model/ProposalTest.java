@@ -4,6 +4,7 @@ import android.test.AndroidTestCase;
 
 import org.junit.Test;
 
+import java.net.PortUnreachableException;
 import java.util.ArrayList;
 
 /**
@@ -17,6 +18,11 @@ public class ProposalTest extends AndroidTestCase {
     private final String proposalContent = "content";
     private final long proposalRelevance = 11000;
     private final long proposalIdOfUser = 0;
+    Proposal proposalDefault = newProposal();
+    Proposal proposalLower = new Proposal(12,"Title","superContent",10999,32);
+    Proposal proposalIgual = new Proposal(32,"SomeTitle","important",11000,1);
+    Proposal proposalLarger = new Proposal(2,"Important title","content",12000,3);
+
 
     @Test
     public void testGetId() {
@@ -55,10 +61,24 @@ public class ProposalTest extends AndroidTestCase {
 
         assertEquals(tags, proposal.getTags());
     }
+    @Test
+    public void testCompareTo(){
+        assertEquals(-1,proposalDefault.compareTo(proposalLower));
+        assertEquals(0,proposalDefault.compareTo(proposalIgual));
+        assertEquals(1,proposalDefault.compareTo(proposalLarger));
+
+    }
+
+    @Test
+    public void testToString(){
+        assertTrue(proposalDefault.toString().equals("title"));
+    }
 
     private Proposal newProposal() {
         return new Proposal(proposalId, proposalTitle, proposalContent, proposalRelevance, proposalIdOfUser);
     }
+
+
 
     private Tag newTag() {
         return new Tag(0, "", 0, 0);

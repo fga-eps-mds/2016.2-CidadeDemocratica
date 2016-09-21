@@ -13,21 +13,30 @@ import org.junit.Test;
 public class UserTest extends AndroidTestCase {
 
     User user;
+    User userIgual;
+
+    User userLarger;
+    User userSecondBuider;
+
     Tag ciclismo;
     Proposal proposalTest;
     Proposal proposalTest2;
     ArrayList<Tag> tags = new ArrayList<Tag>();
     ArrayList<Proposal> proposals  = new ArrayList<Proposal>();
 
+
     @Override
     public void setUp() {
         user = newUser();
+
         ciclismo = newTag();
         tags.add(ciclismo);
         proposalTest = newProposal();
         proposalTest2 = new Proposal(0,"Titulo","content_2",1,1);
         proposals.add(proposalTest);
 
+        userIgual = new User("Name",14,1,0);
+        userLarger = new User("User name",15,2,1);
         user.setMostUsedTags(tags);
         DataContainer.getInstance().addProposal(proposalTest);
         DataContainer.getInstance().addProposal(proposalTest2);
@@ -59,6 +68,26 @@ public class UserTest extends AndroidTestCase {
         assertEquals(this.user.getProposals(),proposals);
     }
 
+    @Test
+    public void testBuider(){
+        userSecondBuider = new User("Lucas","descrição",15,24,1);
+        assertTrue(userSecondBuider.getName().equals("Lucas"));
+        assertTrue(userSecondBuider.getDescription().equals("descrição"));
+        assertEquals(15,userSecondBuider.getProposalCount());
+        assertEquals(24,userSecondBuider.getId());
+        assertEquals(1,userSecondBuider.getRelevance());
+    }
+    @Test
+    public void testToString(){
+        assertTrue(user.toString().equals("Name"));
+    }
+
+    @Test
+    public void testCompareTo(){
+        assertEquals(1,user.compareTo(userLarger));
+        assertEquals(-1,userLarger.compareTo(user));
+        assertEquals(0,user.compareTo(userIgual));
+    }
     @Override
     protected void tearDown() throws Exception {
         DataContainer.getInstance().clearProposals();
