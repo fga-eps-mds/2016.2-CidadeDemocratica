@@ -3,6 +3,7 @@ package layout;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,8 +13,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.mdsgpp.cidadedemocratica.R;
+import com.mdsgpp.cidadedemocratica.controller.ProposalListAdapter;
 import com.mdsgpp.cidadedemocratica.controller.TagginsList;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
@@ -71,21 +74,20 @@ public class ListProposalFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
-                proposalListView = (ListView) view.findViewById(R.id.prosals_listID);
+
+        proposalListView = (ListView) view.findViewById(R.id.prosals_listID);
+
+
+
 
         ArrayList<Proposal> proposalList = getProposalList();
-        final ArrayAdapter<Proposal> proposalAdapter = new ArrayAdapter<Proposal>(
-                getActivity().getApplicationContext(),
-                android.R.layout.simple_list_item_1,
-                android.R.id.text1,
-                proposalList
-        );
+        final ProposalListAdapter proposalAdapter = new ProposalListAdapter(getContext().getApplicationContext(), proposalList);
         proposalListView.setAdapter(proposalAdapter);
 
         proposalListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Proposal proposalClicked = proposalAdapter.getItem(i);
+                Proposal proposalClicked = (Proposal)proposalAdapter.getItem(i);
                 Long id = proposalClicked.getId();
                 String proposalName = proposalClicked.getTitle();
                 String proposalStringID = Long.toString(id);
@@ -139,7 +141,7 @@ public class ListProposalFragment extends Fragment {
     }
 
     public final static void pullProposalData() {
-        Requester requester = new Requester("http://cidadedemocraticaapi.herokuapp.com/api/v0/propouses", new ProposalRequestResponseHandler());
+        Requester requester = new Requester("http://cidadedemocraticaapi.herokuapp.com/api/v0/proposals", new ProposalRequestResponseHandler());
         requester.request(Requester.RequestType.GET);
         requester = null;
     }
