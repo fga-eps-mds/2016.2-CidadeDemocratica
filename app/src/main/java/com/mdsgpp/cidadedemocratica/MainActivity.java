@@ -15,6 +15,7 @@ import com.mdsgpp.cidadedemocratica.controller.TagginsList;
 import com.mdsgpp.cidadedemocratica.controller.TagsList;
 import com.mdsgpp.cidadedemocratica.controller.UsersList;
 
+import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
 import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.requester.TagRequestResponseHandler;
@@ -35,14 +36,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        if (DataContainer.getInstance().getTags().size()==0){
+//            pullTagData();
+//        }
+//
+//        if (DataContainer.getInstance().getProposals().size()==0){
+//            pullProposalData();
+//        }
+//
+//        if (DataContainer.getInstance().getUsers().size()==0){
+//            pullUsersData();
+//        }
+
         pullTagData();
         pullProposalData();
-
+        pullUsersData();
         // Semaphore stops until loads tags & proposals
         pullTagginsData();
-
-        // Semaphore stops until loads taggings
-        pullUsersData();
 
     }
 

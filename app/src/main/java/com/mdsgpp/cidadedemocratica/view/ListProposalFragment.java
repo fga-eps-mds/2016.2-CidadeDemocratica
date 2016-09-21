@@ -36,7 +36,7 @@ public class ListProposalFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private ListView proposalListView;
 
-    private ArrayList<Proposal> proposals;
+    public ArrayList<Proposal> proposals;
 
     public ListProposalFragment() {
         // Required empty public constructor
@@ -46,6 +46,8 @@ public class ListProposalFragment extends Fragment {
         ListProposalFragment fragment = new ListProposalFragment();
 
         Bundle args = new Bundle();
+        //args.putString(ARG_PARAM1,proposals.get(0).getTitle());
+        //fragment.setArguments(args);
         fragment.proposals = proposals;
         return fragment;
     }
