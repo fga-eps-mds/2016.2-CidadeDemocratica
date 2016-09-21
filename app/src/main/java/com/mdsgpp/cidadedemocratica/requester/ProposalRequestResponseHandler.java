@@ -9,6 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -52,6 +54,12 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
                 }
             }
 
+            Collections.sort(proposals, new Comparator<Proposal>() {
+                @Override
+                public int compare(Proposal p1, Proposal p2) {
+                    return p1.compareTo(p2);
+                }
+            });
             dataContainer.setProposals(proposals);
         }
 

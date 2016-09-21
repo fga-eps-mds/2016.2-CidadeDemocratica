@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by andreanmasiro on 9/8/16.
  */
-public class Proposal {
+public class Proposal implements Comparable<Proposal> {
 
     private long id = 0;
     private String title = "";
@@ -47,5 +47,16 @@ public class Proposal {
     @Override
     public String toString() {
         return this.title;
+    }
+
+    @Override
+    public int compareTo(Proposal proposal) {
+        if (this.getRelevance() > proposal.getRelevance()) {
+            return -1;
+        } else if (this.getRelevance() < proposal.getRelevance()) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }
