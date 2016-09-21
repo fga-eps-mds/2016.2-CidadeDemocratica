@@ -22,7 +22,7 @@ test:
     #run code coverage
     - ./gradlew jacocoTestReport
     # run tests  against the emulator.
-    - ./gradlew connectedCheck
+    # - ./gradlew connectedCheck
     # copy the build outputs to artifacts
     - cp -r ./app/build/outputs $CIRCLE_ARTIFACTS/
     # copy the test results to the test results directory.
