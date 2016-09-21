@@ -11,13 +11,15 @@ public class Proposal {
     private String title = "";
     private String content = "";
     private long relevance = 0;
+    private long userId = 0;
     private ArrayList<Tag> tags = new ArrayList<Tag>();
 
-    public Proposal(long id, String title, String content, long relevance) {
+    public Proposal(long id, String title, String content, long relevance, long userId) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.relevance = relevance;
+        this.userId = userId;
     }
 
     public long getId() {

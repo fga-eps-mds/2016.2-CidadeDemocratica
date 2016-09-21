@@ -1,5 +1,7 @@
 package com.mdsgpp.cidadedemocratica.model;
 
+import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+
 import java.util.ArrayList;
 
 /**
@@ -30,7 +32,15 @@ public class User {
     }
 
     public ArrayList<Proposal> getProposals() {
-        return this.proposals;
+        DataContainer dataContainer = DataContainer.getInstance();
+        ArrayList<Proposal> proposalsList = dataContainer.getProposals();
+        ArrayList<Proposal> resultProposalsList = new ArrayList<Proposal>(0);
+        for (Proposal idProposals: proposalsList){
+            if (idProposals.getId() == id){
+                resultProposalsList.add(idProposals);
+            }
+        }
+        return resultProposalsList;
     }
 
     public ArrayList<Tag> getMostUsedTags() {
@@ -44,6 +54,7 @@ public class User {
     public void setMostUsedTags(ArrayList<Tag> mostUsedTags) {
         this.mostUsedTags = mostUsedTags;
     }
+    public long getId(){ return this.id; }
 
 
     @Override

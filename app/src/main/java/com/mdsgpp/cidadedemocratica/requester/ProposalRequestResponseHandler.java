@@ -23,6 +23,7 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
     private final String proposalContentKey = "descricao";
     private final String proposalIdKey = "id";
     private final String proposalRelevanceKey = "relevancia";
+    private final String proposalUserIdKey = "user_id";
 
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -40,11 +41,12 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
                     String title = topicJson.getString(proposalTitleKey);
                     String content = topicJson.getString(proposalContentKey);
                     long relevance = topicJson.getLong(proposalRelevanceKey);
+                    long userId = topicJson.getLong(proposalUserIdKey);
 
-                    Proposal proposal = new Proposal(id, title, content, relevance);
+
+                    Proposal proposal = new Proposal(id, title, content, relevance, userId);
 
                     proposals.add(proposal);
-
 
 
                 } catch (JSONException e) {

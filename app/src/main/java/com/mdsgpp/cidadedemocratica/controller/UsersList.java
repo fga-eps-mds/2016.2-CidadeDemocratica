@@ -1,12 +1,17 @@
 package com.mdsgpp.cidadedemocratica.controller;
 
+import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.mdsgpp.cidadedemocratica.R;
+import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.User;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
@@ -17,16 +22,33 @@ import java.util.jar.Attributes;
 
 public class UsersList extends AppCompatActivity {
 
+    private ListView usersListView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users_list);
 
-        ListView usersListView = (ListView) findViewById(R.id.userList);
+        usersListView = (ListView) findViewById(R.id.userList);
 
         ArrayList<User> usersList = getUsersList();
-        ArrayAdapter<User> userAdapter = new ArrayAdapter<User>(this, android.R.layout.simple_list_item_1,usersList);
+        final ArrayAdapter<User> userAdapter = new ArrayAdapter<User>(this, android.R.layout.simple_list_item_1,usersList);
         usersListView.setAdapter(userAdapter);
+
+        usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l){
+                User userClicked = userAdapter.getItem(position);
+                String userName = userClicked.getName();
+                long id = userClicked.getId();
+                String userId = Long.toString(id);
+                Intent intent = new Intent(getApplicationContext(),UserProfile.class);
+                intent.putExtra("UserName",userName);
+                intent.putExtra("UserId",userId);
+                startActivity(intent);
+            }
+        });
+
     }
 
     public final static void pullUsersData(){
