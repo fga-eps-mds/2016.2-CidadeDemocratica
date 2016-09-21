@@ -1,4 +1,5 @@
 package com.mdsgpp.cidadedemocratica.model;
+import android.provider.ContactsContract;
 import android.test.AndroidTestCase;
 
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
@@ -15,8 +16,8 @@ public class UserTest extends AndroidTestCase {
     Tag ciclismo;
     Proposal proposalTest;
     Proposal proposalTest2;
-    ArrayList<Tag> tags = new ArrayList<>(0);
-    ArrayList<Proposal> proposals  = new ArrayList<>(0);
+    ArrayList<Tag> tags = new ArrayList<Tag>();
+    ArrayList<Proposal> proposals  = new ArrayList<Proposal>();
 
     @Override
     public void setUp() {
@@ -55,7 +56,12 @@ public class UserTest extends AndroidTestCase {
 
     @Test
     public void testGetProposal(){
-        assertTrue(this.user.getProposals().equals(proposals));
+        assertEquals(this.user.getProposals(),proposals);
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        DataContainer.getInstance().clearProposals();
     }
 
     private Tag newTag() {

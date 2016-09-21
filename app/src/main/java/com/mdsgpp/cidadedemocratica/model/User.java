@@ -46,7 +46,7 @@ public class User implements Comparable<User> {
         ArrayList<Proposal> proposalsList = dataContainer.getProposals();
         ArrayList<Proposal> resultProposalsList = new ArrayList<Proposal>(0);
         for (Proposal idProposals: proposalsList){
-            if (idProposals.getUserId() == this.id){
+            if (idProposals.getUserId() == id){
                 resultProposalsList.add(idProposals);
             }
         }
@@ -55,10 +55,6 @@ public class User implements Comparable<User> {
 
     public ArrayList<Tag> getMostUsedTags() {
         return this.mostUsedTags;
-    }
-
-    public void setProposals(ArrayList<Proposal> proposals) {
-        this.proposals = proposals;
     }
 
     public void setMostUsedTags(ArrayList<Tag> mostUsedTags) {
