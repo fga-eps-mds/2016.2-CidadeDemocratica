@@ -19,7 +19,8 @@
         </activity>
         <activity android:name=".controller.TagsList" />
         <activity android:name=".controller.ProposalsList" />
-        <activity android:name=".controller.TagginsList"></activity>
+        <activity android:name=".controller.TagginsList" />
+        <activity android:name=".controller.TagDetailActivity"></activity>
     </application>
 
 </manifest>
