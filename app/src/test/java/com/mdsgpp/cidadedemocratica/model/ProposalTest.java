@@ -16,6 +16,7 @@ public class ProposalTest extends AndroidTestCase {
     private final String proposalTitle = "title";
     private final String proposalContent = "content";
     private final long proposalRelevance = 11000;
+    private final long proposalIdOfUser = 0;
 
     @Test
     public void testGetId() {
@@ -56,7 +57,7 @@ public class ProposalTest extends AndroidTestCase {
     }
 
     private Proposal newProposal() {
-        return new Proposal(proposalId, proposalTitle, proposalContent, proposalRelevance);
+        return new Proposal(proposalId, proposalTitle, proposalContent, proposalRelevance, proposalIdOfUser);
     }
 
     private Tag newTag() {

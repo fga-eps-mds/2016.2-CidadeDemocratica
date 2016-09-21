@@ -209,11 +209,11 @@ public class DataContainerTest extends AndroidTestCase {
     }
 
     private Proposal newProposal() {
-        return new Proposal(0, "title", "content", 0);
+        return new Proposal(0, "title", "content", 0, 0);
     }
 
     private Proposal newProposal(long id) {
-        return new Proposal(id, "title", "content", 0);
+        return new Proposal(id, "title", "content", 0,0);
     }
 
 

@@ -1,6 +1,8 @@
 package com.mdsgpp.cidadedemocratica.model;
 import android.test.AndroidTestCase;
 
+import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+
 import java.util.ArrayList;
 import org.junit.Test;
 
@@ -11,7 +13,8 @@ public class UserTest extends AndroidTestCase {
 
     User user;
     Tag ciclismo;
-    Proposal proposal;
+    Proposal proposalTest;
+    Proposal proposalTest2;
     ArrayList<Tag> tags = new ArrayList<>(0);
     ArrayList<Proposal> proposals  = new ArrayList<>(0);
 
@@ -20,9 +23,13 @@ public class UserTest extends AndroidTestCase {
         user = newUser();
         ciclismo = newTag();
         tags.add(ciclismo);
-        proposal = newProposal();
-        user.setProposals(proposals);
+        proposalTest = newProposal();
+        proposalTest2 = new Proposal(0,"Titulo","content_2",1,1);
+        proposals.add(proposalTest);
+
         user.setMostUsedTags(tags);
+        DataContainer.getInstance().addProposal(proposalTest);
+        DataContainer.getInstance().addProposal(proposalTest2);
     }
 
     @Test
@@ -48,7 +55,6 @@ public class UserTest extends AndroidTestCase {
 
     @Test
     public void testGetProposal(){
-        proposals.add(proposal);
         assertTrue(this.user.getProposals().equals(proposals));
     }
 
@@ -57,7 +63,7 @@ public class UserTest extends AndroidTestCase {
     }
 
     private Proposal newProposal() {
-        return new Proposal(0, "title", "content", 0);
+        return new Proposal(0, "title", "content", 0, 0);
     }
     private User newUser() {return new User("Name", 0, 0,0);}
 }

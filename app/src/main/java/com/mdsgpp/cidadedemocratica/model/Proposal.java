@@ -26,6 +26,8 @@ public class Proposal {
         return this.id;
     }
 
+    public long getUserId(){ return  this.userId;}
+
     public String getTitle() {
         return this.title;
     }
