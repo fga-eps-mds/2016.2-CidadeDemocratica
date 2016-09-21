@@ -9,6 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -21,6 +23,7 @@ public class UserRequestResponseHandler extends JsonHttpResponseHandler {
     DataContainer dataContainer = DataContainer.getInstance();
 
     private final String userNameKey = "nome";
+    private final String userDescriptionKey = "descricao";
     private final String userProposalCountKey = "topicos_count";
     private final String userIdKey = "id";
     private final String userRelevanceKey = "relevancia";
@@ -34,16 +37,24 @@ public class UserRequestResponseHandler extends JsonHttpResponseHandler {
                 try{
                     JSONObject userJson = response.getJSONObject(i);
                     String userName = userJson.getString(userNameKey);
+                    String userDescription = userJson.getString(userDescriptionKey);
                     long userProposals = userJson.getLong(userProposalCountKey);
                     long userId = userJson.getLong(userIdKey);
-                    long userRelevace = userJson.getLong(userRelevanceKey);
+                    long userRelevance = userJson.getLong(userRelevanceKey);
 
-                    User user = new User(userName,userProposals,userId,userRelevace);
+                    User user = new User(userName, userDescription, userProposals, userId, userRelevance);
                     users.add(user);
                 } catch (JSONException e){
                     e.printStackTrace();
                 }
             }
+
+            Collections.sort(users, new Comparator<User>() {
+                @Override
+                public int compare(User u1, User u2) {
+                    return u1.compareTo(u2);
+                }
+            });
             dataContainer.setUsers(users);
 
         }
