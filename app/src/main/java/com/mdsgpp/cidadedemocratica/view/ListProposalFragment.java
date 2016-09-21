@@ -125,14 +125,4 @@ public class ListProposalFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public final static void pullProposalData() {
-        Requester requester = new Requester("http://cidadedemocraticaapi.herokuapp.com/api/v0/proposals", new ProposalRequestResponseHandler());
-        requester.request(Requester.RequestType.GET);
-        requester = null;
-    }
-
-    private ArrayList<Proposal> getProposalList() {
-        DataContainer dataContainer = DataContainer.getInstance();
-        return dataContainer.getProposals();
-    }
 }

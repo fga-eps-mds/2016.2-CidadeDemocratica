@@ -3,16 +3,19 @@ package com.mdsgpp.cidadedemocratica.controller;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.ListFragment;
 
-import layout.ListProposalFragment;
+import com.mdsgpp.cidadedemocratica.model.Proposal;
+import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+import com.mdsgpp.cidadedemocratica.view.ListProposalFragment;
+
+import java.util.ArrayList;
 
 /**
  * Created by gabriel on 20/09/16.
  */
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
-   CharSequence titles[];
+    CharSequence titles[];
     int numberOfTabs;
     ListProposalFragment tabAll, tabAroundHere, tabLocation;
 
@@ -26,22 +29,23 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        if(position ==0){
+        ArrayList<Proposal> proposals = DataContainer.getInstance().getProposals();
+        if(position == 0){
             if(tabAll==null){
-                tabAll = new ListProposalFragment();
+                tabAll = ListProposalFragment.newInstance(proposals);
             }
             return  tabAll;
         }
-        else if(position ==1){
+        else if(position == 1){
             if(tabAroundHere==null){
-                tabAroundHere = new ListProposalFragment();
+                tabAroundHere = ListProposalFragment.newInstance(proposals);
             }
             return  tabAroundHere;
         }
 
         else{
-            if(tabLocation==null){
-                tabLocation = new ListProposalFragment();
+            if(tabLocation == null){
+                tabLocation = ListProposalFragment.newInstance(proposals);
             }
             return  tabLocation;
         }
