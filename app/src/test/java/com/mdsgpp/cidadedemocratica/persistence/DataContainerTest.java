@@ -64,6 +64,7 @@ public class DataContainerTest extends AndroidTestCase {
 
     @Test
     public void testAddUser() {
+
         User user = newUser();
 
         dataContainer.addUser(user);
@@ -73,6 +74,7 @@ public class DataContainerTest extends AndroidTestCase {
         ArrayList<User> users = new ArrayList<User>();
 
         for (int i = 0; i < 10; i++) {
+
             User usern = newUser();
             users.add(usern);
         }
@@ -198,6 +200,21 @@ public class DataContainerTest extends AndroidTestCase {
         assertNotNull(this.dataContainer.getProposalForId(100));
     }
 
+    public void testGetUserForId() {
+        this.dataContainer.addUser(newUser(1));
+        this.dataContainer.addUser(newUser(2));
+        this.dataContainer.addUser(newUser(3));
+        this.dataContainer.addUser(newUser(4));
+        this.dataContainer.addUser(newUser(5));
+
+        assertNull(this.dataContainer.getUserForId(100));
+
+        this.dataContainer.addUser(newUser(100));
+
+        assertNotNull(this.dataContainer.getUserForId(100));    
+
+    }
+
     private Tag newTag() {
         return new Tag(0, "name", 0, 0);
     }
@@ -207,14 +224,19 @@ public class DataContainerTest extends AndroidTestCase {
     }
 
     private Proposal newProposal() {
-        return new Proposal(0, "title", "content", 0);
+        return new Proposal(0, "title", "content", 0, 0);
     }
 
     private Proposal newProposal(long id) {
-        return new Proposal(id, "title", "content", 0);
+        return new Proposal(id, "title", "content", 0,0);
     }
 
+
     private User newUser() {
-        return new User("name", 0, "location", "url", null, null);
+        return new User("Name", 0, 0 ,0);
+    }
+
+    private User newUser(long id) {
+        return new User("Name", 0, id, 0);
     }
 }

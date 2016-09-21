@@ -68,6 +68,20 @@ public class DataContainer {
         return proposal;
     }
 
+    public User getUserForId(long id){
+        User user = null;
+        for (User userInterator : this.users){
+            if(userInterator.getId() == id){
+                user = userInterator;
+                break;
+            }
+            else {
+                // nothing to do
+            }
+        }
+        return user;
+    }
+
     public void addTag(Tag tag) {
         this.tags.add(tag);
         this.notifyTagsUpdate();

@@ -93,6 +93,7 @@ public class DataUpdateListenerTest extends AndroidTestCase {
         });
 
         User user = newUser();
+
         dataContainer.addUser(user);
 
         assertTrue(updated[0]);
@@ -103,10 +104,10 @@ public class DataUpdateListenerTest extends AndroidTestCase {
     }
 
     private Proposal newProposal() {
-        return new Proposal(0, "title", "content", 0);
+        return new Proposal(0, "title", "content", 0,0);
     }
 
     private User newUser() {
-        return new User("name", 0, "location", "url", null, null);
+        return new User("name", 0, 0, 0);
     }
 }

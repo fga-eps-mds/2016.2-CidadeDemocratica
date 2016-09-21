@@ -9,6 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -23,6 +25,7 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
     private final String proposalContentKey = "descricao";
     private final String proposalIdKey = "id";
     private final String proposalRelevanceKey = "relevancia";
+    private final String proposalUserIdKey = "user_id";
 
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -34,26 +37,31 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
 
                 try {
                     JSONObject topicJson = response.getJSONObject(i);
-                    String topicType = topicJson.getString("type");
+                    String topicType = topicJson.getString("titulo");
 
-                    if (topicType == jsonProposalType) {
+                    long id = topicJson.getLong(proposalIdKey);
+                    String title = topicJson.getString(proposalTitleKey);
+                    String content = topicJson.getString(proposalContentKey);
+                    long relevance = topicJson.getLong(proposalRelevanceKey);
+                    long userId = topicJson.getLong(proposalUserIdKey);
 
-                        long id = topicJson.getLong(proposalIdKey);
-                        String title = topicJson.getString(proposalTitleKey);
-                        String content = topicJson.getString(proposalContentKey);
-                        long relevance = topicJson.getLong(proposalRelevanceKey);
 
-                        Proposal proposal = new Proposal(id, title, content, relevance);
+                    Proposal proposal = new Proposal(id, title, content, relevance, userId);
 
-                        proposals.add(proposal);
+                    proposals.add(proposal);
 
-                    } else { /* Not a proposal */ }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-            
+
+            Collections.sort(proposals, new Comparator<Proposal>() {
+                @Override
+                public int compare(Proposal p1, Proposal p2) {
+                    return p1.compareTo(p2);
+                }
+            });
             dataContainer.setProposals(proposals);
         }
 
