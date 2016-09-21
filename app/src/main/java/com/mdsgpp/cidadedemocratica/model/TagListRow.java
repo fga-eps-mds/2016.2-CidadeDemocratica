@@ -1,5 +1,6 @@
 package com.mdsgpp.cidadedemocratica.model;
 
+import android.content.Context;
 import android.widget.TextView;
 
 /**
