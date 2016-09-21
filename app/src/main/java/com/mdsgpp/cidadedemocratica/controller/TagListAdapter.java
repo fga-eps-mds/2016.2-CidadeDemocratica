@@ -11,18 +11,20 @@ import android.widget.TextView;
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.ProposalListRow;
+import com.mdsgpp.cidadedemocratica.model.Tag;
+import com.mdsgpp.cidadedemocratica.model.TagListRow;
 
 import java.util.ArrayList;
 
 /**
- * Created by gabriel on 20/09/16.
+ * Created by andreanmasiro on 9/21/16.
  */
-public class ProposalListAdapter extends BaseAdapter {
+public class TagListAdapter extends BaseAdapter {
 
-    private static ArrayList<Proposal> data;
+    private static ArrayList<Tag> data;
     private Context context;
 
-    public ProposalListAdapter(Context context, ArrayList<Proposal> data){
+    public TagListAdapter(Context context, ArrayList<Tag> data){
         this.context = context;
         this.data = data;
     }
@@ -45,25 +47,22 @@ public class ProposalListAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 
-        ProposalListRow row;
-        Proposal currentProposal = data.get(i);
+        TagListRow row;
+        Tag currentTag = data.get(i);
 
-        if(view == null){
+        if(view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.proposal_list_row,viewGroup,false);
-            row = new ProposalListRow();
-            row.titleTextView = (TextView) view.findViewById(R.id.titleTextView);
-            row.descriptionTextView = (TextView) view.findViewById(R.id.descriptionTextView);
+            view = inflater.inflate(R.layout.tag_list_row,viewGroup,false);
+            row = new TagListRow();
+            row.nameTextView = (TextView) view.findViewById(R.id.nameTextView);
             view.setTag(row);
 
-        }else{
-            row = (ProposalListRow)view.getTag();
-
+        } else {
+            row = (TagListRow) view.getTag();
         }
 
-        row.titleTextView.setText(currentProposal.getTitle());
-        row.titleTextView.setTextColor(Color.BLACK);
-        row.descriptionTextView.setText(currentProposal.getContent());
+        row.nameTextView.setText(currentTag.getName());
+        row.nameTextView.setTextColor(Color.WHITE);
 
         return view;
     }

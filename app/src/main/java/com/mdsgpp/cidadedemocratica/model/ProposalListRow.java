@@ -7,6 +7,7 @@ import android.widget.TextView;
  */
 public class ProposalListRow {
 
-    public TextView titleTextVIew, descriptionTextView;
+    public TextView titleTextView;
+    public TextView descriptionTextView;
 
 }

@@ -11,6 +11,7 @@ import android.widget.ListView;
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.Tag;
+import com.mdsgpp.cidadedemocratica.model.TagListRow;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.requester.TagRequestResponseHandler;
@@ -26,14 +27,14 @@ public class TagsList extends AppCompatActivity {
 
         ListView tagsListView = (ListView) findViewById(R.id.tags_list);
 
-        ArrayList<Tag> tagsList = getTagsList();
-        final ArrayAdapter<Tag> tagsAdapter = new ArrayAdapter<Tag>(this,android.R.layout.simple_list_item_1, tagsList);
-        tagsListView.setAdapter(tagsAdapter);
+        ArrayList<Tag> tags = getTagsList();
+        final TagListAdapter tagAdapter = new TagListAdapter(this, tags);
+        tagsListView.setAdapter(tagAdapter);
 
         tagsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Tag tag = tagsAdapter.getItem(i);
+                Tag tag = (Tag)tagAdapter.getItem(i);
                 Long id = tag.getId();
 
                 Intent intent = new Intent(getApplicationContext(), TagDetailActivity.class);
