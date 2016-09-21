@@ -10,6 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Set;
@@ -72,7 +74,14 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
         Set<Long> tagIdKeySet = tagTaggings.keySet();
         for (Long key : tagIdKeySet) {
             Tag tag = dataContainer.getTagForId(key);
-            tag.setProposals(tagTaggings.get(key));
+            ArrayList<Proposal> proposals = tagTaggings.get(key);
+            Collections.sort(proposals, new Comparator<Proposal>() {
+                @Override
+                public int compare(Proposal p1, Proposal p2) {
+                    return p1.compareTo(p2);
+                }
+            });
+            tag.setProposals(proposals);
         }
     }
 
@@ -81,7 +90,14 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
         Set<Long> proposalIdKeySet = proposalTaggings.keySet();
         for (Long key : proposalIdKeySet) {
             Proposal proposal = dataContainer.getProposalForId(key);
-            proposal.setTags(proposalTaggings.get(key));
+            ArrayList<Tag> tags = proposalTaggings.get(key);
+            Collections.sort(tags, new Comparator<Tag>() {
+                @Override
+                public int compare(Tag t1, Tag t2) {
+                    return t1.compareTo(t2);
+                }
+            });
+            proposal.setTags(tags);
         }
     }
 
