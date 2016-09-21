@@ -44,11 +44,7 @@ public class TagsList extends AppCompatActivity {
         });
     }
 
-    public final static void pullTagData() {
-        Requester requester = new Requester("http://cidadedemocraticaapi.herokuapp.com/api/v0/tags", new TagRequestResponseHandler());
-        requester.request(Requester.RequestType.GET);
-        requester = null;
-    }
+
 
     private ArrayList<Tag> getTagsList() {
         DataContainer dataContainer = DataContainer.getInstance();

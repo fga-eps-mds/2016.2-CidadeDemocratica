@@ -1,9 +1,8 @@
-package layout;
+package com.mdsgpp.cidadedemocratica.view;
 
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,9 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.controller.ProposalListAdapter;
@@ -39,25 +36,17 @@ public class ListProposalFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private ListView proposalListView;
 
+    private ArrayList<Proposal> proposals;
+
     public ListProposalFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ListProposalFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ListProposalFragment newInstance(String param1, String param2) {
+    public static ListProposalFragment newInstance(ArrayList<Proposal> proposals) {
         ListProposalFragment fragment = new ListProposalFragment();
+
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+        fragment.proposals = proposals;
         return fragment;
     }
 
@@ -75,13 +64,9 @@ public class ListProposalFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
-        proposalListView = (ListView) view.findViewById(R.id.prosals_listID);
+        proposalListView = (ListView) view.findViewById(R.id.proposalsListId);
 
-
-
-
-        ArrayList<Proposal> proposalList = getProposalList();
-        final ProposalListAdapter proposalAdapter = new ProposalListAdapter(getContext().getApplicationContext(), proposalList);
+        final ProposalListAdapter proposalAdapter = new ProposalListAdapter(getContext().getApplicationContext(), this.proposals);
         proposalListView.setAdapter(proposalAdapter);
 
         proposalListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -145,7 +130,6 @@ public class ListProposalFragment extends Fragment {
         requester.request(Requester.RequestType.GET);
         requester = null;
     }
-
 
     private ArrayList<Proposal> getProposalList() {
         DataContainer dataContainer = DataContainer.getInstance();

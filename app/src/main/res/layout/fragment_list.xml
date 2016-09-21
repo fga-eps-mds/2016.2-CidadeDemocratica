@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="layout.ListProposalFragment">
+    tools:context=".view.ListProposalFragment">
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/prosals_listID"
+        android:id="@+id/proposalsListId"
         android:layout_centerHorizontal="true"
         android:background="@color/colorPrimary" />
 

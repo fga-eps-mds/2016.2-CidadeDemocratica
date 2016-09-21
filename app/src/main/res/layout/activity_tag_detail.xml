@@ -18,21 +18,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Tag"
-            android:id="@+id/tagNameTextView"
-            android:layout_marginBottom="20dp" />
+            android:text="Propostas com:"
+            android:id="@+id/proposalsWithTextView"
+            android:layout_gravity="center_horizontal" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Propostas que são classificadas por essa Tag"
-            android:id="@+id/tagsListTitleTextView"
-            android:layout_marginBottom="20dp" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Tag"
+            android:id="@+id/tagNameTextView"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center_horizontal" />
 
-        <ListView
-            android:layout_width="match_parent"
+        <FrameLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/proposalsListView" />
+            android:id="@+id/container"></FrameLayout>
+
     </LinearLayout>
 </RelativeLayout>

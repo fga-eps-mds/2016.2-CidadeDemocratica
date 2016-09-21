@@ -60,11 +60,6 @@ public class TagginsList extends AppCompatActivity {
         tagginsListView.setAdapter(tagginsAdapter);
     }
 
-    public final static void pullTagginsData() {
-        Requester requester = new Requester("http://cidadedemocraticaapi.herokuapp.com/api/v0/taggings", new TaggingsRequestResponseHandler());
-        requester.request(Requester.RequestType.GET);
-    }
-
     private ArrayList<Tag> getTagginsList() {
         DataContainer dataContainer = DataContainer.getInstance();
         Bundle extra = getIntent().getExtras();
