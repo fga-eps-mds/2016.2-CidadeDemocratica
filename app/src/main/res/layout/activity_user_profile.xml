@@ -11,10 +11,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/userName"/>
+        android:id="@+id/userName"
+        android:layout_gravity="center_horizontal"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/proposalsList"></ListView>
+        android:id="@+id/proposalsList"
+        android:layout_below="@+id/userName"></ListView>
 
 </RelativeLayout>
