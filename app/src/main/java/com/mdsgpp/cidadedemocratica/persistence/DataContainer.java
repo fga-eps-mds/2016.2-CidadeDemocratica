@@ -46,6 +46,42 @@ public class DataContainer {
         this.dataUpdateListener = dataUpdateListener;
     }
 
+    public Tag getTagForId(long id) {
+        Tag tag = null;
+        for (Tag t : this.tags) {
+            if (t.getId() == id) {
+                tag = t;
+                break;
+            } else { /* Not this one, continue */ }
+        }
+        return tag;
+    }
+
+    public Proposal getProposalForId(long id) {
+        Proposal proposal = null;
+        for (Proposal p : this.proposals) {
+            if (p.getId() == id) {
+                proposal = p;
+                break;
+            } else { /* Not this one, continue */ }
+        }
+        return proposal;
+    }
+
+    public User getUserForId(long id){
+        User user = null;
+        for (User userInterator : this.users){
+            if(userInterator.getId() == id){
+                user = userInterator;
+                break;
+            }
+            else {
+                // nothing to do
+            }
+        }
+        return user;
+    }
+
     public void addTag(Tag tag) {
         this.tags.add(tag);
         this.notifyTagsUpdate();
@@ -74,6 +110,36 @@ public class DataContainer {
     public void addProposals(ArrayList<Proposal> proposals) {
         this.proposals.addAll(proposals);
         this.notifyProposalsUpdate();
+    }
+
+    public void setTags(ArrayList<Tag> tags) {
+        this.tags = tags;
+        this.notifyTagsUpdate();
+    }
+
+    public void setProposals(ArrayList<Proposal> proposals) {
+        this.proposals = proposals;
+        this.notifyProposalsUpdate();
+    }
+
+    public void setUsers(ArrayList<User> users) {
+        this.users = users;
+        this.notifyUsersUpdate();
+    }
+
+    public void clearTags() {
+        this.tags.clear();
+        this.notifyTagsUpdate();
+    }
+
+    public void clearProposals() {
+        this.proposals.clear();
+        this.notifyProposalsUpdate();
+    }
+
+    public void clearUsers() {
+        this.users.clear();
+        this.notifyUsersUpdate();
     }
 
     private void notifyTagsUpdate() {

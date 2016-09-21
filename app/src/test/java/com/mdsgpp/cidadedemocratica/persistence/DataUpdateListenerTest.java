@@ -37,7 +37,7 @@ public class DataUpdateListenerTest extends AndroidTestCase {
             }
         });
 
-        Tag tag = new Tag("Tag", 0);
+        Tag tag = newTag();
         dataContainer.addTag(tag);
 
         assertTrue(updated[0]);
@@ -65,7 +65,7 @@ public class DataUpdateListenerTest extends AndroidTestCase {
             }
         });
 
-        Proposal proposal = new Proposal("Title", "Content", null);
+        Proposal proposal = newProposal();
         dataContainer.addProposal(proposal);
 
         assertTrue(updated[0]);
@@ -92,9 +92,22 @@ public class DataUpdateListenerTest extends AndroidTestCase {
             }
         });
 
-        User user = new User("Name", 0, "Location", "com.picture", null, null);
+        User user = newUser();
+
         dataContainer.addUser(user);
 
         assertTrue(updated[0]);
+    }
+
+    private Tag newTag() {
+        return new Tag(0, "name", 0, 0);
+    }
+
+    private Proposal newProposal() {
+        return new Proposal(0, "title", "content", 0,0);
+    }
+
+    private User newUser() {
+        return new User("name", 0, 0, 0);
     }
 }
