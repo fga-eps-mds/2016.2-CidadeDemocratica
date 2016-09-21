@@ -7,35 +7,35 @@ dependencies:
   override:
     - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
 
-# test:
-#   pre:
-#         # start the emulator
-#       - emulator -avd circleci-android22 -no-audio -no-window:
-#           background: true
-#           parallel: true
-#         # wait for it to have booted
-#       - circle-android wait-for-boot
-#
-#   override:
-#     #run unit tests
-#     - ./gradlew test
-#     #run code coverage
-#     - ./gradlew jacocoTestReport
-#     # run tests  against the emulator.
-#     - ./gradlew connectedCheck
-#     # copy the build outputs to artifacts
-#     - cp -r ./app/build/outputs $CIRCLE_ARTIFACTS/
-#     # copy the test results to the test results directory.
-#     - cp -r ./app/build/reports/* $CIRCLE_TEST_REPORTS/
-#
-#     - sudo apt-get install dc
-#
-#     - chmod +x ./CheckCoverageGoal.sh
-#
-#     - ./CheckCoverageGoal.sh
-#
-#   post:
-#     - bash <(curl -s https://codecov.io/bash)
+test:
+  pre:
+        # start the emulator
+      - emulator -avd circleci-android22 -no-audio -no-window:
+          background: true
+          parallel: true
+        # wait for it to have booted
+      - circle-android wait-for-boot
+
+  override:
+    #run unit tests
+    - ./gradlew test
+    #run code coverage
+    - ./gradlew jacocoTestReport
+    # run tests  against the emulator.
+    - ./gradlew connectedCheck
+    # copy the build outputs to artifacts
+    - cp -r ./app/build/outputs $CIRCLE_ARTIFACTS/
+    # copy the test results to the test results directory.
+    - cp -r ./app/build/reports/* $CIRCLE_TEST_REPORTS/
+
+    - sudo apt-get install dc
+
+    - chmod +x ./CheckCoverageGoal.sh
+
+    - ./CheckCoverageGoal.sh
+
+  post:
+    - bash <(curl -s https://codecov.io/bash)
 
 
 deployment:
@@ -46,7 +46,7 @@ deployment:
       - ./gradlew publishFreeRelease
         -Dorg.gradle.project.track=production
   beta:
-    branch: master
+    branch: beta
     commands:
       - ./gradlew assembleRelease
       - ./gradlew publishFreeRelease
