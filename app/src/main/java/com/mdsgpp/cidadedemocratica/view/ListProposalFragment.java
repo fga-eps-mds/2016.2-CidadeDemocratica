@@ -75,10 +75,9 @@ public class ListProposalFragment extends Fragment {
                 Proposal proposalClicked = (Proposal)proposalAdapter.getItem(i);
                 Long id = proposalClicked.getId();
                 String proposalName = proposalClicked.getTitle();
-                String proposalStringID = Long.toString(id);
+
                 Intent intent = new Intent(getActivity().getApplicationContext(),TagginsList.class);
-                intent.putExtra("ProposalId", proposalStringID);
-                intent.putExtra("ProposalTitle",proposalName);
+                intent.putExtra("proposalId", id);
                 startActivity(intent);
 
             }

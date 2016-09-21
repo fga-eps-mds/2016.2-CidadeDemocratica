@@ -16,26 +16,36 @@ import java.util.ArrayList;
 public class TagginsList extends AppCompatActivity {
 
     ListView tagginsListView;
-    TextView proposalTitle;
-    TextView proposalDescripition;
+    TextView proposalTitleTextView;
+    TextView proposalDescripitionTextView;
+    TextView relevanceTextView;
 
+    Proposal proposal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_taggins_list);
 
-        proposalTitle = (TextView)findViewById(R.id.titleProposalID);
-        proposalTitle.setText(getProposalTitle());
+        DataContainer dataContainer = DataContainer.getInstance();
+        Bundle extras = getIntent().getExtras();
+        long proposalId = extras.getLong("proposalId");
 
+        proposal = dataContainer.getProposalForId(proposalId);
 
-        proposalDescripition = (TextView)findViewById(R.id.proposalDescripitionID);
-        proposalDescripition.setText(getDescription());
+        proposalTitleTextView = (TextView)findViewById(R.id.titleProposalID);
+        proposalTitleTextView.setText(proposal.getTitle());
+
+        proposalDescripitionTextView = (TextView)findViewById(R.id.proposalDescripitionID);
+        proposalDescripitionTextView.setText(proposal.getContent());
+
+        relevanceTextView = (TextView)findViewById(R.id.relevanceTextView);
+        relevanceTextView.setText(String.valueOf(proposal.getRelevance()));
 
         tagginsListView = (ListView) findViewById(R.id.listaTagsDaPropostaID);
         ArrayList<Tag> tags = getTagsList();
 
-        if (tags== null) {
+        if (tags == null) {
             Toast.makeText(getApplicationContext(),"Proposta não possui TAGS", Toast.LENGTH_SHORT);
         }
         TagListAdapter tagginsAdapter = new TagListAdapter(this, tags);
@@ -44,38 +54,11 @@ public class TagginsList extends AppCompatActivity {
     }
 
     private ArrayList<Tag> getTagsList() {
-        DataContainer dataContainer = DataContainer.getInstance();
-        Bundle extra = getIntent().getExtras();
-        String idPassed = extra.getString("ProposalId");
-        if(idPassed != null) {
-            Long proposalId = Long.parseLong(idPassed);
-            Proposal proposal = dataContainer.getProposalForId(proposalId);
+        if (proposal != null) {
             return proposal.getTags();
+        } else {
+            return null;
         }
-
-        return null;
-    }
-
-    private String getDescription() {
-        DataContainer dataContainer = DataContainer.getInstance();
-        Bundle extra = getIntent().getExtras();
-        String idPassed = extra.getString("ProposalId");
-        if(idPassed != null)
-        {
-            Long proposalId = Long.parseLong(idPassed);
-            Proposal proposal = dataContainer.getProposalForId(proposalId);
-            return proposal.getContent();
-        }
-        return  null;
-    }
-
-    private String getProposalTitle() {
-        Bundle extra = getIntent().getExtras();
-        if(extra!=null) {
-            String proposalTitlePassed = extra.getString("ProposalTitle");
-            return proposalTitlePassed;
-        }
-        return null;
     }
 
 }
