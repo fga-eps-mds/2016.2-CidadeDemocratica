@@ -31,7 +31,7 @@ android {
     }
 
     jacocoAndroidUnitTestReport {
-        excludes += ['**/External**/','**/ReportController**']
+        excludes += ['**/External**/','**/ReportController**', '**/controller/**']
     }
 }
 
