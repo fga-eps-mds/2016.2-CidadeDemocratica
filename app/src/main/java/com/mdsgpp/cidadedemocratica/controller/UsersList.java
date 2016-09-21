@@ -17,6 +17,7 @@ import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.requester.UserRequestResponseHandler;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.jar.Attributes;
 
@@ -32,19 +33,16 @@ public class UsersList extends AppCompatActivity {
         usersListView = (ListView) findViewById(R.id.userList);
 
         ArrayList<User> usersList = getUsersList();
-        final ArrayAdapter<User> userAdapter = new ArrayAdapter<User>(this, android.R.layout.simple_list_item_1,usersList);
+        final UserListAdapter userAdapter = new UserListAdapter(this, usersList);
         usersListView.setAdapter(userAdapter);
 
-        usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l){
-                User userClicked = userAdapter.getItem(position);
-                String userName = userClicked.getName();
+                User userClicked = (User)userAdapter.getItem(position);
                 long id = userClicked.getId();
-                String userId = Long.toString(id);
-                Intent intent = new Intent(getApplicationContext(),UserProfile.class);
-                intent.putExtra("UserName",userName);
-                intent.putExtra("UserId",userId);
+                Intent intent = new Intent(getApplicationContext(), UserProfile.class);
+                intent.putExtra("userId", id);
                 startActivity(intent);
             }
         });

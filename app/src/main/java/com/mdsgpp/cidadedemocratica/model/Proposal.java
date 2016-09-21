@@ -26,7 +26,9 @@ public class Proposal implements Comparable<Proposal> {
         return this.id;
     }
 
-    public long getUserId(){ return  this.userId;}
+    public long getUserId() {
+        return this.userId;
+    }
 
     public String getTitle() {
         return this.title;

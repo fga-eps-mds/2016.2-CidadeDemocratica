@@ -37,7 +37,11 @@ public class MainActivity extends AppCompatActivity {
 
         pullTagData();
         pullProposalData();
+
+        // Semaphore stops until loads tags & proposals
         pullTagginsData();
+
+        // Semaphore stops until loads taggings
         pullUsersData();
 
     }
