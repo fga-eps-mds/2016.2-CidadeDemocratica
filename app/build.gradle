@@ -29,6 +29,10 @@ android {
     productFlavors {
         free {}
     }
+
+    jacocoAndroidUnitTestReport {
+        excludes += ['**/External**/','**/ReportController**']
+    }
 }
 
 dependencies {
