@@ -51,11 +51,6 @@ public class UsersList extends AppCompatActivity {
 
     }
 
-    public final static void pullUsersData(){
-        Requester requester = new Requester("http://cidadedemocraticaapi.herokuapp.com/api/v0/users", new UserRequestResponseHandler());
-        requester.request(Requester.RequestType.GET);
-    }
-
     private ArrayList<User> getUsersList(){
         DataContainer dataContainer = DataContainer.getInstance();
         return dataContainer.getUsers();

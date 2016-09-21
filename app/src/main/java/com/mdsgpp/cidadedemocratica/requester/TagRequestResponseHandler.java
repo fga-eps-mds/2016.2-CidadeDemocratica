@@ -9,6 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -42,6 +44,12 @@ public class TagRequestResponseHandler extends JsonHttpResponseHandler {
                 }
             }
 
+            Collections.sort(tags, new Comparator<Tag>() {
+                @Override
+                public int compare(Tag t1, Tag t2) {
+                    return t1.compareTo(t2);
+                }
+            });
             dataContainer.setTags(tags);
         }
 

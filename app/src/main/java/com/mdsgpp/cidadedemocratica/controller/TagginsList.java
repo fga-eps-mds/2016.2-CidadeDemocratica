@@ -1,9 +1,7 @@
 package com.mdsgpp.cidadedemocratica.controller;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,97 +10,55 @@ import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.Tag;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
-import com.mdsgpp.cidadedemocratica.requester.Requester;
-import com.mdsgpp.cidadedemocratica.requester.TaggingsRequestResponseHandler;
 
 import java.util.ArrayList;
 
 public class TagginsList extends AppCompatActivity {
 
     ListView tagginsListView;
-    TextView proposalTitle;
-    TextView proposalDescripition;
+    TextView proposalTitleTextView;
+    TextView proposalDescripitionTextView;
+    TextView relevanceTextView;
 
-
+    Proposal proposal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_taggins_list);
 
-        proposalTitle = (TextView)findViewById(R.id.titleProposalID);
-        proposalTitle.setText(getProposalTitle());
+        DataContainer dataContainer = DataContainer.getInstance();
+        Bundle extras = getIntent().getExtras();
+        long proposalId = extras.getLong("proposalId");
 
+        proposal = dataContainer.getProposalForId(proposalId);
 
-        proposalDescripition = (TextView)findViewById(R.id.proposalDescripitionID);
-        proposalDescripition.setText(getDescription());
+        proposalTitleTextView = (TextView)findViewById(R.id.titleProposalID);
+        proposalTitleTextView.setText(proposal.getTitle());
 
+        proposalDescripitionTextView = (TextView)findViewById(R.id.proposalDescripitionID);
+        proposalDescripitionTextView.setText(proposal.getContent());
 
-
-
+        relevanceTextView = (TextView)findViewById(R.id.relevanceTextView);
+        relevanceTextView.setText(String.valueOf(proposal.getRelevance()));
 
         tagginsListView = (ListView) findViewById(R.id.listaTagsDaPropostaID);
-        ArrayList<Tag> tagginsList = new ArrayList<Tag>();
-        if(getTagginsList().size()>0){
-            tagginsList=getTagginsList();
+        ArrayList<Tag> tags = getTagsList();
+
+        if (tags == null) {
+            Toast.makeText(getApplicationContext(),"Proposta não possui TAGS", Toast.LENGTH_SHORT);
         }
-        else
-        {
-            Toast.makeText(getApplicationContext(),"Proposta não possui TAGS",Toast.LENGTH_SHORT);
-        }
-        ArrayAdapter<Tag> tagginsAdapter = new ArrayAdapter<Tag>(
-                this,
-                android.R.layout.simple_list_item_1,
-                android.R.id.text1,
-                tagginsList
-        );
+        TagListAdapter tagginsAdapter = new TagListAdapter(this, tags);
 
         tagginsListView.setAdapter(tagginsAdapter);
     }
 
-    public final static void pullTagginsData() {
-        Requester requester = new Requester("http://cidadedemocraticaapi.herokuapp.com/api/v0/taggings", new TaggingsRequestResponseHandler());
-        requester.request(Requester.RequestType.GET);
-    }
-
-    private ArrayList<Tag> getTagginsList() {
-        DataContainer dataContainer = DataContainer.getInstance();
-        Bundle extra = getIntent().getExtras();
-        String idPassed = extra.getString("ProposalId");
-        if(idPassed != null)
-        {
-            Long proposalId = Long.parseLong(idPassed);
-            Proposal proposal = dataContainer.getProposalForId(proposalId);
+    private ArrayList<Tag> getTagsList() {
+        if (proposal != null) {
             return proposal.getTags();
+        } else {
+            return null;
         }
-        return  null;
-
-
-    }
-
-    private String getDescription()
-    {
-        DataContainer dataContainer = DataContainer.getInstance();
-        Bundle extra = getIntent().getExtras();
-        String idPassed = extra.getString("ProposalId");
-        if(idPassed != null)
-        {
-            Long proposalId = Long.parseLong(idPassed);
-            Proposal proposal = dataContainer.getProposalForId(proposalId);
-            return proposal.getContent();
-        }
-        return  null;
-    }
-
-    private String getProposalTitle()
-    {
-        Bundle extra = getIntent().getExtras();
-        if(extra!=null)
-        {
-            String proposalTitlePassed = extra.getString("ProposalTitle");
-            return proposalTitlePassed;
-        }
-        return null;
     }
 
 }

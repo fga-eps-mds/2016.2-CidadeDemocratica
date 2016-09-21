@@ -15,27 +15,57 @@ import com.mdsgpp.cidadedemocratica.controller.TagginsList;
 import com.mdsgpp.cidadedemocratica.controller.TagsList;
 import com.mdsgpp.cidadedemocratica.controller.UsersList;
 
+import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
+import com.mdsgpp.cidadedemocratica.requester.Requester;
+import com.mdsgpp.cidadedemocratica.requester.TagRequestResponseHandler;
+import com.mdsgpp.cidadedemocratica.requester.TaggingsRequestResponseHandler;
+import com.mdsgpp.cidadedemocratica.requester.UserRequestResponseHandler;
+import com.mdsgpp.cidadedemocratica.view.ListProposalFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     ListView proposalListView;
+    final String proposalsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/proposals";
+    final String tagsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/tags";
+    final String taggingsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/taggings";
+    final String tagsUsersEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/users";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TagsList.pullTagData();
+        pullTagData();
+        pullProposalData();
+        pullTagginsData();
+        pullUsersData();
 
-        UsersList.pullUsersData();
-        ProposalsList.pullProposalData();
-        TagginsList.pullTagginsData();
+    }
 
+    public void pullProposalData() {
+        Requester requester = new Requester(proposalsEndpointUrl, new ProposalRequestResponseHandler());
+        requester.request(Requester.RequestType.GET);
+    }
 
+    public void pullTagData() {
+        Requester requester = new Requester(tagsEndpointUrl, new TagRequestResponseHandler());
+        requester.request(Requester.RequestType.GET);
+    }
+
+    public void pullTagginsData() {
+        Requester requester = new Requester(taggingsEndpointUrl, new TaggingsRequestResponseHandler());
+        requester.request(Requester.RequestType.GET);
+    }
+
+    public void pullUsersData(){
+        Requester requester = new Requester(tagsUsersEndpointUrl, new UserRequestResponseHandler());
+        requester.request(Requester.RequestType.GET);
     }
 
     public  void showProposalList(View view){
         Intent proposalIntent = new Intent(this, ProposalsList.class);
         startActivity(proposalIntent);
+
     }
 
     public void showTagsList(View view){
