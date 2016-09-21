@@ -22,3 +22,7 @@ status:
         threshold: null
         branches: null           # specify the target coverage for each commit status
         base: auto
+
+ignore:
+    - app/src/main/java/com/mdsgpp/cidadedemocratica/External/*
+    - app/src/main/java/com/mdsgpp/cidadedemocratica/controller/*
