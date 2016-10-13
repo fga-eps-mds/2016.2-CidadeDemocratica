@@ -41,7 +41,8 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="20dp">
+                android:weightSum="1"
+                android:paddingLeft="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -56,6 +57,22 @@
                     android:text="0"
                     android:id="@+id/relevanceTextView"
                     android:textColor="#000000" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="20dp">
+
+                    <Button
+                        android:id="@+id/shareButton"
+                        android:background="@android:drawable/ic_menu_share"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp" />
+                </RelativeLayout>
+
             </LinearLayout>
 
             <TextView
