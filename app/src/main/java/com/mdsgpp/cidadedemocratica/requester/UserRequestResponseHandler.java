@@ -20,14 +20,8 @@ import cz.msebera.android.httpclient.Header;
  * Created by andreanmasiro on 9/8/16.
  */
 public class UserRequestResponseHandler extends JsonHttpResponseHandler {
-    public UserRequestResponseHandler (){
 
-    }
-    public UserRequestResponseHandler (ProgressDialog progressDialog){
-        this.progressDialog = progressDialog;
-    }
     private final int success = 200;
-    private ProgressDialog progressDialog;
 
     DataContainer dataContainer = DataContainer.getInstance();
 
@@ -43,7 +37,6 @@ public class UserRequestResponseHandler extends JsonHttpResponseHandler {
 
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-        progressDialog.dismiss();
         if(statusCode == success){
             ArrayList<User> users = new ArrayList<User>();
 
@@ -77,7 +70,6 @@ public class UserRequestResponseHandler extends JsonHttpResponseHandler {
     @Override
     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
         super.onFailure(statusCode, headers, throwable, errorResponse);
-        progressDialog.dismiss();
         requestUpdateListener.afterError(String.valueOf(statusCode));
     }
 

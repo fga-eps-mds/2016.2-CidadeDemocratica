@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
 
     ListView proposalListView;
     final String proposalsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/proposals";
-    final String tagsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/tags";
     final String taggingsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/taggings";
 
     @Override
@@ -37,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        //pullTagData();
         //pullProposalData();
         // Semaphore stops until loads tags & proposals
         //pullTagginsData();
@@ -46,11 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void pullProposalData() {
         Requester requester = new Requester(proposalsEndpointUrl, new ProposalRequestResponseHandler());
-        requester.request(Requester.RequestType.GET);
-    }
-
-    public void pullTagData() {
-        Requester requester = new Requester(tagsEndpointUrl, new TagRequestResponseHandler());
         requester.request(Requester.RequestType.GET);
     }
 

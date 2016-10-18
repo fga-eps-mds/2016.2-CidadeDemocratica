@@ -33,7 +33,11 @@ public class UsersList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users_list);
-        pullUsersData();
+        if (DataContainer.getInstance().getUsers().size()==0){
+            pullUsersData();
+        }else {
+            loadUsersList();
+        }
     }
 
     private void loadUsersList(){
@@ -62,7 +66,7 @@ public class UsersList extends AppCompatActivity {
 
     private void pullUsersData(){
         progressDialog = FeedbackManager.createProgressDialog(this,getString(R.string.message_load_users));
-        UserRequestResponseHandler userRequestResponseHandler = new UserRequestResponseHandler(progressDialog);
+        UserRequestResponseHandler userRequestResponseHandler = new UserRequestResponseHandler();
         setDataUpdateListener(userRequestResponseHandler);
         Requester requester = new Requester(UserRequestResponseHandler.tagsUsersEndpointUrl, userRequestResponseHandler);
         requester.request(Requester.RequestType.GET);
@@ -77,12 +81,14 @@ public class UsersList extends AppCompatActivity {
         userRequestResponseHandler.setRequestUpdateListener(new RequestUpdateListener() {
             @Override
             public void afterSuccess() {
+                progressDialog.dismiss();
                 loadUsersList();
                 createToast(getString(R.string.message_success_load_users));
             }
 
             @Override
             public void afterError(String message) {
+                progressDialog.dismiss();
                 createToast(message);
             }
         });
