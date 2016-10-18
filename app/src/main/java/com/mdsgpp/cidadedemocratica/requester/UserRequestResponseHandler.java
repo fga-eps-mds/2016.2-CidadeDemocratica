@@ -1,5 +1,7 @@
 package com.mdsgpp.cidadedemocratica.requester;
 
+import android.app.ProgressDialog;
+
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.model.User;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
@@ -18,7 +20,14 @@ import cz.msebera.android.httpclient.Header;
  * Created by andreanmasiro on 9/8/16.
  */
 public class UserRequestResponseHandler extends JsonHttpResponseHandler {
+    public UserRequestResponseHandler (){
+
+    }
+    public UserRequestResponseHandler (ProgressDialog progressDialog){
+        this.progressDialog = progressDialog;
+    }
     private final int success = 200;
+    private ProgressDialog progressDialog;
 
     DataContainer dataContainer = DataContainer.getInstance();
 
@@ -28,8 +37,13 @@ public class UserRequestResponseHandler extends JsonHttpResponseHandler {
     private final String userIdKey = "id";
     private final String userRelevanceKey = "relevancia";
 
+    public static final String tagsUsersEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/users";
+
+    private RequestUpdateListener requestUpdateListener;
+
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+        progressDialog.dismiss();
         if(statusCode == success){
             ArrayList<User> users = new ArrayList<User>();
 
@@ -56,12 +70,22 @@ public class UserRequestResponseHandler extends JsonHttpResponseHandler {
                 }
             });
             dataContainer.setUsers(users);
-
+            requestUpdateListener.afterSuccess();
         }
     }
 
     @Override
     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
         super.onFailure(statusCode, headers, throwable, errorResponse);
+        progressDialog.dismiss();
+        requestUpdateListener.afterError(String.valueOf(statusCode));
+    }
+
+    public RequestUpdateListener getRequestUpdateListener() {
+        return requestUpdateListener;
+    }
+
+    public void setRequestUpdateListener(RequestUpdateListener requestUpdateListener) {
+        this.requestUpdateListener = requestUpdateListener;
     }
 }

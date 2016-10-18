@@ -1,6 +1,7 @@
 package com.mdsgpp.cidadedemocratica;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,30 +30,17 @@ public class MainActivity extends AppCompatActivity {
     final String proposalsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/proposals";
     final String tagsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/tags";
     final String taggingsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/taggings";
-    final String tagsUsersEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/users";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        if (DataContainer.getInstance().getTags().size()==0){
-//            pullTagData();
-//        }
-//
-//        if (DataContainer.getInstance().getProposals().size()==0){
-//            pullProposalData();
-//        }
-//
-//        if (DataContainer.getInstance().getUsers().size()==0){
-//            pullUsersData();
-//        }
 
-        pullTagData();
-        pullProposalData();
-        pullUsersData();
+        //pullTagData();
+        //pullProposalData();
         // Semaphore stops until loads tags & proposals
-        pullTagginsData();
+        //pullTagginsData();
 
     }
 
@@ -68,11 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void pullTagginsData() {
         Requester requester = new Requester(taggingsEndpointUrl, new TaggingsRequestResponseHandler());
-        requester.request(Requester.RequestType.GET);
-    }
-
-    public void pullUsersData(){
-        Requester requester = new Requester(tagsUsersEndpointUrl, new UserRequestResponseHandler());
         requester.request(Requester.RequestType.GET);
     }
 
