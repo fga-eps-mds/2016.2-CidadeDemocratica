@@ -12,13 +12,15 @@ public class Proposal implements Comparable<Proposal> {
     private String content = "";
     private long relevance = 0;
     private long userId = 0;
+    private String slug ="";
     private ArrayList<Tag> tags = new ArrayList<Tag>();
 
-    public Proposal(long id, String title, String content, long relevance, long userId) {
+    public Proposal(long id, String title, String content, long relevance, long userId, String slug) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.relevance = relevance;
+        this.slug = slug;
         this.userId = userId;
     }
 
@@ -28,6 +30,10 @@ public class Proposal implements Comparable<Proposal> {
 
     public long getUserId() {
         return this.userId;
+    }
+
+    public String getSlug() {
+        return this.slug;
     }
 
     public String getTitle() {
