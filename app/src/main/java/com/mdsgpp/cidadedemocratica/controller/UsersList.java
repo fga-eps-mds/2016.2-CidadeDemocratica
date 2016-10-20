@@ -31,9 +31,9 @@ public class UsersList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users_list);
-        if (DataContainer.getInstance().getUsers().size() == 0){
+        if (DataContainer.getInstance().getUsers().size() == 0) {
             pullUsersData();
-        }else {
+        } else {
             loadUsersList();
         }
     }

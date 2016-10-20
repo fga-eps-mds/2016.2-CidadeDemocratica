@@ -66,7 +66,7 @@ public class TagsList extends AppCompatActivity {
     }
 
     private void createToast(String message){
-        FeedbackManager.createToast(this,message);
+        FeedbackManager.createToast(this, message);
     }
 
     public void pullTagData() {
