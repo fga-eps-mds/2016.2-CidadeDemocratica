@@ -70,8 +70,8 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
 
     private void shareProposal(){
 
-        String subjectShare = getString(R.string.title_sharing) + proposal.getTitle();
-        String contentShare = subjectShare + getString(R.string.title_sharing_description) + proposal.getContent() + getString(R.string.link_site_cidade_democratica) + "/topico/" + this.proposal.getId() + "-" + this.proposal.getSlug();
+        String subjectShare = getString(R.string.title_sharing) + " " + proposal.getTitle();
+        String contentShare = getString(R.string.link_site_cidade_democratica) + "topico/" + this.proposal.getId() + "-" + this.proposal.getSlug() + "\n" + subjectShare + getString(R.string.title_sharing_description) + proposal.getContent();
 
         Intent intentShare =new Intent(android.content.Intent.ACTION_SEND);
 
