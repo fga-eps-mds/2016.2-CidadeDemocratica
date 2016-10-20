@@ -31,7 +31,8 @@ public class UserRequestResponseHandler extends JsonHttpResponseHandler {
     private final String userIdKey = "id";
     private final String userRelevanceKey = "relevancia";
 
-    public static final String tagsUsersEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/users";
+    public static int nextPageToRequest = 1;
+    public static final String usersEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/users";
 
     private RequestUpdateListener requestUpdateListener;
 
@@ -62,7 +63,7 @@ public class UserRequestResponseHandler extends JsonHttpResponseHandler {
                     return u1.compareTo(u2);
                 }
             });
-            dataContainer.setUsers(users);
+            dataContainer.addUsers(users);
             requestUpdateListener.afterSuccess();
         }
     }

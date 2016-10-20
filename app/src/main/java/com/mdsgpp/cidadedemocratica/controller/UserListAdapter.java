@@ -66,4 +66,9 @@ public class UserListAdapter extends BaseAdapter {
 
         return view;
     }
+
+    public void updateData(ArrayList<User> data) {
+        this.data = data;
+        notifyDataSetChanged();
+    }
 }
