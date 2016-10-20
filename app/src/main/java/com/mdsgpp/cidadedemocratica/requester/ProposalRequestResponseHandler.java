@@ -22,6 +22,7 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
 
     DataContainer dataContainer = DataContainer.getInstance();
     public static final String proposalsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/proposals";
+    public static int nextPageToRequest = 1;
     private RequestUpdateListener requestUpdateListener;
 
     private final String jsonProposalType = "Proposta";
@@ -66,7 +67,7 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
                     return p1.compareTo(p2);
                 }
             });
-            dataContainer.setProposals(proposals);
+            dataContainer.addProposals(proposals);
             afterSuccess();
         }
 

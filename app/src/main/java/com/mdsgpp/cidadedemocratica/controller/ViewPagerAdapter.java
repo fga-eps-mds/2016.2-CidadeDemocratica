@@ -19,7 +19,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     int numberOfTabs;
     ListProposalFragment tabAll, tabAroundHere, tabLocation;
 
-    public  ViewPagerAdapter(FragmentManager fragmentManager, CharSequence titles[], int numberOfTabs){
+    public ViewPagerAdapter(FragmentManager fragmentManager, CharSequence titles[], int numberOfTabs){
         super(fragmentManager);
 
         this.titles = titles;
@@ -31,13 +31,13 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         ArrayList<Proposal> proposals = DataContainer.getInstance().getProposals();
         if(position == 0){
-            if(tabAll==null){
+            if(tabAll == null){
                 tabAll = ListProposalFragment.newInstance(proposals);
             }
             return  tabAll;
         }
         else if(position == 1){
-            if(tabAroundHere==null){
+            if(tabAroundHere == null){
                 tabAroundHere = ListProposalFragment.newInstance(proposals);
             }
             return  tabAroundHere;

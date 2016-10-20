@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ListView;
 
 import com.mdsgpp.cidadedemocratica.External.SlidingTabLayout;
 import com.mdsgpp.cidadedemocratica.R;
@@ -20,6 +21,7 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
 
     private int numberOfTabs = 3;
     private ProgressDialog progressDialog;
+    private ViewPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +40,15 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
 
     }
 
-    private void pullProposalsData() {
-        progressDialog = FeedbackManager.createProgressDialog(this, getString(R.string.message_load_proposals));
+    public void pullProposalsData() {
+        if (progressDialog == null) {
+            progressDialog = FeedbackManager.createProgressDialog(this, getString(R.string.message_load_proposals));
+        }
         ProposalRequestResponseHandler proposalRequestResponseHandler = new ProposalRequestResponseHandler();
         setDataUpdateListener(proposalRequestResponseHandler);
+
         Requester requester = new Requester(ProposalRequestResponseHandler.proposalsEndpointUrl, proposalRequestResponseHandler);
+        requester.setParameter("page", String.valueOf(ProposalRequestResponseHandler.nextPageToRequest));
         requester.request(Requester.RequestType.GET);
     }
 
@@ -51,7 +57,9 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         CharSequence titles[] = {getString(R.string.titulo_tab_tudo), getString(R.string.titulo_tab_porAqui),
                 getString(R.string.titulo_tab_localidade)};
 
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles, numberOfTabs);
+        if (adapter == null) {
+            adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles, numberOfTabs);
+        }
 
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
@@ -77,7 +85,10 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         progressDialog.dismiss();
         loadProposalsList();
         createToast(getString(R.string.message_success_load_proposals));
+        ProposalRequestResponseHandler.nextPageToRequest++;
     }
+
+
 
     private void createToast(String message) {
         FeedbackManager.createToast(this, message);
