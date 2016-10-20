@@ -20,9 +20,7 @@ import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.requester.UserRequestResponseHandler;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.jar.Attributes;
 
 public class UsersList extends AppCompatActivity {
 
@@ -33,7 +31,7 @@ public class UsersList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users_list);
-        if (DataContainer.getInstance().getUsers().size()==0){
+        if (DataContainer.getInstance().getUsers().size() == 0){
             pullUsersData();
         }else {
             loadUsersList();
@@ -64,8 +62,8 @@ public class UsersList extends AppCompatActivity {
         return dataContainer.getUsers();
     }
 
-    private void pullUsersData(){
-        progressDialog = FeedbackManager.createProgressDialog(this,getString(R.string.message_load_users));
+    private void pullUsersData() {
+        progressDialog = FeedbackManager.createProgressDialog(this, getString(R.string.message_load_users));
         UserRequestResponseHandler userRequestResponseHandler = new UserRequestResponseHandler();
         setDataUpdateListener(userRequestResponseHandler);
         Requester requester = new Requester(UserRequestResponseHandler.tagsUsersEndpointUrl, userRequestResponseHandler);
@@ -73,7 +71,7 @@ public class UsersList extends AppCompatActivity {
     }
 
     private void createToast(String message){
-        FeedbackManager.createToast(this,message);
+        FeedbackManager.createToast(this, message);
     }
 
     private void setDataUpdateListener(UserRequestResponseHandler userRequestResponseHandler){

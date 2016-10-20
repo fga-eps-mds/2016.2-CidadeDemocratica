@@ -28,7 +28,7 @@ public class TagsList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tags_list);
-        if (DataContainer.getInstance().getTags().size()==0){
+        if (DataContainer.getInstance().getTags().size() == 0){
             pullTagData();
         }else {
             loadTagsList();
@@ -71,13 +71,13 @@ public class TagsList extends AppCompatActivity {
 
     public void pullTagData() {
         progressDialog = FeedbackManager.createProgressDialog(this,getString(R.string.message_load_tags));
-        TagRequestResponseHandler  tagRequestResponseHandler = new TagRequestResponseHandler();
+        TagRequestResponseHandler tagRequestResponseHandler = new TagRequestResponseHandler();
         setDataUpdateListener(tagRequestResponseHandler);
         Requester requester = new Requester(TagRequestResponseHandler.tagsEndpointUrl, tagRequestResponseHandler);
         requester.request(Requester.RequestType.GET);
     }
 
-    private void setDataUpdateListener(TagRequestResponseHandler tagRequestResponseHandler){
+    private void setDataUpdateListener(TagRequestResponseHandler tagRequestResponseHandler) {
 
         tagRequestResponseHandler.setRequestUpdateListener(new RequestUpdateListener() {
             @Override
