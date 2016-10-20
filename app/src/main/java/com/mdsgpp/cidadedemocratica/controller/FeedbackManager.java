@@ -11,7 +11,7 @@ import android.widget.Toast;
 public class FeedbackManager {
 
     static public void createToast(Context context, String message){
-        Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
         toast.show();
     }
 
