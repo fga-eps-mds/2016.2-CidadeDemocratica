@@ -25,6 +25,8 @@ public class TagRequestResponseHandler extends JsonHttpResponseHandler {
     private final String tagIdKey = "id";
     private final String tagRelevanceKey = "relevancia";
 
+    public static int nextPageToRequest = 1;
+
     public static final String tagsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/tags";
     private RequestUpdateListener requestUpdateListener;
     @Override
@@ -52,7 +54,7 @@ public class TagRequestResponseHandler extends JsonHttpResponseHandler {
                     return t1.compareTo(t2);
                 }
             });
-            dataContainer.setTags(tags);
+            dataContainer.addTags(tags);
             requestUpdateListener.afterSuccess();
         }
 

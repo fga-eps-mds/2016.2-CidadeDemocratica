@@ -66,4 +66,9 @@ public class TagListAdapter extends BaseAdapter {
 
         return view;
     }
+
+    public void updateData(ArrayList<Tag> data) {
+        this.data = data;
+        notifyDataSetChanged();
+    }
 }
