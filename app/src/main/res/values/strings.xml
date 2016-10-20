@@ -17,6 +17,7 @@
     <string name="message_success_load_users">Usuários carregados com sucesso!</string>
     <string name="message_load_tags">Carregando tags...</string>
     <string name="message_success_load_tags">Tags carregadas com sucesso!</string>
-
+    <string name="message_load_proposals">Carregando propostas...</string>
+    <string name="message_success_load_proposals">Propostas carregadas com sucesso!</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
