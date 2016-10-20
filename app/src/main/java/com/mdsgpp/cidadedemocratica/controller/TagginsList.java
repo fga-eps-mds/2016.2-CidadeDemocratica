@@ -1,5 +1,6 @@
 package com.mdsgpp.cidadedemocratica.controller;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,9 @@ import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.Tag;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
+import com.mdsgpp.cidadedemocratica.requester.Requester;
+import com.mdsgpp.cidadedemocratica.requester.TaggingsRequestResponseHandler;
 
 import java.util.ArrayList;
 
@@ -25,6 +29,7 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
     Button shareButton;
 
     Proposal proposal;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +86,18 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
         intentShare.putExtra(android.content.Intent.EXTRA_TEXT, contentShare);
 
         startActivity(Intent.createChooser(intentShare,getString(R.string.name_action_share)));
+    }
+
+    private void pullTaggingsData() {
+        progressDialog = FeedbackManager.createProgressDialog(this, getString(R.string.message_load_proposals));
+        TaggingsRequestResponseHandler taggingsRequestResponseHandler = new TaggingsRequestResponseHandler();
+        setDataUpdateListener(taggingsRequestResponseHandler);
+        Requester requester = new Requester(ProposalRequestResponseHandler.proposalsEndpointUrl, taggingsRequestResponseHandler);
+        requester.request(Requester.RequestType.GET);
+    }
+
+    private void setDataUpdateListener(TaggingsRequestResponseHandler handler) {
+
     }
 
     @Override

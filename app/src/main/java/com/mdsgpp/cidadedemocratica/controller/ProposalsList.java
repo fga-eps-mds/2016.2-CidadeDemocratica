@@ -80,7 +80,7 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
     }
 
     private void createToast(String message) {
-        FeedbackManager.createToast(this,message);
+        FeedbackManager.createToast(this, message);
     }
 
     public void afterError(String message) {
