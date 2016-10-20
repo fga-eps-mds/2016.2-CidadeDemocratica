@@ -18,6 +18,7 @@ public class Requester {
     }
 
     private String url = "";
+    private String urlSuffix = "";
     private AsyncHttpResponseHandler responseHandler;
     private static AsyncHttpClient client = Looper.myLooper() == null ? new SyncHttpClient() : new AsyncHttpClient();
 
@@ -29,7 +30,11 @@ public class Requester {
     public void request(RequestType method) {
         if (method == RequestType.GET) {
 
-            client.get(this.url, this.responseHandler);
+            client.get(this.url + urlSuffix, this.responseHandler);
         }
+    }
+
+    public void setUrlSuffix(String urlSuffix) {
+        this.urlSuffix = urlSuffix;
     }
 }
