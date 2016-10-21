@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.mime.content.StringBody;
 
 /**
  * Created by andreanmasiro on 9/9/16.
@@ -20,6 +21,10 @@ import cz.msebera.android.httpclient.Header;
 public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
 
     DataContainer dataContainer = DataContainer.getInstance();
+    public static final String proposalsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/proposals";
+    public static int nextPageToRequest = 1;
+    private RequestUpdateListener requestUpdateListener;
+
     private final String jsonProposalType = "Proposta";
     private final String proposalTitleKey = "titulo";
     private final String proposalContentKey = "descricao";
@@ -64,13 +69,35 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
                     return p1.compareTo(p2);
                 }
             });
-            dataContainer.setProposals(proposals);
+            dataContainer.addProposals(proposals);
+            afterSuccess();
         }
 
+    }
+
+    private void afterSuccess() {
+        if (requestUpdateListener != null) {
+            requestUpdateListener.afterSuccess();
+        } else { }
+    }
+
+    private void afterError(String message) {
+        if (requestUpdateListener != null) {
+            requestUpdateListener.afterError(message);
+        } else { }
     }
 
     @Override
     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
         super.onFailure(statusCode, headers, throwable, errorResponse);
+        afterError(String.valueOf(statusCode));
+    }
+
+    public RequestUpdateListener getRequestUpdateListener() {
+        return requestUpdateListener;
+    }
+
+    public void setRequestUpdateListener(RequestUpdateListener requestUpdateListener) {
+        this.requestUpdateListener = requestUpdateListener;
     }
 }

@@ -25,6 +25,10 @@ public class TagRequestResponseHandler extends JsonHttpResponseHandler {
     private final String tagIdKey = "id";
     private final String tagRelevanceKey = "relevancia";
 
+    public static int nextPageToRequest = 1;
+
+    public static final String tagsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/tags";
+    private RequestUpdateListener requestUpdateListener;
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
 
@@ -50,7 +54,8 @@ public class TagRequestResponseHandler extends JsonHttpResponseHandler {
                     return t1.compareTo(t2);
                 }
             });
-            dataContainer.setTags(tags);
+            dataContainer.addTags(tags);
+            requestUpdateListener.afterSuccess();
         }
 
     }
@@ -58,5 +63,14 @@ public class TagRequestResponseHandler extends JsonHttpResponseHandler {
     @Override
     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
         super.onFailure(statusCode, headers, throwable, errorResponse);
+        requestUpdateListener.afterError(String.valueOf(statusCode));
+    }
+
+    public RequestUpdateListener getRequestUpdateListener() {
+        return requestUpdateListener;
+    }
+
+    public void setRequestUpdateListener(RequestUpdateListener requestUpdateListener) {
+        this.requestUpdateListener = requestUpdateListener;
     }
 }

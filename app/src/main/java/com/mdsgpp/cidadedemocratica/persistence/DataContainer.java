@@ -11,10 +11,10 @@ import java.util.ArrayList;
  */
 public class DataContainer {
 
-    private ArrayList<Tag> tags = new ArrayList<Tag>();
-    private ArrayList<User> users = new ArrayList<User>();
-    private ArrayList<Proposal> proposals = new ArrayList<Proposal>();
-    private DataUpdateListener dataUpdateListener;
+    private ArrayList<Tag> tags = new ArrayList<>();
+    private ArrayList<User> users = new ArrayList<>();
+    private ArrayList<Proposal> proposals = new ArrayList<>();
+    private ArrayList<DataUpdateListener> dataUpdateListeners = new ArrayList<>();
 
     private static DataContainer instance;
 
@@ -43,7 +43,7 @@ public class DataContainer {
     }
 
     public void setDataUpdateListener(DataUpdateListener dataUpdateListener) {
-        this.dataUpdateListener = dataUpdateListener;
+        this.dataUpdateListeners.add(dataUpdateListener);
     }
 
     public Tag getTagForId(long id) {
@@ -143,20 +143,20 @@ public class DataContainer {
     }
 
     private void notifyTagsUpdate() {
-        if (this.dataUpdateListener != null) {
-            this.dataUpdateListener.tagsUpdated();
+        for (DataUpdateListener listener : this.dataUpdateListeners) {
+            listener.tagsUpdated();
         }
     }
 
     private void notifyProposalsUpdate() {
-        if (this.dataUpdateListener != null) {
-            this.dataUpdateListener.proposalsUpdated();
+        for (DataUpdateListener listener : this.dataUpdateListeners) {
+            listener.proposalsUpdated();
         }
     }
 
     private void notifyUsersUpdate() {
-        if (this.dataUpdateListener != null) {
-            this.dataUpdateListener.usersUpdated();
+        for (DataUpdateListener listener : this.dataUpdateListeners) {
+            listener.usersUpdated();
         }
     }
 }

@@ -48,7 +48,7 @@ public class ProposalListAdapter extends BaseAdapter {
         ProposalListRow row;
         Proposal currentProposal = data.get(i);
 
-        if(view == null){
+        if(view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.proposal_list_row,viewGroup,false);
             row = new ProposalListRow();
@@ -56,7 +56,7 @@ public class ProposalListAdapter extends BaseAdapter {
             row.descriptionTextView = (TextView) view.findViewById(R.id.descriptionTextView);
             view.setTag(row);
 
-        }else{
+        } else {
             row = (ProposalListRow)view.getTag();
 
         }
@@ -66,5 +66,10 @@ public class ProposalListAdapter extends BaseAdapter {
         row.descriptionTextView.setText(currentProposal.getContent());
 
         return view;
+    }
+
+    public void updateData(ArrayList<Proposal> data) {
+        this.data = data;
+        notifyDataSetChanged();
     }
 }

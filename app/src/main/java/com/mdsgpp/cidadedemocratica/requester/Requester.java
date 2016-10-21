@@ -8,6 +8,8 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.SyncHttpClient;
 
+import java.util.HashMap;
+
 /**
  * Created by andreanmasiro on 9/8/16.
  */
@@ -18,6 +20,7 @@ public class Requester {
     }
 
     private String url = "";
+    private HashMap<String, String> parameters = new HashMap<String, String>();
     private AsyncHttpResponseHandler responseHandler;
     private static AsyncHttpClient client = Looper.myLooper() == null ? new SyncHttpClient() : new AsyncHttpClient();
 
@@ -29,7 +32,15 @@ public class Requester {
     public void request(RequestType method) {
         if (method == RequestType.GET) {
 
-            client.get(this.url, this.responseHandler);
+            String endpoint = this.url;
+            for (String key : parameters.keySet()) {
+                endpoint += "?" + key + "=" + parameters.get(key);
+            }
+            client.get(endpoint, this.responseHandler);
         }
+    }
+
+    public void setParameter(String key, String parameter) {
+        parameters.put(key, parameter);
     }
 }

@@ -28,6 +28,8 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
     private final String taggingTaggableIdKey = "taggable_id";
     private final String taggingTaggableTypeKey = "taggable_type";
 
+    private RequestUpdateListener requestUpdateListener;
+
     HashMap<Long, ArrayList<Tag>> proposalTaggings = new HashMap<Long, ArrayList<Tag>>();
     HashMap<Long, ArrayList<Proposal>> tagTaggings = new HashMap<Long, ArrayList<Proposal>>();
 
@@ -132,5 +134,13 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
     @Override
     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
         super.onFailure(statusCode, headers, throwable, errorResponse);
+    }
+
+    public RequestUpdateListener getRequestUpdateListener() {
+        return requestUpdateListener;
+    }
+
+    public void setRequestUpdateListener(RequestUpdateListener requestUpdateListener) {
+        this.requestUpdateListener = requestUpdateListener;
     }
 }

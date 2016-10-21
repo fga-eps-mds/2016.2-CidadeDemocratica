@@ -1,5 +1,7 @@
 package com.mdsgpp.cidadedemocratica.requester;
 
+import android.app.ProgressDialog;
+
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.model.User;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
@@ -18,6 +20,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by andreanmasiro on 9/8/16.
  */
 public class UserRequestResponseHandler extends JsonHttpResponseHandler {
+
     private final int success = 200;
 
     DataContainer dataContainer = DataContainer.getInstance();
@@ -27,6 +30,11 @@ public class UserRequestResponseHandler extends JsonHttpResponseHandler {
     private final String userProposalCountKey = "topicos_count";
     private final String userIdKey = "id";
     private final String userRelevanceKey = "relevancia";
+
+    public static int nextPageToRequest = 1;
+    public static final String usersEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/users";
+
+    private RequestUpdateListener requestUpdateListener;
 
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -55,13 +63,22 @@ public class UserRequestResponseHandler extends JsonHttpResponseHandler {
                     return u1.compareTo(u2);
                 }
             });
-            dataContainer.setUsers(users);
-
+            dataContainer.addUsers(users);
+            requestUpdateListener.afterSuccess();
         }
     }
 
     @Override
     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
         super.onFailure(statusCode, headers, throwable, errorResponse);
+        requestUpdateListener.afterError(String.valueOf(statusCode));
+    }
+
+    public RequestUpdateListener getRequestUpdateListener() {
+        return requestUpdateListener;
+    }
+
+    public void setRequestUpdateListener(RequestUpdateListener requestUpdateListener) {
+        this.requestUpdateListener = requestUpdateListener;
     }
 }

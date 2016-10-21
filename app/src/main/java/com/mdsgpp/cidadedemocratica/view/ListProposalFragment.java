@@ -3,62 +3,61 @@ package com.mdsgpp.cidadedemocratica.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.controller.ProposalListAdapter;
+import com.mdsgpp.cidadedemocratica.controller.ProposalsList;
 import com.mdsgpp.cidadedemocratica.controller.TagginsList;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+import com.mdsgpp.cidadedemocratica.persistence.DataUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
 
 import java.util.ArrayList;
 
 
-public class ListProposalFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class ListProposalFragment extends Fragment implements DataUpdateListener {
 
     private OnFragmentInteractionListener mListener;
     private ListView proposalListView;
 
     public ArrayList<Proposal> proposals;
 
+    ProposalListAdapter proposalAdapter;
+
+    int preLast = 0;
     public ListProposalFragment() {
         // Required empty public constructor
     }
 
     public static ListProposalFragment newInstance(ArrayList<Proposal> proposals) {
+
+
         ListProposalFragment fragment = new ListProposalFragment();
 
         Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1,proposals.get(0).getTitle());
-        //fragment.setArguments(args);
         fragment.proposals = proposals;
+
+        DataContainer.getInstance().setDataUpdateListener(fragment);
+
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
@@ -66,9 +65,18 @@ public class ListProposalFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
+        proposalAdapter = new ProposalListAdapter(getContext().getApplicationContext(), this.proposals);
+
+        proposalAdapter.updateData(proposals);
         proposalListView = (ListView) view.findViewById(R.id.proposalsListId);
 
-        final ProposalListAdapter proposalAdapter = new ProposalListAdapter(getContext().getApplicationContext(), this.proposals);
+        proposalAdapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                proposalListView.smoothScrollToPosition(preLast);
+            }
+        });
+
         proposalListView.setAdapter(proposalAdapter);
 
         proposalListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -84,14 +92,27 @@ public class ListProposalFragment extends Fragment {
 
             }
         });
-        return view;
-    }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        proposalListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                final int lastItem = firstVisibleItem + visibleItemCount;
+
+                if(lastItem == totalItemCount - 15) {
+                    if(preLast != lastItem) {
+                        preLast = lastItem;
+                        ((ProposalsList) getActivity()).pullProposalsData();
+                    }
+                }
+
+            }
+        });
+        return view;
     }
 
     @Override
@@ -126,4 +147,18 @@ public class ListProposalFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    @Override
+    public void tagsUpdated() {
+
+    }
+
+    @Override
+    public void proposalsUpdated() {
+        proposalAdapter.updateData(DataContainer.getInstance().getProposals());
+    }
+
+    @Override
+    public void usersUpdated() {
+
+    }
 }

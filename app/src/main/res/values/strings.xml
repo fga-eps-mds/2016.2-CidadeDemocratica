@@ -13,7 +13,11 @@
     <string name="title_sharing_description"> Descrição da Proposta: </string>
     <string name="link_site_cidade_democratica"> http://www.cidadedemocratica.org.br/</string>
     <string name="name_action_share">Compartilhar</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="message_load_users">Carregando usuários...</string>
+    <string name="message_success_load_users">Novos usuários carregados com sucesso!</string>
+    <string name="message_load_tags">Carregando tags...</string>
+    <string name="message_success_load_tags">Novas tags carregadas com sucesso!</string>
+    <string name="message_load_proposals">Carregando propostas...</string>
+    <string name="message_success_load_proposals">Novas propostas carregadas com sucesso!</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
