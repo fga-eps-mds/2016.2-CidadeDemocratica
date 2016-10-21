@@ -26,7 +26,7 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
     private DataContainer dataContainer = DataContainer.getInstance();
     private final String taggingTagIdKey = "tag_id";
     private final String taggingTaggableIdKey = "taggable_id";
-    private final String taggingTaggableTypeKey = "taggable_type";
+    public static final String taggingsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/taggings";
 
     private RequestUpdateListener requestUpdateListener;
 
@@ -42,14 +42,17 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
                 try {
 
                     JSONObject taggingJson = response.getJSONObject(i);
-                    String taggableType = taggingJson.getString(taggingTaggableTypeKey);
-
-                    if (taggableType.equals("Topico")) {
+//                    String taggableType = taggingJson.getString(taggingTaggableTypeKey);
 
                         long tagId = taggingJson.getLong(taggingTagIdKey);
                         long proposalId = taggingJson.getLong(taggingTaggableIdKey);
 
                         Tag tag = dataContainer.getTagForId(tagId);
+                        if (tag == null) {
+                            Requester requester = new Requester(TagRequestResponseHandler.tagsEndpointUrl + "/" + tagId, new TagRequestResponseHandler());
+                            requester.syncRequest(Requester.RequestType.GET);
+                            tag = dataContainer.getTagForId(tagId);
+                        }
                         Proposal proposal = dataContainer.getProposalForId(proposalId);
 
                         if (tag != null && proposal != null) {
@@ -59,7 +62,6 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
 
                         } else { /* Tag or Proposal does not exist */ }
 
-                    } else { /* Taggable is not a topic */ }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -68,6 +70,7 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
 
             setProposalsTags();
             setTagsProposals();
+            requestUpdateListener.afterSuccess();
         }
     }
 
@@ -134,6 +137,7 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
     @Override
     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
         super.onFailure(statusCode, headers, throwable, errorResponse);
+        requestUpdateListener.afterError(String.valueOf(statusCode));
     }
 
     public RequestUpdateListener getRequestUpdateListener() {

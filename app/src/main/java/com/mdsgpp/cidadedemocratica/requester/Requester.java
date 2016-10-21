@@ -23,6 +23,7 @@ public class Requester {
     private HashMap<String, String> parameters = new HashMap<String, String>();
     private AsyncHttpResponseHandler responseHandler;
     private static AsyncHttpClient client = Looper.myLooper() == null ? new SyncHttpClient() : new AsyncHttpClient();
+    private static SyncHttpClient syncClient = new SyncHttpClient();
 
     public Requester(String url, AsyncHttpResponseHandler responseHandler) {
         this.url = url;
@@ -37,6 +38,17 @@ public class Requester {
                 endpoint += "?" + key + "=" + parameters.get(key);
             }
             client.get(endpoint, this.responseHandler);
+        }
+    }
+
+    public void syncRequest(RequestType method) {
+        if (method == RequestType.GET) {
+
+            String endpoint = this.url;
+            for (String key : parameters.keySet()) {
+                endpoint += "?" + key + "=" + parameters.get(key);
+            }
+            syncClient.get(endpoint, this.responseHandler);
         }
     }
 

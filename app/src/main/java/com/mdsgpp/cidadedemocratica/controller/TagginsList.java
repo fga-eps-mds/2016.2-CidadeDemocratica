@@ -15,12 +15,13 @@ import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.Tag;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
 import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
+import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.requester.TaggingsRequestResponseHandler;
 
 import java.util.ArrayList;
 
-public class TagginsList extends AppCompatActivity implements View.OnClickListener{
+public class TagginsList extends AppCompatActivity implements View.OnClickListener, RequestUpdateListener {
 
     ListView tagginsListView;
     TextView proposalTitleTextView;
@@ -29,7 +30,8 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
     Button shareButton;
 
     Proposal proposal;
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
+    TagListAdapter taggingsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +56,14 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
         tagginsListView = (ListView) findViewById(R.id.listaTagsDaPropostaID);
         ArrayList<Tag> tags = getTagsList();
 
+        pullTaggingsData();
+
         if (tags == null) {
             Toast.makeText(getApplicationContext(),"Proposta não possui TAGS", Toast.LENGTH_SHORT);
         }
-        TagListAdapter tagginsAdapter = new TagListAdapter(this, tags);
+        taggingsAdapter = new TagListAdapter(this, tags);
 
-        tagginsListView.setAdapter(tagginsAdapter);
+        tagginsListView.setAdapter(taggingsAdapter);
 
         shareButton = (Button) findViewById(R.id.shareButton);
         shareButton.setOnClickListener(this);
@@ -69,7 +73,7 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
         if (proposal != null) {
             return proposal.getTags();
         } else {
-            return null;
+            return new ArrayList<>();
         }
     }
 
@@ -78,25 +82,42 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
         String subjectShare = getString(R.string.title_sharing) + proposal.getTitle();
         String contentShare = subjectShare + getString(R.string.title_sharing_description) + proposal.getContent() + getString(R.string.link_site_cidade_democratica);
 
-        Intent intentShare =new Intent(android.content.Intent.ACTION_SEND);
+        Intent intentShare = new Intent(android.content.Intent.ACTION_SEND);
 
         intentShare.setType("text/plain");
 
-        intentShare.putExtra(android.content.Intent.EXTRA_SUBJECT,subjectShare);
+        intentShare.putExtra(android.content.Intent.EXTRA_SUBJECT, subjectShare);
         intentShare.putExtra(android.content.Intent.EXTRA_TEXT, contentShare);
 
         startActivity(Intent.createChooser(intentShare,getString(R.string.name_action_share)));
     }
 
     private void pullTaggingsData() {
-        progressDialog = FeedbackManager.createProgressDialog(this, getString(R.string.message_load_proposals));
+        if (progressDialog == null) {
+            progressDialog = FeedbackManager.createProgressDialog(this, getString(R.string.message_load_proposal_detail));
+        }
+
         TaggingsRequestResponseHandler taggingsRequestResponseHandler = new TaggingsRequestResponseHandler();
         setDataUpdateListener(taggingsRequestResponseHandler);
-        Requester requester = new Requester(ProposalRequestResponseHandler.proposalsEndpointUrl, taggingsRequestResponseHandler);
+
+        Requester requester = new Requester(TaggingsRequestResponseHandler.taggingsEndpointUrl, taggingsRequestResponseHandler);
+        requester.setParameter("proposal_id", String.valueOf(proposal.getId()));
         requester.request(Requester.RequestType.GET);
     }
 
     private void setDataUpdateListener(TaggingsRequestResponseHandler handler) {
+        handler.setRequestUpdateListener(this);
+    }
+
+    @Override
+    public void afterSuccess() {
+        progressDialog.dismiss();
+        FeedbackManager.createToast(this, getString(R.string.message_success_load_tags));
+        taggingsAdapter.updateData(getTagsList());
+    }
+
+    @Override
+    public void afterError(String message) {
 
     }
 
