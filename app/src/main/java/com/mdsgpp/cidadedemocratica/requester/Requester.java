@@ -45,8 +45,10 @@ public class Requester {
         if (method == RequestType.GET) {
 
             String endpoint = this.url;
+            String prefix = "?";
             for (String key : parameters.keySet()) {
-                endpoint += "?" + key + "=" + parameters.get(key);
+                endpoint += prefix + key + "=" + parameters.get(key);
+                prefix = "&";
             }
             syncClient.get(endpoint, this.responseHandler);
         }
