@@ -273,6 +273,35 @@ public class DataContainerTest extends AndroidTestCase {
     }
 
     @Test
+    public void testGetProposalForUserId() {
+        this.dataContainer.addProposal(newProposal(1, 1));
+        this.dataContainer.addProposal(newProposal(2, 2));
+        this.dataContainer.addProposal(newProposal(3, 3));
+        this.dataContainer.addProposal(newProposal(4, 4));
+
+        long uId = 99;
+        assertTrue(this.dataContainer.getProposalsForUserId(uId).isEmpty());
+
+        ArrayList<Proposal> proposals = new ArrayList<>();
+        proposals.add(newProposal(5, uId));
+        proposals.add(newProposal(6, uId));
+        proposals.add(newProposal(7, uId));
+        proposals.add(newProposal(8, uId));
+        proposals.add(newProposal(9, uId));
+
+        this.dataContainer.addProposals(proposals);
+
+
+        ArrayList<Proposal> uproposals = this.dataContainer.getProposalsForUserId(uId);
+        assertTrue(uproposals.containsAll(proposals));
+        assertTrue(proposals.containsAll(uproposals));
+        
+        for (Proposal proposal : uproposals) {
+            assertEquals(proposal.getUserId(), uId);
+        }
+    }
+
+    @Test
     public  void testGetTaggingForTagId(){
         this.dataContainer.addTagging(newTagging(1, 1, 1));
         this.dataContainer.addTagging(newTagging(2, 2, 2));
@@ -337,6 +366,9 @@ public class DataContainerTest extends AndroidTestCase {
 
     private Proposal newProposal(long id) {
         return new Proposal(id, "title", "content", 0,0);
+    }
+    private Proposal newProposal(long id, long userId) {
+        return new Proposal(id, "title", "content", 0, userId);
     }
 
     private Tagging newTagging() {
