@@ -1,29 +1,39 @@
 package com.mdsgpp.cidadedemocratica.controller;
 
+import android.app.ProgressDialog;
 import android.net.Uri;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.User;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
+import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
+import com.mdsgpp.cidadedemocratica.requester.Requester;
+import com.mdsgpp.cidadedemocratica.requester.TaggingsRequestResponseHandler;
+import com.mdsgpp.cidadedemocratica.requester.UserRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.view.ListProposalFragment;
 
 import java.util.ArrayList;
 
-public class UserProfile extends AppCompatActivity implements ListProposalFragment.OnFragmentInteractionListener {
+public class UserProfile extends AppCompatActivity implements ListProposalFragment.OnFragmentInteractionListener, RequestUpdateListener {
 
     User user;
     TextView userName;
     TextView descriptionTextView;
     TextView relevanceTextView;
     ListView userProposals;
+
+    private ProgressDialog progressDialog;
+    private ProposalRequestResponseHandler proposalRequestResponseHandler;
+    private static String userIdParameterKey = "user_id";
+    private UserRequestResponseHandler userRequestResponseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,27 +54,46 @@ public class UserProfile extends AppCompatActivity implements ListProposalFragme
         relevanceTextView = (TextView)findViewById(R.id.relevanceTextView);
         relevanceTextView.setText(String.valueOf(user.getRelevance()));
 
-        ArrayList<Proposal> proposals = getProposalList();
-        if(proposals == null){
-            Toast.makeText(getApplicationContext(),"Usuário não possui propostas", Toast.LENGTH_SHORT);
-        }
 
-        ListProposalFragment proposalFragment = ListProposalFragment.newInstance(proposals);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, proposalFragment).commit();
-
-    }
-
-    private ArrayList<Proposal> getProposalList() {
-        if (user != null) {
-            return user.getProposals();
-        } else {
-            return null;
-        }
     }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    private void loadProposalsList(ArrayList<Proposal> proposals) {
+
+        if(proposals == null) {
+            Toast.makeText(getApplicationContext(),"Usuário não possui propostas", Toast.LENGTH_SHORT);
+        }
+
+        ListProposalFragment proposalFragment = ListProposalFragment.newInstance(proposals);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, proposalFragment).commit();
+    }
+
+    private void pullUsersProposals() {
+        if (progressDialog == null) {
+            progressDialog = FeedbackManager.createProgressDialog(this, getString(R.string.message_load_proposal_detail));
+        }
+
+        proposalRequestResponseHandler = new ProposalRequestResponseHandler();
+        proposalRequestResponseHandler.setRequestUpdateListener(this);
+
+        Requester requester = new Requester(ProposalRequestResponseHandler.proposalsEndpointUrl, proposalRequestResponseHandler);
+        requester.setParameter(userIdParameterKey, String.valueOf(user.getId()));
+        requester.request(Requester.RequestType.GET);
+    }
+
+    @Override
+    public void afterSuccess(JsonHttpResponseHandler handler) {
+        ArrayList<Proposal> proposals = DataContainer.getInstance().getProposalsForUserId(user.getId());
+        loadProposalsList(proposals);
+    }
+
+    @Override
+    public void afterError(JsonHttpResponseHandler handler, String message) {
 
     }
 }
