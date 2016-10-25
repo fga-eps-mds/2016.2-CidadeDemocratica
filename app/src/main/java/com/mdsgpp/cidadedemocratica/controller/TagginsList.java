@@ -134,8 +134,6 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
             requester.setParameter(proposalIdParameterKey, String.valueOf(proposal.getId()));
             requester.request(Requester.RequestType.GET);
 
-            System.out.println("taggings done");
-
         } else if (handler == tagRequestResponseHandler) {
             progressDialog.dismiss();
             FeedbackManager.createToast(this, getString(R.string.message_success_load_tags));
