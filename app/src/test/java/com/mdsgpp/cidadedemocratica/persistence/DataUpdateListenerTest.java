@@ -35,6 +35,11 @@ public class DataUpdateListenerTest extends AndroidTestCase {
             public void usersUpdated() {
 
             }
+
+            @Override
+            public void taggingsUpdated() {
+
+            }
         });
 
         Tag tag = newTag();
@@ -63,6 +68,11 @@ public class DataUpdateListenerTest extends AndroidTestCase {
             public void usersUpdated() {
 
             }
+
+            @Override
+            public void taggingsUpdated() {
+
+            }
         });
 
         Proposal proposal = newProposal();
@@ -89,6 +99,11 @@ public class DataUpdateListenerTest extends AndroidTestCase {
             @Override
             public void usersUpdated() {
                 updated[0] = true;
+            }
+
+            @Override
+            public void taggingsUpdated() {
+
             }
         });
 
