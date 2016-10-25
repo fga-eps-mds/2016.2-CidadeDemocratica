@@ -67,6 +67,7 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
                     return p1.compareTo(p2);
                 }
             });
+            proposals.removeAll(dataContainer.getProposals());
             dataContainer.addProposals(proposals);
             afterSuccess();
         }

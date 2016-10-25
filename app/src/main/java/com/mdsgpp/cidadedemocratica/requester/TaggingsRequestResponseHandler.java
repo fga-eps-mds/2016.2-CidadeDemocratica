@@ -58,7 +58,8 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
                 }
             }
 
-            DataContainer.getInstance().addTaggings(taggings);
+            taggings.removeAll(dataContainer.getTaggings());
+            dataContainer.addTaggings(taggings);
             requestUpdateListener.afterSuccess(this);
         }
     }

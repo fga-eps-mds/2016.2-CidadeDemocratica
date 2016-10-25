@@ -63,6 +63,7 @@ public class UserRequestResponseHandler extends JsonHttpResponseHandler {
                     return u1.compareTo(u2);
                 }
             });
+            users.removeAll(dataContainer.getUsers());
             dataContainer.addUsers(users);
             requestUpdateListener.afterSuccess(this);
         }

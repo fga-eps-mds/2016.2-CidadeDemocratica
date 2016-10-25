@@ -54,6 +54,7 @@ public class TagRequestResponseHandler extends JsonHttpResponseHandler {
                     return t1.compareTo(t2);
                 }
             });
+            tags.removeAll(dataContainer.getTags());
             dataContainer.addTags(tags);
             requestUpdateListener.afterSuccess(this);
         }
