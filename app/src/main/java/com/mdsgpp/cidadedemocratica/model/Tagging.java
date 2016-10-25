@@ -6,13 +6,25 @@ package com.mdsgpp.cidadedemocratica.model;
 
 public class Tagging {
 
-    private int tagId = 0;
-    private int taggableId = 0;
-    private int taggerId = 0;
+    private long tagId = 0;
+    private long taggableId = 0;
+    private long taggerId = 0;
 
-    public Tagging(int tagId, int taggableId, int taggerId) {
+    public Tagging(long tagId, long taggableId, long taggerId) {
         this.tagId = tagId;
         this.taggableId = taggableId;
         this.taggerId = taggerId;
+    }
+
+    public long getTagId() {
+        return tagId;
+    }
+
+    public long getTaggableId() {
+        return taggableId;
+    }
+
+    public long getTaggerId() {
+        return taggerId;
     }
 }
