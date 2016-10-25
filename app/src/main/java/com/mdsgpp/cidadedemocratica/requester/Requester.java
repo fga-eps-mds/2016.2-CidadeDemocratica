@@ -20,7 +20,7 @@ public class Requester {
     }
 
     private String url = "";
-    private HashMap<String, String> parameters = new HashMap<String, String>();
+    private HashMap<String, String> parameters = new HashMap<>();
     private AsyncHttpResponseHandler responseHandler;
     private static AsyncHttpClient client = Looper.myLooper() == null ? new SyncHttpClient() : new AsyncHttpClient();
     private static SyncHttpClient syncClient = new SyncHttpClient();

@@ -10,13 +10,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.Tag;
+import com.mdsgpp.cidadedemocratica.model.Tagging;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
-import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
+import com.mdsgpp.cidadedemocratica.requester.TagRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.TaggingsRequestResponseHandler;
 
 import java.util.ArrayList;
@@ -32,6 +34,11 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
     Proposal proposal;
     private ProgressDialog progressDialog;
     TagListAdapter taggingsAdapter;
+
+    TaggingsRequestResponseHandler taggingsRequestResponseHandler;
+    TagRequestResponseHandler tagRequestResponseHandler;
+
+    private static String proposalIdParameterKey = "proposal_id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +78,17 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
 
     private ArrayList<Tag> getTagsList() {
         if (proposal != null) {
-            return proposal.getTags();
+
+            ArrayList<Tag> tags = new ArrayList<>();
+            ArrayList<Tagging> taggings = DataContainer.getInstance().getTaggingsForProposalId(proposal.getId());
+            for (Tagging t : taggings) {
+                Tag tag = DataContainer.getInstance().getTagForId(t.getTagId());
+                if (tag != null) {
+                    tags.add(tag);
+                }
+            }
+
+            return tags;
         } else {
             return new ArrayList<>();
         }
@@ -97,28 +114,37 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
             progressDialog = FeedbackManager.createProgressDialog(this, getString(R.string.message_load_proposal_detail));
         }
 
-        TaggingsRequestResponseHandler taggingsRequestResponseHandler = new TaggingsRequestResponseHandler();
-        setDataUpdateListener(taggingsRequestResponseHandler);
+        taggingsRequestResponseHandler = new TaggingsRequestResponseHandler();
+        taggingsRequestResponseHandler.setRequestUpdateListener(this);
 
         Requester requester = new Requester(TaggingsRequestResponseHandler.taggingsEndpointUrl, taggingsRequestResponseHandler);
-        requester.setParameter("proposal_id", String.valueOf(proposal.getId()));
+        requester.setParameter(proposalIdParameterKey, String.valueOf(proposal.getId()));
         requester.request(Requester.RequestType.GET);
     }
 
-    private void setDataUpdateListener(TaggingsRequestResponseHandler handler) {
-        handler.setRequestUpdateListener(this);
+    @Override
+    public void afterSuccess(JsonHttpResponseHandler handler) {
+
+        if (handler == taggingsRequestResponseHandler) {
+
+            tagRequestResponseHandler = new TagRequestResponseHandler();
+            tagRequestResponseHandler.setRequestUpdateListener(this);
+
+            Requester requester = new Requester(TagRequestResponseHandler.tagsEndpointUrl, tagRequestResponseHandler);
+            requester.setParameter(proposalIdParameterKey, String.valueOf(proposal.getId()));
+            requester.request(Requester.RequestType.GET);
+
+            System.out.println("taggings done");
+
+        } else if (handler == tagRequestResponseHandler) {
+            progressDialog.dismiss();
+            FeedbackManager.createToast(this, getString(R.string.message_success_load_tags));
+            taggingsAdapter.updateData(getTagsList());
+        }
     }
 
     @Override
-    public void afterSuccess() {
-        progressDialog.dismiss();
-        FeedbackManager.createToast(this, getString(R.string.message_success_load_tags));
-        taggingsAdapter.updateData(getTagsList());
-    }
-
-    @Override
-    public void afterError(String message) {
-
+    public void afterError(JsonHttpResponseHandler handler, String message) {
     }
 
     @Override

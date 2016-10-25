@@ -88,37 +88,34 @@ public class DataContainer {
         return user;
     }
 
-    public Tagging getTaggingForTagId(long id) {
-        Tagging tagging = null;
-        for (Tagging t : taggings) {
+    public ArrayList<Tagging> getTaggingsForTagId(long id) {
+        ArrayList<Tagging> taggings = new ArrayList<>();
+        for (Tagging t : this.taggings) {
             if (t.getTagId() == id) {
-                tagging = t;
-                break;
+                taggings.add(t);
             } else { /* not this one */ }
         }
-        return tagging;
+        return taggings;
     }
 
-    public Tagging getTaggingForProposalId(long id) {
-        Tagging tagging = null;
-        for (Tagging t : taggings) {
+    public ArrayList<Tagging> getTaggingsForProposalId(long id) {
+        ArrayList<Tagging> taggings = new ArrayList<>();
+        for (Tagging t : this.taggings) {
             if (t.getTaggableId() == id) {
-                tagging = t;
-                break;
+                taggings.add(t);
             } else { /* not this one */ }
         }
-        return tagging;
+        return taggings;
     }
 
-    public Tagging getTaggingForUserId(long id) {
-        Tagging tagging = null;
-        for (Tagging t : taggings) {
+    public ArrayList<Tagging> getTaggingsForUserId(long id) {
+        ArrayList<Tagging> taggings = new ArrayList<>();
+        for (Tagging t : this.taggings) {
             if (t.getTaggerId() == id) {
-                tagging = t;
-                break;
+                taggings.add(t);
             } else { /* not this one */ }
         }
-        return tagging;
+        return taggings;
     }
 
     public void addTag(Tag tag) {

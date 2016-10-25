@@ -161,4 +161,9 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
     public void usersUpdated() {
 
     }
+
+    @Override
+    public void taggingsUpdated() {
+
+    }
 }

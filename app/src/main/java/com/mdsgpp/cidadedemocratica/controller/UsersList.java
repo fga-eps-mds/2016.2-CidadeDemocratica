@@ -9,6 +9,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.User;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
@@ -107,7 +108,7 @@ public class UsersList extends AppCompatActivity implements RequestUpdateListene
     }
 
     @Override
-    public void afterSuccess() {
+    public void afterSuccess(JsonHttpResponseHandler handler) {
         progressDialog.dismiss();
         loadUsersList();
         createToast(getString(R.string.message_success_load_users));
@@ -115,7 +116,7 @@ public class UsersList extends AppCompatActivity implements RequestUpdateListene
     }
 
     @Override
-    public void afterError(String message) {
+    public void afterError(JsonHttpResponseHandler handler, String message) {
         progressDialog.dismiss();
         createToast(message);
     }

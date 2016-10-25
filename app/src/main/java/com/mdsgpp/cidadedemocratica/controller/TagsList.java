@@ -9,6 +9,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Tag;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
@@ -108,7 +109,7 @@ public class TagsList extends AppCompatActivity implements RequestUpdateListener
     }
 
     @Override
-    public void afterSuccess() {
+    public void afterSuccess(JsonHttpResponseHandler handler) {
         progressDialog.dismiss();
         loadTagsList();
         FeedbackManager.createToast(this, getString(R.string.message_success_load_tags));
@@ -116,7 +117,7 @@ public class TagsList extends AppCompatActivity implements RequestUpdateListener
     }
 
     @Override
-    public void afterError(String message) {
+    public void afterError(JsonHttpResponseHandler handler, String message) {
         progressDialog.dismiss();
         FeedbackManager.createToast(this, message);
     }
