@@ -8,4 +8,5 @@ public interface DataUpdateListener {
     public void tagsUpdated();
     public void proposalsUpdated();
     public void usersUpdated();
+    public void taggingsUpdated();
 }

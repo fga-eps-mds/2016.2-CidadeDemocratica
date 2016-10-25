@@ -2,6 +2,7 @@ package com.mdsgpp.cidadedemocratica.persistence;
 
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.Tag;
+import com.mdsgpp.cidadedemocratica.model.Tagging;
 import com.mdsgpp.cidadedemocratica.model.User;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class DataContainer {
     private ArrayList<Tag> tags = new ArrayList<>();
     private ArrayList<User> users = new ArrayList<>();
     private ArrayList<Proposal> proposals = new ArrayList<>();
+    private ArrayList<Tagging> taggings = new ArrayList<>();
     private ArrayList<DataUpdateListener> dataUpdateListeners = new ArrayList<>();
 
     private static DataContainer instance;
@@ -40,6 +42,10 @@ public class DataContainer {
 
     public ArrayList<Proposal> getProposals() {
         return proposals;
+    }
+
+    public ArrayList<Tagging> getTaggings() {
+        return taggings;
     }
 
     public void setDataUpdateListener(DataUpdateListener dataUpdateListener) {
@@ -82,6 +88,39 @@ public class DataContainer {
         return user;
     }
 
+    public Tagging getTaggingForTagId(long id) {
+        Tagging tagging = null;
+        for (Tagging t : taggings) {
+            if (t.getTagId() == id) {
+                tagging = t;
+                break;
+            } else { /* not this one */ }
+        }
+        return tagging;
+    }
+
+    public Tagging getTaggingForProposalId(long id) {
+        Tagging tagging = null;
+        for (Tagging t : taggings) {
+            if (t.getTaggableId() == id) {
+                tagging = t;
+                break;
+            } else { /* not this one */ }
+        }
+        return tagging;
+    }
+
+    public Tagging getTaggingForUserId(long id) {
+        Tagging tagging = null;
+        for (Tagging t : taggings) {
+            if (t.getTaggerId() == id) {
+                tagging = t;
+                break;
+            } else { /* not this one */ }
+        }
+        return tagging;
+    }
+
     public void addTag(Tag tag) {
         this.tags.add(tag);
         this.notifyTagsUpdate();
@@ -95,6 +134,11 @@ public class DataContainer {
     public void addProposal(Proposal proposal) {
         this.proposals.add(proposal);
         this.notifyProposalsUpdate();
+    }
+
+    public void addTagging(Tagging tagging) {
+        this.taggings.add(tagging);
+        this.notifyTaggingsUpdate();
     }
 
     public void addTags(ArrayList<Tag> tags) {
@@ -112,6 +156,11 @@ public class DataContainer {
         this.notifyProposalsUpdate();
     }
 
+    public void addTaggings(ArrayList<Tagging> taggings) {
+        this.taggings.addAll(taggings);
+        this.notifyTaggingsUpdate();
+    }
+
     public void setTags(ArrayList<Tag> tags) {
         this.tags = tags;
         this.notifyTagsUpdate();
@@ -125,6 +174,11 @@ public class DataContainer {
     public void setUsers(ArrayList<User> users) {
         this.users = users;
         this.notifyUsersUpdate();
+    }
+
+    public void setTaggings(ArrayList<Tagging> taggings) {
+        this.taggings = taggings;
+        this.notifyTaggingsUpdate();
     }
 
     public void clearTags() {
@@ -142,6 +196,11 @@ public class DataContainer {
         this.notifyUsersUpdate();
     }
 
+    public void clearTaggings() {
+        this.taggings.clear();
+        this.notifyTaggingsUpdate();
+    }
+
     private void notifyTagsUpdate() {
         for (DataUpdateListener listener : this.dataUpdateListeners) {
             listener.tagsUpdated();
@@ -157,6 +216,12 @@ public class DataContainer {
     private void notifyUsersUpdate() {
         for (DataUpdateListener listener : this.dataUpdateListeners) {
             listener.usersUpdated();
+        }
+    }
+
+    private void notifyTaggingsUpdate() {
+        for (DataUpdateListener listener : this.dataUpdateListeners) {
+            listener.taggingsUpdated();
         }
     }
 }
