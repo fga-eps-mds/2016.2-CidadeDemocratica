@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.External.SlidingTabLayout;
 import com.mdsgpp.cidadedemocratica.R;
 
@@ -81,7 +82,7 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         handler.setRequestUpdateListener(this);
     }
 
-    public void afterSuccess() {
+    public void afterSuccess(JsonHttpResponseHandler handler) {
         progressDialog.dismiss();
         loadProposalsList();
         createToast(getString(R.string.message_success_load_proposals));
@@ -94,7 +95,7 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         FeedbackManager.createToast(this, message);
     }
 
-    public void afterError(String message) {
+    public void afterError(JsonHttpResponseHandler handler, String message) {
 
     }
 }

@@ -64,14 +64,14 @@ public class UserRequestResponseHandler extends JsonHttpResponseHandler {
                 }
             });
             dataContainer.addUsers(users);
-            requestUpdateListener.afterSuccess();
+            requestUpdateListener.afterSuccess(this);
         }
     }
 
     @Override
     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
         super.onFailure(statusCode, headers, throwable, errorResponse);
-        requestUpdateListener.afterError(String.valueOf(statusCode));
+        requestUpdateListener.afterError(this, String.valueOf(statusCode));
     }
 
     public RequestUpdateListener getRequestUpdateListener() {

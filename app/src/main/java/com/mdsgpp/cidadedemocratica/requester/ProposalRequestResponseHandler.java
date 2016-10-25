@@ -75,13 +75,13 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
 
     private void afterSuccess() {
         if (requestUpdateListener != null) {
-            requestUpdateListener.afterSuccess();
+            requestUpdateListener.afterSuccess(this);
         } else { }
     }
 
     private void afterError(String message) {
         if (requestUpdateListener != null) {
-            requestUpdateListener.afterError(message);
+            requestUpdateListener.afterError(this, message);
         } else { }
     }
 

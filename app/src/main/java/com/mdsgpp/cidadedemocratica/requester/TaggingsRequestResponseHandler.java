@@ -59,7 +59,7 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
             }
 
             DataContainer.getInstance().addTaggings(taggings);
-            requestUpdateListener.afterSuccess();
+            requestUpdateListener.afterSuccess(this);
         }
     }
 
@@ -126,7 +126,7 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
     @Override
     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
         super.onFailure(statusCode, headers, throwable, errorResponse);
-        requestUpdateListener.afterError(String.valueOf(statusCode));
+        requestUpdateListener.afterError(this, String.valueOf(statusCode));
     }
 
     public RequestUpdateListener getRequestUpdateListener() {
