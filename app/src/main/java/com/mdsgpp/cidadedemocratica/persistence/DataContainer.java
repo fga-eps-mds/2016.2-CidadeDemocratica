@@ -88,6 +88,16 @@ public class DataContainer {
         return user;
     }
 
+    public ArrayList<Proposal> getProposalsForUserId(long id) {
+        ArrayList<Proposal> proposals = new ArrayList<>();
+        for (Proposal p : this.proposals) {
+            if (p.getUserId() == id) {
+                proposals.add(p);
+            } else { /* not this one */ }
+        }
+        return proposals;
+    }
+
     public ArrayList<Tagging> getTaggingsForTagId(long id) {
         ArrayList<Tagging> taggings = new ArrayList<>();
         for (Tagging t : this.taggings) {
