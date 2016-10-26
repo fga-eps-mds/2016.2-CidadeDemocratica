@@ -60,8 +60,27 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
 
             taggings.removeAll(dataContainer.getTaggings());
             dataContainer.addTaggings(taggings);
-            requestUpdateListener.afterSuccess(this);
+            afterSuccess();
+            afterSuccess(taggings);
         }
+    }
+
+    private void afterSuccess() {
+        if (requestUpdateListener != null) {
+            requestUpdateListener.afterSuccess(this);
+        } else { }
+    }
+
+    private void afterSuccess(ArrayList<Tagging> response) {
+        if (requestUpdateListener != null) {
+            requestUpdateListener.afterSuccess(this, (Object) response);
+        } else { }
+    }
+
+    private void afterError(String message) {
+        if (requestUpdateListener != null) {
+            requestUpdateListener.afterError(this, message);
+        } else { }
     }
 
     private void setTagsProposals() {
@@ -127,7 +146,7 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
     @Override
     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
         super.onFailure(statusCode, headers, throwable, errorResponse);
-        requestUpdateListener.afterError(this, String.valueOf(statusCode));
+        afterError(String.valueOf(statusCode));
     }
 
     public RequestUpdateListener getRequestUpdateListener() {

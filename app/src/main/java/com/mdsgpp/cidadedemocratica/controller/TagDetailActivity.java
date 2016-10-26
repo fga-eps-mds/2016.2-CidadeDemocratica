@@ -12,16 +12,15 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.Tag;
-import com.mdsgpp.cidadedemocratica.model.Tagging;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
 
 import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
-import com.mdsgpp.cidadedemocratica.requester.TagRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.TaggingsRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.view.ListProposalFragment;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class TagDetailActivity extends AppCompatActivity implements OnFragmentInteractionListener, ListProposalFragment.OnFragmentInteractionListener, RequestUpdateListener {
@@ -34,6 +33,8 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
     private TaggingsRequestResponseHandler taggingsRequestResponseHandler;
     private ProposalRequestResponseHandler proposalRequestResponseHandler;
     private String tagIdParameterKey = "tag_id";
+
+    private static ArrayList<Long> loadedTagIds = new ArrayList<>();
 
 
     @Override
@@ -50,17 +51,15 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
         TextView tagNameTextView = (TextView)findViewById(R.id.tagNameTextView);
         tagNameTextView.setText(this.tag.getName());
 
-        pullTaggingsData();
-
+        if (!loadedTagIds.contains(tag.getId())) {
+            pullTaggingsData();
+        } else {
+            loadProposalsList(tag.getProposals());
+        }
+        
     }
 
-    private void loadProposalsList() {
-        ArrayList<Tagging> taggings = dataContainter.getTaggingsForTagId(tag.getId());
-        ArrayList<Proposal> proposals = new ArrayList<>();
-        for (Tagging t : taggings) {
-            Proposal p = dataContainter.getProposalForId(t.getTaggableId());
-            proposals.add(p);
-        }
+    private void loadProposalsList(ArrayList<Proposal> proposals) {
 
         getSupportFragmentManager().beginTransaction().
                 replace(R.id.container, ListProposalFragment.newInstance(proposals)).
@@ -82,28 +81,26 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
             progressDialog = FeedbackManager.createProgressDialog(this, getString(R.string.message_load_tag_detail));
         }
 
-        taggingsRequestResponseHandler = new TaggingsRequestResponseHandler();
-        taggingsRequestResponseHandler.setRequestUpdateListener(this);
+        proposalRequestResponseHandler = new ProposalRequestResponseHandler();
+        proposalRequestResponseHandler.setRequestUpdateListener(this);
 
-        String endpoint = TaggingsRequestResponseHandler.taggingsEndpointUrl + "/" + tag.getId();
-        Requester requester = new Requester(endpoint, taggingsRequestResponseHandler);
+        Requester requester = new Requester(ProposalRequestResponseHandler.proposalsEndpointUrl, proposalRequestResponseHandler);
+        requester.setParameter(tagIdParameterKey, String.valueOf(tag.getId()));
         requester.request(Requester.RequestType.GET);
     }
 
     @Override
     public void afterSuccess(JsonHttpResponseHandler handler) {
-        if (handler == taggingsRequestResponseHandler) {
 
-            proposalRequestResponseHandler = new ProposalRequestResponseHandler();
-            proposalRequestResponseHandler.setRequestUpdateListener(this);
+    }
 
-            Requester requester = new Requester(ProposalRequestResponseHandler.proposalsEndpointUrl, proposalRequestResponseHandler);
-            requester.setParameter(tagIdParameterKey, String.valueOf(tag.getId()));
-            requester.request(Requester.RequestType.GET);
-        } else if (handler == proposalRequestResponseHandler) {
+    @Override
+    public void afterSuccess(JsonHttpResponseHandler handler, Object response) {
+        progressDialog.dismiss();
+        ArrayList<Proposal> proposals = (ArrayList<Proposal>) response;
 
-            loadProposalsList();
-        }
+        tag.setProposals(proposals);
+        loadProposalsList(proposals);
     }
 
     @Override

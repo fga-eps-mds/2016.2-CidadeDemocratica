@@ -6,6 +6,7 @@ import com.mdsgpp.cidadedemocratica.model.Tagging;
 import com.mdsgpp.cidadedemocratica.model.User;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by andreanmasiro on 9/9/16.
@@ -150,16 +151,19 @@ public class DataContainer {
 
     public void addTags(ArrayList<Tag> tags) {
         this.tags.addAll(tags);
+        Collections.sort(tags);
         this.notifyTagsUpdate();
     }
 
     public void addUsers(ArrayList<User> users) {
         this.users.addAll(users);
+        Collections.sort(users);
         this.notifyUsersUpdate();
     }
 
     public void addProposals(ArrayList<Proposal> proposals) {
         this.proposals.addAll(proposals);
+        Collections.sort(proposals);
         this.notifyProposalsUpdate();
     }
 

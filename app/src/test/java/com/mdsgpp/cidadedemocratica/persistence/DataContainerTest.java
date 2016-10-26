@@ -295,7 +295,7 @@ public class DataContainerTest extends AndroidTestCase {
         ArrayList<Proposal> uproposals = this.dataContainer.getProposalsForUserId(uId);
         assertTrue(uproposals.containsAll(proposals));
         assertTrue(proposals.containsAll(uproposals));
-        
+
         for (Proposal proposal : uproposals) {
             assertEquals(proposal.getUserId(), uId);
         }

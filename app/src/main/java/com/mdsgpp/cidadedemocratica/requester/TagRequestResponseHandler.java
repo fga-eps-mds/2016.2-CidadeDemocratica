@@ -56,15 +56,34 @@ public class TagRequestResponseHandler extends JsonHttpResponseHandler {
             });
             tags.removeAll(dataContainer.getTags());
             dataContainer.addTags(tags);
-            requestUpdateListener.afterSuccess(this);
+            afterSuccess();
+            afterSuccess(tags);
         }
 
+    }
+
+    private void afterSuccess() {
+        if (requestUpdateListener != null) {
+            requestUpdateListener.afterSuccess(this);
+        } else { }
+    }
+
+    private void afterSuccess(ArrayList<Tag> response) {
+        if (requestUpdateListener != null) {
+            requestUpdateListener.afterSuccess(this, (Object) response);
+        } else { }
+    }
+
+    private void afterError(String message) {
+        if (requestUpdateListener != null) {
+            requestUpdateListener.afterError(this, message);
+        } else { }
     }
 
     @Override
     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
         super.onFailure(statusCode, headers, throwable, errorResponse);
-        requestUpdateListener.afterError(this, String.valueOf(statusCode));
+        afterError(String.valueOf(statusCode));
     }
 
     public RequestUpdateListener getRequestUpdateListener() {

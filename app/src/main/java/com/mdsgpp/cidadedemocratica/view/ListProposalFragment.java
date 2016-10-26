@@ -1,6 +1,7 @@
 package com.mdsgpp.cidadedemocratica.view;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
@@ -101,15 +102,23 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
 
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                final int itemCountTrigger = totalItemCount/2;
                 final int lastItem = firstVisibleItem + visibleItemCount;
 
-                if(lastItem == totalItemCount - 15) {
-                    if(preLast != lastItem) {
-                        preLast = lastItem;
-                        ((ProposalsList) getActivity()).pullProposalsData();
+                Activity ac = getActivity();
+                if (ac != null) {
+                    if (getActivity().getClass() == ProposalsList.class) {
+                        if(lastItem == totalItemCount - (itemCountTrigger > 15 ? 15 : itemCountTrigger)) {
+                            if(preLast != lastItem) {
+                                preLast = lastItem;
+                                ((ProposalsList)getActivity()).pullProposalsData();
+                            }
+
+                        }
+                    } else {
+
                     }
                 }
-
             }
         });
         return view;

@@ -117,6 +117,11 @@ public class TagsList extends AppCompatActivity implements RequestUpdateListener
     }
 
     @Override
+    public void afterSuccess(JsonHttpResponseHandler handler, Object response) {
+
+    }
+
+    @Override
     public void afterError(JsonHttpResponseHandler handler, String message) {
         progressDialog.dismiss();
         FeedbackManager.createToast(this, message);

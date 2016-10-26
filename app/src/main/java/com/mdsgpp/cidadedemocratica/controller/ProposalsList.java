@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ListView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.External.SlidingTabLayout;
@@ -89,7 +88,10 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         ProposalRequestResponseHandler.nextPageToRequest++;
     }
 
+    @Override
+    public void afterSuccess(JsonHttpResponseHandler handler, Object response) {
 
+    }
 
     private void createToast(String message) {
         FeedbackManager.createToast(this, message);

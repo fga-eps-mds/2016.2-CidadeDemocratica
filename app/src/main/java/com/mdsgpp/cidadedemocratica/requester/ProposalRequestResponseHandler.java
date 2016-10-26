@@ -70,6 +70,7 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
             proposals.removeAll(dataContainer.getProposals());
             dataContainer.addProposals(proposals);
             afterSuccess();
+            afterSuccess(proposals);
         }
 
     }
@@ -77,6 +78,13 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
     private void afterSuccess() {
         if (requestUpdateListener != null) {
             requestUpdateListener.afterSuccess(this);
+        } else { }
+    }
+
+    private void afterSuccess(ArrayList<Proposal> response) {
+        if (requestUpdateListener != null) {
+
+            requestUpdateListener.afterSuccess(this, (Object) response);
         } else { }
     }
 

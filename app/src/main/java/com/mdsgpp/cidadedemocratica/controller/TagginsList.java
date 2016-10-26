@@ -21,6 +21,7 @@ import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.requester.TagRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.TaggingsRequestResponseHandler;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class TagginsList extends AppCompatActivity implements View.OnClickListener, RequestUpdateListener {
@@ -37,6 +38,8 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
 
     TaggingsRequestResponseHandler taggingsRequestResponseHandler;
     TagRequestResponseHandler tagRequestResponseHandler;
+
+    private static ArrayList<Long> loadedProposalIds = new ArrayList<>();
 
     private static String proposalIdParameterKey = "proposal_id";
 
@@ -61,37 +64,16 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
         relevanceTextView.setText(String.valueOf(proposal.getRelevance()));
 
         tagginsListView = (ListView) findViewById(R.id.listaTagsDaPropostaID);
-        ArrayList<Tag> tags = getTagsList();
-
-        pullTaggingsData();
-
-        if (tags == null) {
-            Toast.makeText(getApplicationContext(),"Proposta não possui TAGS", Toast.LENGTH_SHORT);
-        }
-        taggingsAdapter = new TagListAdapter(this, tags);
-
-        tagginsListView.setAdapter(taggingsAdapter);
 
         shareButton = (Button) findViewById(R.id.shareButton);
         shareButton.setOnClickListener(this);
-    }
 
-    private ArrayList<Tag> getTagsList() {
-        if (proposal != null) {
-
-            ArrayList<Tag> tags = new ArrayList<>();
-            ArrayList<Tagging> taggings = DataContainer.getInstance().getTaggingsForProposalId(proposal.getId());
-            for (Tagging t : taggings) {
-                Tag tag = DataContainer.getInstance().getTagForId(t.getTagId());
-                if (tag != null) {
-                    tags.add(tag);
-                }
-            }
-
-            return tags;
+        if (!loadedProposalIds.contains(proposal.getId())) {
+            pullTaggingsData();
         } else {
-            return new ArrayList<>();
+            setTagsListViewAdapter(proposal.getTags());
         }
+
     }
 
     private void shareProposal(){
@@ -109,15 +91,21 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
         startActivity(Intent.createChooser(intentShare,getString(R.string.name_action_share)));
     }
 
+    private void setTagsListViewAdapter(ArrayList<Tag> tags) {
+
+        taggingsAdapter = new TagListAdapter(this, tags);
+        tagginsListView.setAdapter(taggingsAdapter);
+    }
+
     private void pullTaggingsData() {
         if (progressDialog == null) {
             progressDialog = FeedbackManager.createProgressDialog(this, getString(R.string.message_load_proposal_detail));
         }
 
-        taggingsRequestResponseHandler = new TaggingsRequestResponseHandler();
-        taggingsRequestResponseHandler.setRequestUpdateListener(this);
+        tagRequestResponseHandler = new TagRequestResponseHandler();
+        tagRequestResponseHandler.setRequestUpdateListener(this);
 
-        Requester requester = new Requester(TaggingsRequestResponseHandler.taggingsEndpointUrl, taggingsRequestResponseHandler);
+        Requester requester = new Requester(TagRequestResponseHandler.tagsEndpointUrl, tagRequestResponseHandler);
         requester.setParameter(proposalIdParameterKey, String.valueOf(proposal.getId()));
         requester.request(Requester.RequestType.GET);
     }
@@ -125,20 +113,19 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
     @Override
     public void afterSuccess(JsonHttpResponseHandler handler) {
 
-        if (handler == taggingsRequestResponseHandler) {
+    }
 
-            tagRequestResponseHandler = new TagRequestResponseHandler();
-            tagRequestResponseHandler.setRequestUpdateListener(this);
+    @Override
+    public void afterSuccess(JsonHttpResponseHandler handler, Object response) {
 
-            Requester requester = new Requester(TagRequestResponseHandler.tagsEndpointUrl, tagRequestResponseHandler);
-            requester.setParameter(proposalIdParameterKey, String.valueOf(proposal.getId()));
-            requester.request(Requester.RequestType.GET);
+        ArrayList<Tag> tags = (ArrayList<Tag>) response;
 
-        } else if (handler == tagRequestResponseHandler) {
-            progressDialog.dismiss();
-            FeedbackManager.createToast(this, getString(R.string.message_success_load_tags));
-            taggingsAdapter.updateData(getTagsList());
-        }
+        progressDialog.dismiss();
+        FeedbackManager.createToast(this, getString(R.string.message_success_load_tags));
+
+        proposal.setTags(tags);
+
+        setTagsListViewAdapter(tags);
     }
 
     @Override

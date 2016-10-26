@@ -16,7 +16,6 @@ import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
 import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
-import com.mdsgpp.cidadedemocratica.requester.TaggingsRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.UserRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.view.ListProposalFragment;
 
@@ -34,6 +33,8 @@ public class UserProfile extends AppCompatActivity implements ListProposalFragme
     private ProposalRequestResponseHandler proposalRequestResponseHandler;
     private static String userIdParameterKey = "user_id";
     private UserRequestResponseHandler userRequestResponseHandler;
+
+    private static ArrayList<Long> loadedUserIds = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,11 @@ public class UserProfile extends AppCompatActivity implements ListProposalFragme
         relevanceTextView = (TextView)findViewById(R.id.relevanceTextView);
         relevanceTextView.setText(String.valueOf(user.getRelevance()));
 
-
+        if (!loadedUserIds.contains(user.getId())) {
+            pullUsersProposals();
+        } else {
+            loadProposalsList();
+        }
 
     }
 
@@ -63,8 +68,10 @@ public class UserProfile extends AppCompatActivity implements ListProposalFragme
 
     }
 
-    private void loadProposalsList(ArrayList<Proposal> proposals) {
+    private void loadProposalsList() {
 
+
+        ArrayList<Proposal> proposals = user.getProposals();
         if(proposals == null) {
             Toast.makeText(getApplicationContext(),"Usuário não possui propostas", Toast.LENGTH_SHORT);
         }
@@ -86,10 +93,23 @@ public class UserProfile extends AppCompatActivity implements ListProposalFragme
         requester.request(Requester.RequestType.GET);
     }
 
+
     @Override
     public void afterSuccess(JsonHttpResponseHandler handler) {
-        ArrayList<Proposal> proposals = DataContainer.getInstance().getProposalsForUserId(user.getId());
-        loadProposalsList(proposals);
+
+    }
+
+    @Override
+    public void afterSuccess(JsonHttpResponseHandler handler, Object response) {
+
+        progressDialog.dismiss();
+
+        ArrayList<Proposal> proposals = (ArrayList<Proposal>) response;
+
+        user.setProposals(proposals);
+        loadProposalsList();
+
+        loadedUserIds.add(user.getId());
     }
 
     @Override
