@@ -4,6 +4,7 @@ import android.test.AndroidTestCase;
 
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.Tag;
+import com.mdsgpp.cidadedemocratica.model.Tagging;
 import com.mdsgpp.cidadedemocratica.model.User;
 
 import org.junit.Test;
@@ -40,6 +41,25 @@ public class DataContainerTest extends AndroidTestCase {
         dataContainer.addTags(tags);
 
         assertTrue(DataContainer.getInstance().getTags().containsAll(tags));
+    }
+
+    @Test
+    public void testAddTagging(){
+
+
+        Tagging tagging = newTagging();
+        assertFalse(DataContainer.getInstance().getTaggings().contains(tagging));
+        dataContainer.addTagging(tagging);
+        assertTrue(DataContainer.getInstance().getTaggings().contains(tagging));
+        ArrayList<Tagging> taggingsArray = new ArrayList<Tagging>();
+        for(int i=0;i<10;i++){
+            Tagging tagging1 = newTagging();
+            taggingsArray.add(tagging1);
+        }
+        assertFalse(DataContainer.getInstance().getTaggings().containsAll(taggingsArray));
+        dataContainer.addTaggings(taggingsArray);
+        assertTrue(DataContainer.getInstance().getTaggings().containsAll(taggingsArray));
+
     }
 
     @Test
@@ -96,6 +116,17 @@ public class DataContainerTest extends AndroidTestCase {
 
         assertEquals(tags, dataContainer.getTags());
     }
+    @Test
+    public void testSetTaggins(){
+        ArrayList<Tagging> taggings = new ArrayList<Tagging>();
+        taggings.add(newTagging());
+        taggings.add(newTagging());
+        taggings.add(newTagging());
+
+        dataContainer.setTaggings(taggings);
+        assertEquals(taggings,dataContainer.getTaggings());
+
+    }
 
     @Test
     public void testSetProposals() {
@@ -137,6 +168,18 @@ public class DataContainerTest extends AndroidTestCase {
 
         dataContainer.clearTags();
         assertEquals(dataContainer.getTags().size(), 0);
+    }
+
+    @Test
+    public  void testClearTaggins(){
+        ArrayList<Tagging> taggings = new ArrayList<Tagging>();
+        taggings.add(newTagging());
+        taggings.add(newTagging());
+        taggings.add(newTagging());
+        dataContainer.setTaggings(taggings);
+        assertEquals(taggings,dataContainer.getTaggings());
+        dataContainer.clearTaggings();
+        assertEquals(dataContainer.getTaggings().size(),0);
     }
 
     @Test
@@ -185,6 +228,100 @@ public class DataContainerTest extends AndroidTestCase {
 
         assertNotNull(this.dataContainer.getTagForId(99));
     }
+    @Test
+    public  void testGetTaggingForProposalId(){
+        this.dataContainer.addTagging(newTagging(1, 1, 1));
+        this.dataContainer.addTagging(newTagging(2, 2, 2));
+        this.dataContainer.addTagging(newTagging(3, 3, 3));
+        this.dataContainer.addTagging(newTagging(4, 4, 4));
+
+        assertTrue(this.dataContainer.getTaggingsForProposalId(99).isEmpty());
+
+        long pId = 99;
+
+        this.dataContainer.addTagging(newTagging(1, pId, 1));
+        this.dataContainer.addTagging(newTagging(13, pId, 1));
+        this.dataContainer.addTagging(newTagging(2, pId, 1));
+        this.dataContainer.addTagging(newTagging(15, pId, 1));
+
+        ArrayList<Tagging> taggings = this.dataContainer.getTaggingsForProposalId(pId);
+        for (Tagging tagging : taggings) {
+            assertEquals(tagging.getTaggableId(), pId);
+        }
+    }
+
+    @Test
+    public  void testGetTaggingForUserId(){
+        this.dataContainer.addTagging(newTagging(1, 1, 1));
+        this.dataContainer.addTagging(newTagging(2, 2, 2));
+        this.dataContainer.addTagging(newTagging(3, 3, 3));
+        this.dataContainer.addTagging(newTagging(4, 4, 4));
+
+        assertTrue(this.dataContainer.getTaggingsForUserId(99).isEmpty());
+
+        long pId = 99;
+
+        this.dataContainer.addTagging(newTagging(1, 1, pId));
+        this.dataContainer.addTagging(newTagging(13, 1, pId));
+        this.dataContainer.addTagging(newTagging(2, 1, pId));
+        this.dataContainer.addTagging(newTagging(15, 1, pId));
+
+        ArrayList<Tagging> taggings = this.dataContainer.getTaggingsForUserId(pId);
+        for (Tagging tagging : taggings) {
+            assertEquals(tagging.getTaggerId(), pId);
+        }
+    }
+
+    @Test
+    public void testGetProposalForUserId() {
+        this.dataContainer.addProposal(newProposal(1, 1));
+        this.dataContainer.addProposal(newProposal(2, 2));
+        this.dataContainer.addProposal(newProposal(3, 3));
+        this.dataContainer.addProposal(newProposal(4, 4));
+
+        long uId = 99;
+        assertTrue(this.dataContainer.getProposalsForUserId(uId).isEmpty());
+
+        ArrayList<Proposal> proposals = new ArrayList<>();
+        proposals.add(newProposal(5, uId));
+        proposals.add(newProposal(6, uId));
+        proposals.add(newProposal(7, uId));
+        proposals.add(newProposal(8, uId));
+        proposals.add(newProposal(9, uId));
+
+        this.dataContainer.addProposals(proposals);
+
+
+        ArrayList<Proposal> uproposals = this.dataContainer.getProposalsForUserId(uId);
+        assertTrue(uproposals.containsAll(proposals));
+        assertTrue(proposals.containsAll(uproposals));
+
+        for (Proposal proposal : uproposals) {
+            assertEquals(proposal.getUserId(), uId);
+        }
+    }
+
+    @Test
+    public  void testGetTaggingForTagId(){
+        this.dataContainer.addTagging(newTagging(1, 1, 1));
+        this.dataContainer.addTagging(newTagging(2, 2, 2));
+        this.dataContainer.addTagging(newTagging(3, 3, 3));
+        this.dataContainer.addTagging(newTagging(4, 4, 4));
+
+        assertTrue(this.dataContainer.getTaggingsForTagId(99).isEmpty());
+
+        long pId = 99;
+
+        this.dataContainer.addTagging(newTagging(pId, 1, 1));
+        this.dataContainer.addTagging(newTagging(pId, 1, 14));
+        this.dataContainer.addTagging(newTagging(pId, 1, 2));
+        this.dataContainer.addTagging(newTagging(pId, 1, 15));
+
+        ArrayList<Tagging> taggings = this.dataContainer.getTaggingsForTagId(pId);
+        for (Tagging tagging : taggings) {
+            assertEquals(tagging.getTagId(), pId);
+        }
+    }
 
     public void testGetProposalForId() {
 
@@ -229,6 +366,17 @@ public class DataContainerTest extends AndroidTestCase {
 
     private Proposal newProposal(long id) {
         return new Proposal(id, "title", "content", 0,0);
+    }
+    private Proposal newProposal(long id, long userId) {
+        return new Proposal(id, "title", "content", 0, userId);
+    }
+
+    private Tagging newTagging() {
+        return new Tagging(1,1,1);
+    }
+
+    private Tagging newTagging(long tagId, long proposalId, long userId){
+        return new Tagging(tagId, proposalId, userId);
     }
 
 

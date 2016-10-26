@@ -69,21 +69,30 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
                     return p1.compareTo(p2);
                 }
             });
+            proposals.removeAll(dataContainer.getProposals());
             dataContainer.addProposals(proposals);
             afterSuccess();
+            afterSuccess(proposals);
         }
 
     }
 
     private void afterSuccess() {
         if (requestUpdateListener != null) {
-            requestUpdateListener.afterSuccess();
+            requestUpdateListener.afterSuccess(this);
+        } else { }
+    }
+
+    private void afterSuccess(ArrayList<Proposal> response) {
+        if (requestUpdateListener != null) {
+
+            requestUpdateListener.afterSuccess(this, (Object) response);
         } else { }
     }
 
     private void afterError(String message) {
         if (requestUpdateListener != null) {
-            requestUpdateListener.afterError(message);
+            requestUpdateListener.afterError(this, message);
         } else { }
     }
 

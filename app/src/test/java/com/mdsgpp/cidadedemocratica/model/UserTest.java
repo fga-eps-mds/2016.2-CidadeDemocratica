@@ -65,7 +65,9 @@ public class UserTest extends AndroidTestCase {
 
     @Test
     public void testGetProposal(){
-        assertEquals(this.user.getProposals(),proposals);
+        assertTrue(this.user.getProposals().isEmpty());
+        user.setProposals(proposals);
+        assertEquals(this.user.getProposals(), proposals);
     }
 
     @Test

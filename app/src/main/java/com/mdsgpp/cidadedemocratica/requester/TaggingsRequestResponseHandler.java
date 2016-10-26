@@ -3,6 +3,7 @@ package com.mdsgpp.cidadedemocratica.requester;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.Tag;
+import com.mdsgpp.cidadedemocratica.model.Tagging;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
 
 import org.json.JSONArray;
@@ -26,7 +27,8 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
     private DataContainer dataContainer = DataContainer.getInstance();
     private final String taggingTagIdKey = "tag_id";
     private final String taggingTaggableIdKey = "taggable_id";
-    private final String taggingTaggableTypeKey = "taggable_type";
+    private final String taggingTaggerIdKey = "tagger_id";
+    public static final String taggingsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/taggings";
 
     private RequestUpdateListener requestUpdateListener;
 
@@ -38,37 +40,47 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
 
         if (statusCode == 200) {
 
+            ArrayList<Tagging> taggings = new ArrayList<>();
             for (int i = 0; i < response.length(); ++i) {
                 try {
 
                     JSONObject taggingJson = response.getJSONObject(i);
-                    String taggableType = taggingJson.getString(taggingTaggableTypeKey);
 
-                    if (taggableType.equals("Topico")) {
+                    long tagId = taggingJson.getLong(taggingTagIdKey);
+                    long proposalId = taggingJson.getLong(taggingTaggableIdKey);
+                    long taggerId = taggingJson.getLong(taggingTaggerIdKey);
 
-                        long tagId = taggingJson.getLong(taggingTagIdKey);
-                        long proposalId = taggingJson.getLong(taggingTaggableIdKey);
-
-                        Tag tag = dataContainer.getTagForId(tagId);
-                        Proposal proposal = dataContainer.getProposalForId(proposalId);
-
-                        if (tag != null && proposal != null) {
-
-                            addTagForProposalId(proposalId, tag);
-                            addProposalForTagId(tagId, proposal);
-
-                        } else { /* Tag or Proposal does not exist */ }
-
-                    } else { /* Taggable is not a topic */ }
+                    Tagging tagging = new Tagging(tagId, proposalId, taggerId);
+                    taggings.add(tagging);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
 
-            setProposalsTags();
-            setTagsProposals();
+            taggings.removeAll(dataContainer.getTaggings());
+            dataContainer.addTaggings(taggings);
+            afterSuccess();
+            afterSuccess(taggings);
         }
+    }
+
+    private void afterSuccess() {
+        if (requestUpdateListener != null) {
+            requestUpdateListener.afterSuccess(this);
+        } else { }
+    }
+
+    private void afterSuccess(ArrayList<Tagging> response) {
+        if (requestUpdateListener != null) {
+            requestUpdateListener.afterSuccess(this, (Object) response);
+        } else { }
+    }
+
+    private void afterError(String message) {
+        if (requestUpdateListener != null) {
+            requestUpdateListener.afterError(this, message);
+        } else { }
     }
 
     private void setTagsProposals() {
@@ -134,6 +146,7 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
     @Override
     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
         super.onFailure(statusCode, headers, throwable, errorResponse);
+        afterError(String.valueOf(statusCode));
     }
 
     public RequestUpdateListener getRequestUpdateListener() {

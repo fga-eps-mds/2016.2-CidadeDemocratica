@@ -63,15 +63,35 @@ public class UserRequestResponseHandler extends JsonHttpResponseHandler {
                     return u1.compareTo(u2);
                 }
             });
+            users.removeAll(dataContainer.getUsers());
             dataContainer.addUsers(users);
-            requestUpdateListener.afterSuccess();
+            afterSuccess();
+            afterSuccess(users);
         }
     }
 
     @Override
     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
         super.onFailure(statusCode, headers, throwable, errorResponse);
-        requestUpdateListener.afterError(String.valueOf(statusCode));
+        afterError(String.valueOf(statusCode));
+    }
+
+    private void afterSuccess() {
+        if (requestUpdateListener != null) {
+            requestUpdateListener.afterSuccess(this);
+        } else { }
+    }
+
+    private void afterSuccess(ArrayList<User> response) {
+        if (requestUpdateListener != null) {
+            requestUpdateListener.afterSuccess(this, (Object) response);
+        } else { }
+    }
+
+    private void afterError(String message) {
+        if (requestUpdateListener != null) {
+            requestUpdateListener.afterError(this, message);
+        } else { }
     }
 
     public RequestUpdateListener getRequestUpdateListener() {
