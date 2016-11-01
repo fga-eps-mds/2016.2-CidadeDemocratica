@@ -15,6 +15,15 @@ public class Proposal implements Comparable<Proposal> {
     private String slug ="";
     private ArrayList<Tag> tags = new ArrayList<Tag>();
 
+    public Proposal(long id, String title, String content, long relevance, long userId) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.relevance = relevance;
+        this.slug = slug;
+        this.userId = userId;
+    }
+
     public Proposal(long id, String title, String content, long relevance, long userId, String slug) {
         this.id = id;
         this.title = title;

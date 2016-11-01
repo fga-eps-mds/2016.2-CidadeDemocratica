@@ -24,9 +24,13 @@ public class UserTest extends AndroidTestCase {
     ArrayList<Tag> tags = new ArrayList<Tag>();
     ArrayList<Proposal> proposals  = new ArrayList<Proposal>();
 
+    DataContainer dataContainer = DataContainer.getInstance();
 
     @Override
     public void setUp() {
+
+        dataContainer.clearProposals();
+
         user = newUser();
 
         ciclismo = newTag();
@@ -38,8 +42,8 @@ public class UserTest extends AndroidTestCase {
         userIgual = new User("Name",14,1,0);
         userLarger = new User("User name",15,2,1);
         user.setMostUsedTags(tags);
-        DataContainer.getInstance().addProposal(proposalTest);
-        DataContainer.getInstance().addProposal(proposalTest2);
+        dataContainer.addProposal(proposalTest);
+        dataContainer.addProposal(proposalTest2);
     }
 
     @Test
