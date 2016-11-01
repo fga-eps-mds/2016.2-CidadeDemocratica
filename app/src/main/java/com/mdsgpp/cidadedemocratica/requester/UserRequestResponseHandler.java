@@ -19,7 +19,7 @@ import cz.msebera.android.httpclient.Header;
 /**
  * Created by andreanmasiro on 9/8/16.
  */
-public class UserRequestResponseHandler extends JsonHttpResponseHandler {
+public class UserRequestResponseHandler extends RequestResponseHandler {
 
     private final int success = 200;
 
@@ -65,7 +65,6 @@ public class UserRequestResponseHandler extends JsonHttpResponseHandler {
             });
             users.removeAll(dataContainer.getUsers());
             dataContainer.addUsers(users);
-            afterSuccess();
             afterSuccess(users);
         }
     }
@@ -75,25 +74,6 @@ public class UserRequestResponseHandler extends JsonHttpResponseHandler {
         super.onFailure(statusCode, headers, throwable, errorResponse);
         afterError(String.valueOf(statusCode));
     }
-
-    private void afterSuccess() {
-        if (requestUpdateListener != null) {
-            requestUpdateListener.afterSuccess(this);
-        } else { }
-    }
-
-    private void afterSuccess(ArrayList<User> response) {
-        if (requestUpdateListener != null) {
-            requestUpdateListener.afterSuccess(this, (Object) response);
-        } else { }
-    }
-
-    private void afterError(String message) {
-        if (requestUpdateListener != null) {
-            requestUpdateListener.afterError(this, message);
-        } else { }
-    }
-
     public RequestUpdateListener getRequestUpdateListener() {
         return requestUpdateListener;
     }

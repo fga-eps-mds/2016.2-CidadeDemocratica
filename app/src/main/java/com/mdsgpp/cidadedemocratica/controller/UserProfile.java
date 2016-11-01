@@ -93,12 +93,6 @@ public class UserProfile extends AppCompatActivity implements ListProposalFragme
         requester.request(Requester.RequestType.GET);
     }
 
-
-    @Override
-    public void afterSuccess(JsonHttpResponseHandler handler) {
-
-    }
-
     @Override
     public void afterSuccess(JsonHttpResponseHandler handler, Object response) {
 

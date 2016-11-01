@@ -108,16 +108,11 @@ public class UsersList extends AppCompatActivity implements RequestUpdateListene
     }
 
     @Override
-    public void afterSuccess(JsonHttpResponseHandler handler) {
+    public void afterSuccess(JsonHttpResponseHandler handler, Object response) {
         progressDialog.dismiss();
         loadUsersList();
         createToast(getString(R.string.message_success_load_users));
         UserRequestResponseHandler.nextPageToRequest++;
-    }
-
-    @Override
-    public void afterSuccess(JsonHttpResponseHandler handler, Object response) {
-
     }
 
     @Override

@@ -18,7 +18,7 @@ import cz.msebera.android.httpclient.entity.mime.content.StringBody;
 /**
  * Created by andreanmasiro on 9/9/16.
  */
-public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
+public class ProposalRequestResponseHandler extends RequestResponseHandler {
 
     DataContainer dataContainer = DataContainer.getInstance();
     public static final String proposalsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/proposals";
@@ -71,29 +71,9 @@ public class ProposalRequestResponseHandler extends JsonHttpResponseHandler {
             });
             proposals.removeAll(dataContainer.getProposals());
             dataContainer.addProposals(proposals);
-            afterSuccess();
             afterSuccess(proposals);
         }
 
-    }
-
-    private void afterSuccess() {
-        if (requestUpdateListener != null) {
-            requestUpdateListener.afterSuccess(this);
-        } else { }
-    }
-
-    private void afterSuccess(ArrayList<Proposal> response) {
-        if (requestUpdateListener != null) {
-
-            requestUpdateListener.afterSuccess(this, (Object) response);
-        } else { }
-    }
-
-    private void afterError(String message) {
-        if (requestUpdateListener != null) {
-            requestUpdateListener.afterError(this, message);
-        } else { }
     }
 
     @Override

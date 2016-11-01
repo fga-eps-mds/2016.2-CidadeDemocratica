@@ -22,7 +22,7 @@ import cz.msebera.android.httpclient.Header;
 /**
  * Created by andreanmasiro on 9/17/16.
  */
-public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
+public class TaggingsRequestResponseHandler extends RequestResponseHandler {
 
     private DataContainer dataContainer = DataContainer.getInstance();
     private final String taggingTagIdKey = "tag_id";
@@ -60,28 +60,10 @@ public class TaggingsRequestResponseHandler extends JsonHttpResponseHandler {
 
             taggings.removeAll(dataContainer.getTaggings());
             dataContainer.addTaggings(taggings);
-            afterSuccess();
             afterSuccess(taggings);
         }
     }
 
-    private void afterSuccess() {
-        if (requestUpdateListener != null) {
-            requestUpdateListener.afterSuccess(this);
-        } else { }
-    }
-
-    private void afterSuccess(ArrayList<Tagging> response) {
-        if (requestUpdateListener != null) {
-            requestUpdateListener.afterSuccess(this, (Object) response);
-        } else { }
-    }
-
-    private void afterError(String message) {
-        if (requestUpdateListener != null) {
-            requestUpdateListener.afterError(this, message);
-        } else { }
-    }
 
     private void setTagsProposals() {
 

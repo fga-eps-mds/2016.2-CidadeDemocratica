@@ -111,11 +111,6 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
     }
 
     @Override
-    public void afterSuccess(JsonHttpResponseHandler handler) {
-
-    }
-
-    @Override
     public void afterSuccess(JsonHttpResponseHandler handler, Object response) {
 
         ArrayList<Tag> tags = (ArrayList<Tag>) response;

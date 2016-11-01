@@ -109,16 +109,11 @@ public class TagsList extends AppCompatActivity implements RequestUpdateListener
     }
 
     @Override
-    public void afterSuccess(JsonHttpResponseHandler handler) {
+    public void afterSuccess(JsonHttpResponseHandler handler, Object response) {
         progressDialog.dismiss();
         loadTagsList();
         FeedbackManager.createToast(this, getString(R.string.message_success_load_tags));
         TagRequestResponseHandler.nextPageToRequest++;
-    }
-
-    @Override
-    public void afterSuccess(JsonHttpResponseHandler handler, Object response) {
-
     }
 
     @Override

@@ -17,7 +17,7 @@ import cz.msebera.android.httpclient.Header;
 /**
  * Created by andreanmasiro on 9/9/16.
  */
-public class TagRequestResponseHandler extends JsonHttpResponseHandler {
+public class TagRequestResponseHandler extends RequestResponseHandler {
 
     DataContainer dataContainer = DataContainer.getInstance();
 
@@ -56,28 +56,9 @@ public class TagRequestResponseHandler extends JsonHttpResponseHandler {
             });
             tags.removeAll(dataContainer.getTags());
             dataContainer.addTags(tags);
-            afterSuccess();
             afterSuccess(tags);
         }
 
-    }
-
-    private void afterSuccess() {
-        if (requestUpdateListener != null) {
-            requestUpdateListener.afterSuccess(this);
-        } else { }
-    }
-
-    private void afterSuccess(ArrayList<Tag> response) {
-        if (requestUpdateListener != null) {
-            requestUpdateListener.afterSuccess(this, (Object) response);
-        } else { }
-    }
-
-    private void afterError(String message) {
-        if (requestUpdateListener != null) {
-            requestUpdateListener.afterError(this, message);
-        } else { }
     }
 
     @Override

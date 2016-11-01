@@ -90,11 +90,6 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
     }
 
     @Override
-    public void afterSuccess(JsonHttpResponseHandler handler) {
-
-    }
-
-    @Override
     public void afterSuccess(JsonHttpResponseHandler handler, Object response) {
         progressDialog.dismiss();
         ArrayList<Proposal> proposals = (ArrayList<Proposal>) response;
