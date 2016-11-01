@@ -22,20 +22,23 @@ public class Requester {
     private String url = "";
     private HashMap<String, String> parameters = new HashMap<>();
     private AsyncHttpResponseHandler responseHandler;
-    private static AsyncHttpClient client = Looper.myLooper() == null ? new SyncHttpClient() : new AsyncHttpClient();
+    private static AsyncHttpClient client = new AsyncHttpClient();
     private static SyncHttpClient syncClient = new SyncHttpClient();
 
     public Requester(String url, AsyncHttpResponseHandler responseHandler) {
         this.url = url;
         this.responseHandler = responseHandler;
+
     }
 
     public void request(RequestType method) {
         if (method == RequestType.GET) {
 
             String endpoint = this.url;
+            String prefix = "?";
             for (String key : parameters.keySet()) {
-                endpoint += "?" + key + "=" + parameters.get(key);
+                endpoint += prefix + key + "=" + parameters.get(key);
+                prefix = "&";
             }
             client.get(endpoint, this.responseHandler);
         }
