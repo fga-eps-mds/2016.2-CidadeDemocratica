@@ -74,13 +74,24 @@ public class ProposalTest extends AndroidTestCase {
         assertTrue(proposalDefault.toString().equals("title"));
     }
 
+    @Test
+    public void testGetSlug() {
+        String slug = "slug";
+        Proposal proposal = newProposal(slug);
+
+        assertEquals(slug, proposal.getSlug());
+    }
+
     private Proposal newProposal() {
         return new Proposal(proposalId, proposalTitle, proposalContent, proposalRelevance, proposalIdOfUser);
     }
 
-
+    private Proposal newProposal(String slug) {
+        return new Proposal(proposalId, proposalTitle, proposalContent, proposalRelevance, proposalIdOfUser, slug);
+    }
 
     private Tag newTag() {
         return new Tag(0, "", 0, 0);
     }
+
 }
