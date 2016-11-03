@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +24,11 @@ import java.util.Map;
  */
 public class Requester {
 
-    public static enum RequestMethod {
+    public enum RequestMethod {
         POST, GET, PATCH, DELETE
     }
 
-    public static enum ValidProtocol {
+    public enum ValidProtocol {
         FTP, HTTP, HTTPS
     }
 
@@ -36,8 +37,6 @@ public class Requester {
     private String url = "";
     private HashMap<String, String> parameters = new HashMap<>();
     private RequestResponseHandler responseHandler;
-    private static AsyncHttpClient client = new AsyncHttpClient();
-    private static SyncHttpClient syncClient = new SyncHttpClient();
 
     public Requester(String url, RequestResponseHandler responseHandler) {
         this.url = url;
@@ -124,6 +123,8 @@ public class Requester {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
+        } catch (UnknownHostException e) {
+            responseHandler.onFailure(500, null, null);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -144,7 +145,7 @@ public class Requester {
         return urlConnection;
     }
 
-    private String getRequestMethodDescription(RequestMethod method) {
+    public static String getRequestMethodDescription(RequestMethod method) {
         String description = "";
         switch (method) {
             case GET:
@@ -163,7 +164,7 @@ public class Requester {
         return description;
     }
 
-    private String getProtocolDescription(ValidProtocol protocol) {
+    public static String getProtocolDescription(ValidProtocol protocol) {
         String description = "";
         switch (protocol) {
             case FTP:
@@ -179,7 +180,7 @@ public class Requester {
         return description;
     }
 
-    private String getUrlWithParameters() {
+    public String getUrlWithParameters() {
         String purl = this.url;
 
         String prefix = "?";

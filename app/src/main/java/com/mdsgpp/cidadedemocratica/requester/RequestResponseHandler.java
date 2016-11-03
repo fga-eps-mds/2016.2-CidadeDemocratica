@@ -23,48 +23,13 @@ public class RequestResponseHandler {
     public RequestUpdateListener requestUpdateListener;
 
     public void onSuccess(int statusCode, Map<String, List<String>> headers, JSONArray response) {
-        afterSuccess(jsonArrayToHashMapArray(response));
+        afterSuccess(response);
     }
 
     public void onFailure(int statusCode, Map<String, List<String>> headers, JSONArray errorResponse) {
-        System.out.println("Failed with status code: " + statusCode);
-    }
-
-    private HashMap<String, Object> jsonToHashMap(JSONObject json) {
-
-        HashMap<String, Object> map = new HashMap<>();
-        Iterator<String> keys = json.keys();
-
-        while (keys.hasNext()) {
-            String key = keys.next();
-            Object value = null;
-            try {
-                value = json.get(key);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            map.put(key, value);
-            keys.remove();
-        }
-
-        return map;
-    }
-
-    private ArrayList<HashMap<String, Object>> jsonArrayToHashMapArray(JSONArray jsonArray) {
-
-        ArrayList<HashMap<String, Object>> responseArray = new ArrayList<>();
-        for (int i = 0; i < jsonArray.length(); ++i) {
-            try {
-                JSONObject object = jsonArray.getJSONObject(i);
-                HashMap<String, Object> map = jsonToHashMap(object);
-                responseArray.add(map);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return responseArray;
+        String errorMessage = "Failed with status code: " + statusCode;
+        System.out.println(errorMessage);
+        afterError(errorMessage);
     }
 
     public RequestUpdateListener getRequestUpdateListener() {
