@@ -13,6 +13,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -34,10 +37,8 @@ public class UserRequestResponseHandler extends RequestResponseHandler {
     public static int nextPageToRequest = 1;
     public static final String usersEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/users";
 
-    private RequestUpdateListener requestUpdateListener;
-
     @Override
-    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+    public void onSuccess(int statusCode, Map<String, List<String>> headers, JSONArray response) {
         if(statusCode == success){
             ArrayList<User> users = new ArrayList<User>();
 
@@ -70,15 +71,8 @@ public class UserRequestResponseHandler extends RequestResponseHandler {
     }
 
     @Override
-    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-        super.onFailure(statusCode, headers, throwable, errorResponse);
+    public void onFailure(int statusCode, Map<String, List<String>> headers, JSONArray errorResponse) {
+        super.onFailure(statusCode, headers, errorResponse);
         afterError(String.valueOf(statusCode));
-    }
-    public RequestUpdateListener getRequestUpdateListener() {
-        return requestUpdateListener;
-    }
-
-    public void setRequestUpdateListener(RequestUpdateListener requestUpdateListener) {
-        this.requestUpdateListener = requestUpdateListener;
     }
 }

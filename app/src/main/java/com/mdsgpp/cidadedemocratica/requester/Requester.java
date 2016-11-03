@@ -45,21 +45,38 @@ public class Requester {
 
     }
 
-    public void request(RequestMethod method) {
-        if (method == RequestMethod.GET) {
+    /**
+     * Legacy
+     *
+     *
+         public void request(RequestMethod method) {
+             if (method == RequestMethod.GET) {
 
-            String endpoint = getUrlWithParameters();
-            client.get(endpoint, this.responseHandler);
-        }
-    }
+                 String endpoint = getUrlWithParameters();
+                 client.get(endpoint, this.responseHandler);
+             }
+         }
+     *
+     *
+         public void syncRequest(RequestMethod method) {
+             if (method == RequestMethod.GET) {
 
-    public void syncRequest(RequestMethod method) {
-        if (method == RequestMethod.GET) {
+                 String endpoint = getUrlWithParameters();
+                 syncClient.get(endpoint, this.responseHandler);
+             }
+         }
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     */
 
-            String endpoint = getUrlWithParameters();
-            syncClient.get(endpoint, this.responseHandler);
-        }
-    }
+
 
     public void getAsync() {
         requestThread = new Thread(new Runnable() {
@@ -85,7 +102,9 @@ public class Requester {
             String line;
             while ((line = br.readLine()) != null) {
                 sb.append(line + "\n");
+                System.out.println("loading...");
             }
+            System.out.println("loaded...");
             br.close();
 
             String jsonString = sb.toString();
@@ -96,7 +115,7 @@ public class Requester {
 
             Map<String, List<String>> headers = urlConnection.getHeaderFields();
 
-            if (responseCode % 200 < 100) {
+            if (responseCode >= 200 && responseCode - 200 < 100) {
                 responseHandler.onSuccess(responseCode, headers, ja);
             } else {
                 responseHandler.onFailure(responseCode, headers, ja);
@@ -120,7 +139,7 @@ public class Requester {
         urlConnection.setReadTimeout(10000 /* milliseconds */);
         urlConnection.setConnectTimeout(15000 /* milliseconds */);
 
-        urlConnection.setDoOutput(true);
+        urlConnection.setDoOutput(false);
 
         return urlConnection;
     }

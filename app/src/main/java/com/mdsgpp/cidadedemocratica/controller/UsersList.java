@@ -9,10 +9,10 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.User;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.requester.UserRequestResponseHandler;
@@ -92,31 +92,34 @@ public class UsersList extends AppCompatActivity implements RequestUpdateListene
         }
 
         UserRequestResponseHandler userRequestResponseHandler = new UserRequestResponseHandler();
-        setDataUpdateListener(userRequestResponseHandler);
+        userRequestResponseHandler.setRequestUpdateListener(this);
 
         Requester requester = new Requester(UserRequestResponseHandler.usersEndpointUrl, userRequestResponseHandler);
         requester.setParameter("page", String.valueOf(UserRequestResponseHandler.nextPageToRequest));
-        requester.request(Requester.RequestMethod.GET);
+        System.out.println("loading users...");
+        requester.getAsync();
     }
 
     private void createToast(String message){
         FeedbackManager.createToast(this, message);
     }
 
-    private void setDataUpdateListener(UserRequestResponseHandler handler) {
-        handler.setRequestUpdateListener(this);
-    }
-
     @Override
-    public void afterSuccess(JsonHttpResponseHandler handler, Object response) {
-        progressDialog.dismiss();
-        loadUsersList();
-        createToast(getString(R.string.message_success_load_users));
+    public void afterSuccess(RequestResponseHandler handler, Object response) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+                loadUsersList();
+                createToast(getString(R.string.message_success_load_users));
+            }
+        });
+
         UserRequestResponseHandler.nextPageToRequest++;
     }
 
     @Override
-    public void afterError(JsonHttpResponseHandler handler, String message) {
+    public void afterError(RequestResponseHandler handler, String message) {
         progressDialog.dismiss();
         createToast(message);
     }

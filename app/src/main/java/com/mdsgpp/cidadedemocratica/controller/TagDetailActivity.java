@@ -8,13 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.Tag;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
 
 import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
+import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.requester.TaggingsRequestResponseHandler;
@@ -85,11 +85,11 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
 
         Requester requester = new Requester(ProposalRequestResponseHandler.proposalsEndpointUrl, proposalRequestResponseHandler);
         requester.setParameter(tagIdParameterKey, String.valueOf(tag.getId()));
-        requester.request(Requester.RequestMethod.GET);
+        requester.getAsync();
     }
 
     @Override
-    public void afterSuccess(JsonHttpResponseHandler handler, Object response) {
+    public void afterSuccess(RequestResponseHandler handler, Object response) {
         progressDialog.dismiss();
         ArrayList<Proposal> proposals = (ArrayList<Proposal>) response;
 
@@ -98,7 +98,7 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
     }
 
     @Override
-    public void afterError(JsonHttpResponseHandler handler, String message) {
+    public void afterError(RequestResponseHandler handler, String message) {
 
     }
 }

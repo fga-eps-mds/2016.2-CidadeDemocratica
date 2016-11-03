@@ -9,10 +9,10 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Tag;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.requester.TagRequestResponseHandler;
@@ -100,7 +100,7 @@ public class TagsList extends AppCompatActivity implements RequestUpdateListener
 
         Requester requester = new Requester(TagRequestResponseHandler.tagsEndpointUrl, tagRequestResponseHandler);
         requester.setParameter("page", String.valueOf(TagRequestResponseHandler.nextPageToRequest));
-        requester.request(Requester.RequestMethod.GET);
+        requester.getAsync();
     }
 
     private void setDataUpdateListener(TagRequestResponseHandler tagRequestResponseHandler) {
@@ -109,7 +109,7 @@ public class TagsList extends AppCompatActivity implements RequestUpdateListener
     }
 
     @Override
-    public void afterSuccess(JsonHttpResponseHandler handler, Object response) {
+    public void afterSuccess(RequestResponseHandler handler, Object response) {
         progressDialog.dismiss();
         loadTagsList();
         FeedbackManager.createToast(this, getString(R.string.message_success_load_tags));
@@ -117,7 +117,7 @@ public class TagsList extends AppCompatActivity implements RequestUpdateListener
     }
 
     @Override
-    public void afterError(JsonHttpResponseHandler handler, String message) {
+    public void afterError(RequestResponseHandler handler, String message) {
         progressDialog.dismiss();
         FeedbackManager.createToast(this, message);
     }

@@ -9,11 +9,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.Tag;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.requester.TagRequestResponseHandler;
@@ -104,11 +104,11 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
 
         Requester requester = new Requester(TagRequestResponseHandler.tagsEndpointUrl, tagRequestResponseHandler);
         requester.setParameter(proposalIdParameterKey, String.valueOf(proposal.getId()));
-        requester.request(Requester.RequestMethod.GET);
+        requester.getAsync();
     }
 
     @Override
-    public void afterSuccess(JsonHttpResponseHandler handler, Object response) {
+    public void afterSuccess(RequestResponseHandler handler, Object response) {
 
         ArrayList<Tag> tags = (ArrayList<Tag>) response;
 
@@ -121,7 +121,7 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
     }
 
     @Override
-    public void afterError(JsonHttpResponseHandler handler, String message) {
+    public void afterError(RequestResponseHandler handler, String message) {
     }
 
     @Override

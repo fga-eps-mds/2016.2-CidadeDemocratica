@@ -34,12 +34,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void pullProposalData() {
         Requester requester = new Requester(proposalsEndpointUrl, new ProposalRequestResponseHandler());
-        requester.request(Requester.RequestMethod.GET);
+        requester.getAsync();
     }
 
     public void pullTagginsData() {
         Requester requester = new Requester(taggingsEndpointUrl, new TaggingsRequestResponseHandler());
-        requester.request(Requester.RequestMethod.GET);
+        requester.getAsync();
     }
 
     public  void showProposalList(View view){

@@ -12,6 +12,7 @@ import com.mdsgpp.cidadedemocratica.R;
 
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
 import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
+import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.view.ListProposalFragment;
@@ -49,7 +50,7 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
 
         Requester requester = new Requester(ProposalRequestResponseHandler.proposalsEndpointUrl, proposalRequestResponseHandler);
         requester.setParameter("page", String.valueOf(ProposalRequestResponseHandler.nextPageToRequest));
-        requester.request(Requester.RequestMethod.GET);
+        requester.getAsync();
     }
 
     private void loadProposalsList() {
@@ -89,7 +90,7 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
     }
 
     @Override
-    public void afterSuccess(JsonHttpResponseHandler handler, Object response) {
+    public void afterSuccess(RequestResponseHandler handler, Object response) {
 
     }
 
@@ -97,7 +98,7 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         FeedbackManager.createToast(this, message);
     }
 
-    public void afterError(JsonHttpResponseHandler handler, String message) {
+    public void afterError(RequestResponseHandler handler, String message) {
 
     }
 }

@@ -18,7 +18,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by andreanmasiro on 01/11/16.
  */
 
-public class RequestResponseHandler extends JsonHttpResponseHandler {
+public class RequestResponseHandler {
 
     public RequestUpdateListener requestUpdateListener;
 
@@ -27,14 +27,7 @@ public class RequestResponseHandler extends JsonHttpResponseHandler {
     }
 
     public void onFailure(int statusCode, Map<String, List<String>> headers, JSONArray errorResponse) {
-
-    }
-
-    @Override
-    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-        if (statusCode == 200) {
-            afterSuccess(jsonArrayToHashMapArray(response));
-        }
+        System.out.println("Failed with status code: " + statusCode);
     }
 
     private HashMap<String, Object> jsonToHashMap(JSONObject json) {
@@ -72,6 +65,10 @@ public class RequestResponseHandler extends JsonHttpResponseHandler {
         }
 
         return responseArray;
+    }
+
+    public RequestUpdateListener getRequestUpdateListener() {
+        return requestUpdateListener;
     }
 
     public void setRequestUpdateListener(RequestUpdateListener requestUpdateListener) {

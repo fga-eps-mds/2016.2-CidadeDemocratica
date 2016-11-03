@@ -1,23 +1,12 @@
 package com.mdsgpp.cidadedemocratica.requester;
 
-import android.provider.Settings;
-import android.test.AndroidTestCase;
 import android.test.ApplicationTestCase;
 import android.app.Application;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import junit.framework.TestCase;
-
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Test;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -56,13 +45,13 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
     }
 
     @Override
-    public void afterSuccess(JsonHttpResponseHandler handler, Object response) {
+    public void afterSuccess(RequestResponseHandler handler, Object response) {
         this.response = response;
         signal.countDown();
     }
 
     @Override
-    public void afterError(JsonHttpResponseHandler handler, String message) {
+    public void afterError(RequestResponseHandler handler, String message) {
 
     }
 }

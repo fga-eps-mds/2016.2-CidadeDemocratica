@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import cz.msebera.android.httpclient.Header;
@@ -30,13 +32,11 @@ public class TaggingsRequestResponseHandler extends RequestResponseHandler {
     private final String taggingTaggerIdKey = "tagger_id";
     public static final String taggingsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/taggings";
 
-    private RequestUpdateListener requestUpdateListener;
-
     HashMap<Long, ArrayList<Tag>> proposalTaggings = new HashMap<Long, ArrayList<Tag>>();
     HashMap<Long, ArrayList<Proposal>> tagTaggings = new HashMap<Long, ArrayList<Proposal>>();
 
     @Override
-    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+    public void onSuccess(int statusCode, Map<String, List<String>> headers, JSONArray response) {
 
         if (statusCode == 200) {
 
@@ -126,16 +126,9 @@ public class TaggingsRequestResponseHandler extends RequestResponseHandler {
     }
 
     @Override
-    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-        super.onFailure(statusCode, headers, throwable, errorResponse);
+    public void onFailure(int statusCode, Map<String, List<String>> headers, JSONArray errorResponse) {
+        super.onFailure(statusCode, headers, errorResponse);
         afterError(String.valueOf(statusCode));
     }
 
-    public RequestUpdateListener getRequestUpdateListener() {
-        return requestUpdateListener;
-    }
-
-    public void setRequestUpdateListener(RequestUpdateListener requestUpdateListener) {
-        this.requestUpdateListener = requestUpdateListener;
-    }
 }

@@ -11,6 +11,6 @@ import java.util.Objects;
 
 public interface RequestUpdateListener {
 
-    void afterSuccess(JsonHttpResponseHandler handler, Object response);
-    void afterError(JsonHttpResponseHandler handler, String message);
+    void afterSuccess(RequestResponseHandler handler, Object response);
+    void afterError(RequestResponseHandler handler, String message);
 }
