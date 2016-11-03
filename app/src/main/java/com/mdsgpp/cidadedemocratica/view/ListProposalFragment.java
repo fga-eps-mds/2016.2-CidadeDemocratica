@@ -163,7 +163,16 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
 
     @Override
     public void proposalsUpdated() {
-        proposalAdapter.updateData(DataContainer.getInstance().getProposals());
+        Activity ac = getActivity();
+        if (ac != null) {
+            ac.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    proposalAdapter.updateData(DataContainer.getInstance().getProposals());
+                }
+            });
+        }
+
     }
 
     @Override

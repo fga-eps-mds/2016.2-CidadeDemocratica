@@ -91,7 +91,12 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
     private void setTagsListViewAdapter(ArrayList<Tag> tags) {
 
         taggingsAdapter = new TagListAdapter(this, tags);
-        tagginsListView.setAdapter(taggingsAdapter);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tagginsListView.setAdapter(taggingsAdapter);
+            }
+        });
     }
 
     private void pullTaggingsData() {
@@ -110,11 +115,16 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
     @Override
     public void afterSuccess(RequestResponseHandler handler, Object response) {
 
+        final TagginsList self = this;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+                FeedbackManager.createToast(self, getString(R.string.message_success_load_tags));
+            }
+        });
+
         ArrayList<Tag> tags = (ArrayList<Tag>) response;
-
-        progressDialog.dismiss();
-        FeedbackManager.createToast(this, getString(R.string.message_success_load_tags));
-
         proposal.setTags(tags);
 
         setTagsListViewAdapter(tags);

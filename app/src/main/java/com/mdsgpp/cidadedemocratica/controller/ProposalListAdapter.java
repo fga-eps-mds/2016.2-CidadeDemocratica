@@ -69,6 +69,7 @@ public class ProposalListAdapter extends BaseAdapter {
     }
 
     public void updateData(ArrayList<Proposal> data) {
+
         this.data = data;
         notifyDataSetChanged();
     }

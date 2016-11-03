@@ -90,7 +90,14 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
 
     @Override
     public void afterSuccess(RequestResponseHandler handler, Object response) {
-        progressDialog.dismiss();
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+            }
+        });
+
         ArrayList<Proposal> proposals = (ArrayList<Proposal>) response;
 
         tag.setProposals(proposals);

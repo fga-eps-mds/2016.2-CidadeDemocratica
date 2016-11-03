@@ -110,9 +110,16 @@ public class TagsList extends AppCompatActivity implements RequestUpdateListener
 
     @Override
     public void afterSuccess(RequestResponseHandler handler, Object response) {
-        progressDialog.dismiss();
-        loadTagsList();
-        FeedbackManager.createToast(this, getString(R.string.message_success_load_tags));
+        final TagsList self = this;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+                loadTagsList();
+                FeedbackManager.createToast(self, getString(R.string.message_success_load_tags));
+            }
+        });
+
         TagRequestResponseHandler.nextPageToRequest++;
     }
 

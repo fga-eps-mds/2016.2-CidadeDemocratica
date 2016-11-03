@@ -82,16 +82,19 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         handler.setRequestUpdateListener(this);
     }
 
-    public void afterSuccess(JsonHttpResponseHandler handler) {
-        progressDialog.dismiss();
-        loadProposalsList();
-        createToast(getString(R.string.message_success_load_proposals));
-        ProposalRequestResponseHandler.nextPageToRequest++;
-    }
-
     @Override
     public void afterSuccess(RequestResponseHandler handler, Object response) {
 
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+                createToast(getString(R.string.message_success_load_proposals));
+                loadProposalsList();
+            }
+        });
+        
+        ProposalRequestResponseHandler.nextPageToRequest++;
     }
 
     private void createToast(String message) {

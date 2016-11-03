@@ -96,12 +96,16 @@ public class UserProfile extends AppCompatActivity implements ListProposalFragme
     @Override
     public void afterSuccess(RequestResponseHandler handler, Object response) {
 
-        progressDialog.dismiss();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+                loadProposalsList();
+            }
+        });
 
         ArrayList<Proposal> proposals = (ArrayList<Proposal>) response;
-
         user.setProposals(proposals);
-        loadProposalsList();
 
         loadedUserIds.add(user.getId());
     }
