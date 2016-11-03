@@ -8,20 +8,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.Tag;
-import com.mdsgpp.cidadedemocratica.model.Tagging;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.requester.TagRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.TaggingsRequestResponseHandler;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class TagginsList extends AppCompatActivity implements View.OnClickListener, RequestUpdateListener {
@@ -107,7 +104,7 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
 
         Requester requester = new Requester(TagRequestResponseHandler.tagsEndpointUrl, tagRequestResponseHandler);
         requester.setParameter(proposalIdParameterKey, String.valueOf(proposal.getId()));
-        requester.request(Requester.RequestType.GET);
+        requester.request(Requester.RequestMethod.GET);
     }
 
     @Override

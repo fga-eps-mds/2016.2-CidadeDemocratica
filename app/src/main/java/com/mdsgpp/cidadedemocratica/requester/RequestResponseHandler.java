@@ -9,6 +9,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -18,23 +20,20 @@ import cz.msebera.android.httpclient.Header;
 
 public class RequestResponseHandler extends JsonHttpResponseHandler {
 
+    public RequestUpdateListener requestUpdateListener;
+
+    public void onSuccess(int statusCode, Map<String, List<String>> headers, JSONArray response) {
+        afterSuccess(jsonArrayToHashMapArray(response));
+    }
+
+    public void onFailure(int statusCode, Map<String, List<String>> headers, JSONArray errorResponse) {
+
+    }
 
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
         if (statusCode == 200) {
-
-            ArrayList<HashMap<String, Object>> responseArray = new ArrayList<>();
-            for (int i = 0; i < response.length(); ++i) {
-                try {
-                    JSONObject object = response.getJSONObject(i);
-                    HashMap<String, Object> map = jsonToHashMap(object);
-                    responseArray.add(map);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            afterSuccess(responseArray);
+            afterSuccess(jsonArrayToHashMapArray(response));
         }
     }
 
@@ -59,7 +58,25 @@ public class RequestResponseHandler extends JsonHttpResponseHandler {
         return map;
     }
 
-    protected RequestUpdateListener requestUpdateListener;
+    private ArrayList<HashMap<String, Object>> jsonArrayToHashMapArray(JSONArray jsonArray) {
+
+        ArrayList<HashMap<String, Object>> responseArray = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); ++i) {
+            try {
+                JSONObject object = jsonArray.getJSONObject(i);
+                HashMap<String, Object> map = jsonToHashMap(object);
+                responseArray.add(map);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return responseArray;
+    }
+
+    public void setRequestUpdateListener(RequestUpdateListener requestUpdateListener) {
+        this.requestUpdateListener = requestUpdateListener;
+    }
 
     protected void afterSuccess(Object response) {
         if (requestUpdateListener != null) {

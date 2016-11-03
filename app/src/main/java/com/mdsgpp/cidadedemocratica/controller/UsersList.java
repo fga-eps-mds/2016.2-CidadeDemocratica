@@ -96,7 +96,7 @@ public class UsersList extends AppCompatActivity implements RequestUpdateListene
 
         Requester requester = new Requester(UserRequestResponseHandler.usersEndpointUrl, userRequestResponseHandler);
         requester.setParameter("page", String.valueOf(UserRequestResponseHandler.nextPageToRequest));
-        requester.request(Requester.RequestType.GET);
+        requester.request(Requester.RequestMethod.GET);
     }
 
     private void createToast(String message){

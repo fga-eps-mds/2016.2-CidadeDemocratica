@@ -49,7 +49,7 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
 
         Requester requester = new Requester(ProposalRequestResponseHandler.proposalsEndpointUrl, proposalRequestResponseHandler);
         requester.setParameter("page", String.valueOf(ProposalRequestResponseHandler.nextPageToRequest));
-        requester.request(Requester.RequestType.GET);
+        requester.request(Requester.RequestMethod.GET);
     }
 
     private void loadProposalsList() {

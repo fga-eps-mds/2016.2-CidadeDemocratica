@@ -52,7 +52,7 @@ public class DataContainerTest extends AndroidTestCase {
         dataContainer.addTagging(tagging);
         assertTrue(DataContainer.getInstance().getTaggings().contains(tagging));
         ArrayList<Tagging> taggingsArray = new ArrayList<Tagging>();
-        for(int i=0;i<10;i++){
+        for(int i = 0; i < 10; i++) {
             Tagging tagging1 = newTagging();
             taggingsArray.add(tagging1);
         }
@@ -124,7 +124,7 @@ public class DataContainerTest extends AndroidTestCase {
         taggings.add(newTagging());
 
         dataContainer.setTaggings(taggings);
-        assertEquals(taggings,dataContainer.getTaggings());
+        assertEquals(taggings, dataContainer.getTaggings());
 
     }
 
@@ -176,10 +176,12 @@ public class DataContainerTest extends AndroidTestCase {
         taggings.add(newTagging());
         taggings.add(newTagging());
         taggings.add(newTagging());
+
         dataContainer.setTaggings(taggings);
         assertEquals(taggings,dataContainer.getTaggings());
+
         dataContainer.clearTaggings();
-        assertEquals(dataContainer.getTaggings().size(),0);
+        assertTrue(dataContainer.getTaggings().isEmpty());
     }
 
     @Test
@@ -349,6 +351,46 @@ public class DataContainerTest extends AndroidTestCase {
         this.dataContainer.addUser(newUser(100));
 
         assertNotNull(this.dataContainer.getUserForId(100));    
+
+    }
+
+    public void testNotifyUpdates() {
+
+        final boolean[] notified = {false, false, false, false};
+
+        dataContainer.setDataUpdateListener(new DataUpdateListener() {
+            @Override
+            public void tagsUpdated() {
+                notified[0] = true;
+            }
+
+            @Override
+            public void proposalsUpdated() {
+                notified[1] = true;
+            }
+
+            @Override
+            public void usersUpdated() {
+                notified[2] = true;
+            }
+
+            @Override
+            public void taggingsUpdated() {
+                notified[3] = true;
+            }
+        });
+
+        dataContainer.addTag(newTag());
+        assertTrue(notified[0]);
+
+        dataContainer.addProposal(newProposal());
+        assertTrue(notified[1]);
+
+        dataContainer.addUser(newUser());
+        assertTrue(notified[2]);
+
+        dataContainer.addTagging(newTagging());
+        assertTrue(notified[3]);
 
     }
 

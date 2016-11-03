@@ -20,7 +20,6 @@ import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.requester.TaggingsRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.view.ListProposalFragment;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class TagDetailActivity extends AppCompatActivity implements OnFragmentInteractionListener, ListProposalFragment.OnFragmentInteractionListener, RequestUpdateListener {
@@ -86,7 +85,7 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
 
         Requester requester = new Requester(ProposalRequestResponseHandler.proposalsEndpointUrl, proposalRequestResponseHandler);
         requester.setParameter(tagIdParameterKey, String.valueOf(tag.getId()));
-        requester.request(Requester.RequestType.GET);
+        requester.request(Requester.RequestMethod.GET);
     }
 
     @Override
