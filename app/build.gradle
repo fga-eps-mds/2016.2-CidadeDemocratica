@@ -15,13 +15,13 @@ android {
            }
     }
     defaultConfig {
-        applicationId "com.mdsgpp.cidadedemocratica"
+        applicationId "com.cidadedemocratica.android"
         minSdkVersion 16
         targetSdkVersion 23
         versionName "${getVersionNameTimestamp()}"
         versionCode getVersionCodeTimestamp()
-        testApplicationId "com.mdsgpp.cidadedemocratica.test"
-        testInstrumentationRunner "com.mdsgpp.cidadedemocratica.JUnitJacocoTestRunner"
+        testApplicationId "com.cidadedemocratica.android.test"
+        testInstrumentationRunner "com.cidadedemocratica.android.JUnitJacocoTestRunner"
     }
     buildTypes {
         release {
@@ -75,11 +75,11 @@ dependencies {
 }
 
 
-play {
-    track = "${track}"
-    serviceAccountEmail = 'cidadedemocraticaandroid@api-5152221638731831188-576059.iam.gserviceaccount.com'
-    pk12File = file('cidadedeploy.p12')
-}
+//play {
+//    track = "${track}"
+//    serviceAccountEmail = 'cidadedemocraticaandroid@api-5152221638731831188-576059.iam.gserviceaccount.com'
+//    pk12File = file('cidadedeploy.p12')
+//}
 
 def getVersionNameTimestamp() {
     return new Date().format('yy.MM.ddHHmm')

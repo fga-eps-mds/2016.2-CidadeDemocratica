@@ -3,6 +3,7 @@
 dependencies:
   pre:
     - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.3,android-23
+    - sudo gem install fastlane --verbose
 
   override:
     - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
@@ -42,12 +43,9 @@ deployment:
   production: # just a label; label names are completely up to you
     branch: production
     commands:
-      - ./gradlew assembleRelease
-      - ./gradlew publishFreeRelease
-        -Dorg.gradle.project.track=production
+      - fastlane release
+
   beta:
     branch: beta
     commands:
-      - ./gradlew assembleRelease
-      - ./gradlew publishFreeRelease
-        -Dorg.gradle.project.track=alpha
+      - fastlane beta

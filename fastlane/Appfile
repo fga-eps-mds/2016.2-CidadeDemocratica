@@ -1,0 +1,4 @@
+json_key_file "app/play-release.json" # Path to the json secret file - Follow https://github.com/fastlane/supply#setup to get one
+package_name "com.cidadedemocratica.android" # e.g. com.krausefx.app
+
+slack_url "https://hooks.slack.com/services/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"
