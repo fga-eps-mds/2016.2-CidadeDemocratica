@@ -41,6 +41,13 @@ public class ProposalRequestResponseHandlerTest extends AndroidTestCase implemen
         assertEquals(proposal.getUserId(), userId);
     }
 
+    @Test
+    public void testOnFailure() {
+        int statusCode = 500;
+        handler.onFailure(statusCode, null, null);
+        assertEquals(String.valueOf(statusCode), errorMessage);
+    }
+    
     @Override
     public void afterSuccess(RequestResponseHandler handler, Object response) {
         this.response = (ArrayList<Proposal>) response;
