@@ -42,6 +42,14 @@ public class UserRequestResponseHandlerTest extends AndroidTestCase implements R
         assertEquals(id, user.getId());
     }
 
+    @Test
+    public void testOnFailure() {
+        int statusCode = 500;
+        handler.onFailure(statusCode, null, null);
+
+        assertEquals(String.valueOf(statusCode), errorMessage);
+    }
+
     @Override
     public void afterSuccess(RequestResponseHandler handler, Object response) {
         ArrayList<User> users = (ArrayList<User>) response;
@@ -50,6 +58,6 @@ public class UserRequestResponseHandlerTest extends AndroidTestCase implements R
 
     @Override
     public void afterError(RequestResponseHandler handler, String message) {
-
+        errorMessage = message;
     }
 }
