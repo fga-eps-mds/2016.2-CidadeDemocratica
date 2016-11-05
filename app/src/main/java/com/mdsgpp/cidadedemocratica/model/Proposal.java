@@ -20,7 +20,6 @@ public class Proposal implements Comparable<Proposal> {
         this.title = title;
         this.content = content;
         this.relevance = relevance;
-        this.slug = slug;
         this.userId = userId;
     }
 
