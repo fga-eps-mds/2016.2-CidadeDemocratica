@@ -1,8 +1,5 @@
 package com.mdsgpp.cidadedemocratica.requester;
 
-import android.app.ProgressDialog;
-
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.model.User;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
 
@@ -13,7 +10,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +18,7 @@ import cz.msebera.android.httpclient.Header;
 /**
  * Created by andreanmasiro on 9/8/16.
  */
-public class UserRequestResponseHandler extends RequestResponseHandler {
+public class UserRequestResponseHandler extends RequestResponseHandler implements Comparator<User> {
 
     private final int success = 200;
 
@@ -58,12 +54,7 @@ public class UserRequestResponseHandler extends RequestResponseHandler {
                 }
             }
 
-            Collections.sort(users, new Comparator<User>() {
-                @Override
-                public int compare(User u1, User u2) {
-                    return u1.compareTo(u2);
-                }
-            });
+            Collections.sort(users, this);
             users.removeAll(dataContainer.getUsers());
             dataContainer.addUsers(users);
             afterSuccess(users);
@@ -74,5 +65,10 @@ public class UserRequestResponseHandler extends RequestResponseHandler {
     public void onFailure(int statusCode, Map<String, List<String>> headers, JSONArray errorResponse) {
         super.onFailure(statusCode, headers, errorResponse);
         afterError(String.valueOf(statusCode));
+    }
+
+    @Override
+    public int compare(User u1, User u2) {
+        return u1.compareTo(u2);
     }
 }
