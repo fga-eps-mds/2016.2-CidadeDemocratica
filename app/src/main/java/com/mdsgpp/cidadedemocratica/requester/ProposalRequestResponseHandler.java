@@ -20,7 +20,7 @@ import cz.msebera.android.httpclient.entity.mime.content.StringBody;
 /**
  * Created by andreanmasiro on 9/9/16.
  */
-public class ProposalRequestResponseHandler extends RequestResponseHandler {
+public class ProposalRequestResponseHandler extends RequestResponseHandler implements Comparator<Proposal> {
 
     DataContainer dataContainer = DataContainer.getInstance();
     public static final String proposalsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/proposals";
@@ -44,7 +44,6 @@ public class ProposalRequestResponseHandler extends RequestResponseHandler {
 
                 try {
                     JSONObject topicJson = response.getJSONObject(i);
-                    String topicType = topicJson.getString("titulo");
 
                     long id = topicJson.getLong(proposalIdKey);
                     String title = topicJson.getString(proposalTitleKey);
@@ -64,12 +63,7 @@ public class ProposalRequestResponseHandler extends RequestResponseHandler {
                 }
             }
 
-            Collections.sort(proposals, new Comparator<Proposal>() {
-                @Override
-                public int compare(Proposal p1, Proposal p2) {
-                    return p1.compareTo(p2);
-                }
-            });
+            Collections.sort(proposals, this);
             proposals.removeAll(dataContainer.getProposals());
             dataContainer.addProposals(proposals);
             afterSuccess(proposals);
@@ -81,6 +75,11 @@ public class ProposalRequestResponseHandler extends RequestResponseHandler {
     public void onFailure(int statusCode, Map<String, List<String>> headers, JSONArray errorResponse) {
         super.onFailure(statusCode, headers, errorResponse);
         afterError(String.valueOf(statusCode));
+    }
+
+    @Override
+    public int compare(Proposal p1, Proposal p2) {
+        return p1.compareTo(p2);
     }
 
 }
