@@ -17,7 +17,6 @@ import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.requester.TagRequestResponseHandler;
-import com.mdsgpp.cidadedemocratica.requester.TaggingsRequestResponseHandler;
 
 import java.util.ArrayList;
 
@@ -33,7 +32,6 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
     private ProgressDialog progressDialog;
     TagListAdapter taggingsAdapter;
 
-    TaggingsRequestResponseHandler taggingsRequestResponseHandler;
     TagRequestResponseHandler tagRequestResponseHandler;
 
     private static ArrayList<Long> loadedProposalIds = new ArrayList<>();

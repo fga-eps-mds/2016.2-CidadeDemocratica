@@ -17,7 +17,6 @@ import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
-import com.mdsgpp.cidadedemocratica.requester.TaggingsRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.view.ListProposalFragment;
 
 import java.util.ArrayList;
@@ -29,7 +28,6 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
     private FragmentManager fragmentManager;
     private ProgressDialog progressDialog;
 
-    private TaggingsRequestResponseHandler taggingsRequestResponseHandler;
     private ProposalRequestResponseHandler proposalRequestResponseHandler;
     private String tagIdParameterKey = "tag_id";
 
