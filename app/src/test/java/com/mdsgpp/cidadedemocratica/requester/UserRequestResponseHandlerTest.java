@@ -4,6 +4,10 @@ import android.test.AndroidTestCase;
 
 import com.mdsgpp.cidadedemocratica.model.User;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.junit.Test;
+
 import java.util.ArrayList;
 
 /**
@@ -12,11 +16,11 @@ import java.util.ArrayList;
 
 public class UserRequestResponseHandlerTest extends AndroidTestCase implements RequestUpdateListener {
 
-    int id = 0;
-    String name = "";
+    int id = 99;
+    String name = "Henrique Parra Parra Filho";
     UserRequestResponseHandler handler = new UserRequestResponseHandler();
-    ArrayList<User> response = null;
     String errorMessage = null;
+    User user = null;
 
     @Override
     protected void setUp() throws Exception {
@@ -25,13 +29,23 @@ public class UserRequestResponseHandlerTest extends AndroidTestCase implements R
 
     @Override
     protected void tearDown() throws Exception {
-        response = null;
+        user = null;
         errorMessage = null;
+    }
+
+    @Test
+    public void testOnSuccess() throws JSONException {
+        JSONArray userJson = new JSONArray("[{\"nome\":\"" + name + "\",\"descricao\":\"Cada vez mais jundiaiense e acreditando no poder do cidadão para transformar as coisas.\",\"sexo\":\"m\",\"aniversario\":\"1989-08-16T00:00:00.000Z\",\"id\":" + id + ",\"state\":\"active\",\"type\":\"Cidadao\",\"topicos_count\":29,\"comments_count\":1168,\"adesoes_count\":489,\"relevancia\":406500,\"inspirations_count\":14,\"city_name\":\"Jundiaí\",\"state_name\":\"São Paulo\",\"state_abrev\":\"SP\"}]");
+        handler.onSuccess(200, null, userJson);
+
+        assertEquals(name, user.getName());
+        assertEquals(id, user.getId());
     }
 
     @Override
     public void afterSuccess(RequestResponseHandler handler, Object response) {
-
+        ArrayList<User> users = (ArrayList<User>) response;
+        user = users.get(0);
     }
 
     @Override
