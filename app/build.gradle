@@ -54,8 +54,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-
-
+    testCompile 'org.json:json:20140107'
     androidTestCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
     androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.2'){
