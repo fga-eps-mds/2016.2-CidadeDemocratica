@@ -6,11 +6,9 @@ import com.mdsgpp.cidadedemocratica.model.Proposal;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by andreanmasiro on 03/11/16.
