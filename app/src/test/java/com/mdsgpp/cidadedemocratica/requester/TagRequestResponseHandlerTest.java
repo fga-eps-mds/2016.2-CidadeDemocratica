@@ -43,6 +43,21 @@ public class TagRequestResponseHandlerTest extends AndroidTestCase implements Re
         assertEquals(tagName, tag.getName());
     }
 
+    @Test
+    public void testOnFailure() {
+        int errorCode = 500;
+        handler.onFailure(errorCode, null, null);
+
+        assertEquals(errorMessage, String.valueOf(errorCode));
+    }
+
+    @Test
+    public void testCompareTags() {
+        Tag t1 = new Tag(0, "", 0, 0);
+        Tag t2 = new Tag(0, "", 0, 0);
+
+        assertEquals(t1.compareTo(t2), handler.compare(t1, t2));
+    }
 
     @Override
     public void afterSuccess(RequestResponseHandler handler, Object response) {
@@ -52,6 +67,6 @@ public class TagRequestResponseHandlerTest extends AndroidTestCase implements Re
 
     @Override
     public void afterError(RequestResponseHandler handler, String message) {
-
+        errorMessage = message;
     }
 }
