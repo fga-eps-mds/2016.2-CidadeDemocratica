@@ -50,6 +50,14 @@ public class UserRequestResponseHandlerTest extends AndroidTestCase implements R
         assertEquals(String.valueOf(statusCode), errorMessage);
     }
 
+    @Test
+    public void testCompareUsers() {
+        User u1 = new User("", 0, 0, 0);
+        User u2 = new User("", 0, 0, 0);
+
+        assertEquals(u1.compareTo(u2), handler.compare(u1, u2));
+    }
+
     @Override
     public void afterSuccess(RequestResponseHandler handler, Object response) {
         ArrayList<User> users = (ArrayList<User>) response;
