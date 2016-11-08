@@ -5,16 +5,15 @@ import java.util.ArrayList;
 /**
  * Created by andreanmasiro on 9/8/16.
  */
-public class Tag implements Comparable<Tag> {
+public class Tag extends Entity implements Comparable<Tag> {
 
-    private long id = 0;
     private String name = "";
     private long numberOfAppearances = 0;
     private long relevance = 0;
     private ArrayList<Proposal> proposals = new ArrayList<Proposal>();
 
     public Tag(long id, String name, long numberOfAppearances, long relevance) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.numberOfAppearances = numberOfAppearances;
         this.relevance = relevance;
@@ -22,10 +21,6 @@ public class Tag implements Comparable<Tag> {
 
     public long getRelevance() {
         return this.relevance;
-    }
-
-    public long getId() {
-        return this.id;
     }
 
     public String getName() {
