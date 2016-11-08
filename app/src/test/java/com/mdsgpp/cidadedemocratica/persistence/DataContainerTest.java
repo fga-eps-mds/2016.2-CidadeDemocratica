@@ -2,6 +2,7 @@ package com.mdsgpp.cidadedemocratica.persistence;
 
 import android.test.AndroidTestCase;
 
+import com.mdsgpp.cidadedemocratica.model.Entity;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.Tag;
 import com.mdsgpp.cidadedemocratica.model.Tagging;
@@ -356,41 +357,17 @@ public class DataContainerTest extends AndroidTestCase {
 
     public void testNotifyUpdates() {
 
-        final boolean[] notified = {false, false, false, false};
+        final boolean[] notified = {false};
 
         dataContainer.setDataUpdateListener(new DataUpdateListener() {
             @Override
-            public void tagsUpdated() {
+            public void dataUpdated(Class<? extends Entity> entityType) {
                 notified[0] = true;
-            }
-
-            @Override
-            public void proposalsUpdated() {
-                notified[1] = true;
-            }
-
-            @Override
-            public void usersUpdated() {
-                notified[2] = true;
-            }
-
-            @Override
-            public void taggingsUpdated() {
-                notified[3] = true;
             }
         });
 
         dataContainer.addTag(newTag());
         assertTrue(notified[0]);
-
-        dataContainer.addProposal(newProposal());
-        assertTrue(notified[1]);
-
-        dataContainer.addUser(newUser());
-        assertTrue(notified[2]);
-
-        dataContainer.addTagging(newTagging());
-        assertTrue(notified[3]);
 
     }
 

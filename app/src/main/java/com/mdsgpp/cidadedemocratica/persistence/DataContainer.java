@@ -131,108 +131,85 @@ public class DataContainer {
 
     public void addTag(Tag tag) {
         this.tags.add(tag);
-        this.notifyTagsUpdate();
+        
     }
 
     public void addUser(User user) {
         this.users.add(user);
-        this.notifyUsersUpdate();
+        
     }
 
     public void addProposal(Proposal proposal) {
         this.proposals.add(proposal);
-        this.notifyProposalsUpdate();
+        
     }
 
     public void addTagging(Tagging tagging) {
         this.taggings.add(tagging);
-        this.notifyTaggingsUpdate();
+        
     }
 
     public void addTags(ArrayList<Tag> tags) {
         this.tags.addAll(tags);
         Collections.sort(tags);
-        this.notifyTagsUpdate();
+        
     }
 
     public void addUsers(ArrayList<User> users) {
         this.users.addAll(users);
         Collections.sort(users);
-        this.notifyUsersUpdate();
+        
     }
 
     public void addProposals(ArrayList<Proposal> proposals) {
         this.proposals.addAll(proposals);
         Collections.sort(proposals);
-        this.notifyProposalsUpdate();
+        
     }
 
     public void addTaggings(ArrayList<Tagging> taggings) {
         this.taggings.addAll(taggings);
-        this.notifyTaggingsUpdate();
+        
     }
 
     public void setTags(ArrayList<Tag> tags) {
         this.tags = tags;
-        this.notifyTagsUpdate();
+        
     }
 
     public void setProposals(ArrayList<Proposal> proposals) {
         this.proposals = proposals;
-        this.notifyProposalsUpdate();
+        
     }
 
     public void setUsers(ArrayList<User> users) {
         this.users = users;
-        this.notifyUsersUpdate();
+        
     }
 
     public void setTaggings(ArrayList<Tagging> taggings) {
         this.taggings = taggings;
-        this.notifyTaggingsUpdate();
+        
     }
 
     public void clearTags() {
         this.tags.clear();
-        this.notifyTagsUpdate();
+        
     }
 
     public void clearProposals() {
         this.proposals.clear();
-        this.notifyProposalsUpdate();
+        
     }
 
     public void clearUsers() {
         this.users.clear();
-        this.notifyUsersUpdate();
+        
     }
 
     public void clearTaggings() {
         this.taggings.clear();
-        this.notifyTaggingsUpdate();
+        
     }
 
-    private void notifyTagsUpdate() {
-        for (DataUpdateListener listener : this.dataUpdateListeners) {
-            listener.tagsUpdated();
-        }
-    }
-
-    private void notifyProposalsUpdate() {
-        for (DataUpdateListener listener : this.dataUpdateListeners) {
-            listener.proposalsUpdated();
-        }
-    }
-
-    private void notifyUsersUpdate() {
-        for (DataUpdateListener listener : this.dataUpdateListeners) {
-            listener.usersUpdated();
-        }
-    }
-
-    private void notifyTaggingsUpdate() {
-        for (DataUpdateListener listener : this.dataUpdateListeners) {
-            listener.taggingsUpdated();
-        }
-    }
 }

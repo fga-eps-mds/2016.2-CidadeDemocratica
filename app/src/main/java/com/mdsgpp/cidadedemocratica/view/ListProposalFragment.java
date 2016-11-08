@@ -19,11 +19,10 @@ import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.controller.ProposalListAdapter;
 import com.mdsgpp.cidadedemocratica.controller.ProposalsList;
 import com.mdsgpp.cidadedemocratica.controller.TagginsList;
+import com.mdsgpp.cidadedemocratica.model.Entity;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
 import com.mdsgpp.cidadedemocratica.persistence.DataUpdateListener;
-import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
-import com.mdsgpp.cidadedemocratica.requester.Requester;
 
 import java.util.ArrayList;
 
@@ -157,12 +156,7 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
     }
 
     @Override
-    public void tagsUpdated() {
-
-    }
-
-    @Override
-    public void proposalsUpdated() {
+    public void dataUpdated(Class<? extends Entity> entityType) {
         Activity ac = getActivity();
         if (ac != null) {
             ac.runOnUiThread(new Runnable() {
@@ -172,16 +166,5 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
                 }
             });
         }
-
-    }
-
-    @Override
-    public void usersUpdated() {
-
-    }
-
-    @Override
-    public void taggingsUpdated() {
-
     }
 }

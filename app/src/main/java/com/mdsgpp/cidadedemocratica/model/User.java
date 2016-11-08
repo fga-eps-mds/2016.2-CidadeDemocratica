@@ -17,14 +17,14 @@ public class User extends Entity implements Comparable<User> {
     private ArrayList<Proposal> proposals = new ArrayList<Proposal>();
     private ArrayList<Tag> mostUsedTags = new ArrayList<Tag>();
 
-    public User(String name, long proposalCount,long id, long relevance) {
+    public User(String name, long proposalCount, long id, long relevance) {
         super(id);
         this.name = name;
         this.proposalCount = proposalCount;
         this.relevance = relevance;
     }
 
-    public User(String name, String description, long proposalCount,long id, long relevance) {
+    public User(String name, String description, long proposalCount, long id, long relevance) {
         super(id);
         this.name = name;
         this.description = description;
