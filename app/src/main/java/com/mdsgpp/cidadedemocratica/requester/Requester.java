@@ -102,18 +102,6 @@ public class Requester {
         requestAsync(method);
     }
 
-    public void getSync() {
-        requestSync(RequestMethod.GET);
-    }
-
-    public void postAsync() {
-        requestAsync(RequestMethod.POST);
-    }
-
-    public void postSync() {
-        requestSync(RequestMethod.POST);
-    }
-
     @NonNull
     private HttpURLConnection getHttpURLConnection(URL url, RequestMethod method) throws IOException {
         HttpURLConnection urlConnection = null;

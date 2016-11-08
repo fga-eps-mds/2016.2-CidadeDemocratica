@@ -35,13 +35,19 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
     @Override
     protected void tearDown() throws Exception {
         response = null;
+        errorMessage = null;
     }
 
     @Test
-    public void testGet() throws InterruptedException {
-        requester.setMethod(Requester.RequestMethod.GET);
-        requester.async();
+    public void testGetAsync() throws InterruptedException {
+        requester.async(Requester.RequestMethod.GET);
         signal.await(5, TimeUnit.SECONDS);
+        assertNotNull(response);
+    }
+
+    @Test
+    public void testGetSync() {
+        requester.sync(Requester.RequestMethod.GET);
         assertNotNull(response);
     }
 
@@ -51,8 +57,7 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
         handler.setRequestUpdateListener(this);
 
         Requester requester = new Requester("http://www.naoexiste.com", handler);
-        requester.setMethod(Requester.RequestMethod.GET);
-        requester.async();
+        requester.async(Requester.RequestMethod.GET);
         signal.await();
         assertNotNull(errorMessage);
     }
@@ -82,15 +87,6 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
         assertEquals(Requester.getRequestMethodDescription(Requester.RequestMethod.POST), "POST");
         assertEquals(Requester.getRequestMethodDescription(Requester.RequestMethod.PATCH), "PATCH");
         assertEquals(Requester.getRequestMethodDescription(Requester.RequestMethod.DELETE), "DELETE");
-    }
-
-    @Test
-    public void testGetMethod() {
-        requester.setMethod(Requester.RequestMethod.GET);
-        assertEquals(requester.getMethod(), Requester.RequestMethod.GET);
-
-        requester.setMethod(Requester.RequestMethod.POST);
-        assertEquals(requester.getMethod(), Requester.RequestMethod.POST);
     }
 
     @Test
