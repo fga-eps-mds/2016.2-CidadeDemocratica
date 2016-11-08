@@ -3,12 +3,10 @@ package com.mdsgpp.cidadedemocratica.requester;
 import android.test.ApplicationTestCase;
 import android.app.Application;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by andreanmasiro on 01/11/16.
@@ -42,8 +40,8 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
     @Test
     public void testGet() throws InterruptedException {
         requester.setMethod(Requester.RequestMethod.GET);
-        requester.getAsync();
-        signal.await();
+        requester.async();
+        signal.await(5, TimeUnit.SECONDS);
         assertNotNull(response);
     }
 
@@ -54,7 +52,7 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
 
         Requester requester = new Requester("http://www.naoexiste.com", handler);
         requester.setMethod(Requester.RequestMethod.GET);
-        requester.getAsync();
+        requester.async();
         signal.await();
         assertNotNull(errorMessage);
     }

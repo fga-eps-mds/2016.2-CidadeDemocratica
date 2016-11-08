@@ -2,9 +2,6 @@ package com.mdsgpp.cidadedemocratica.requester;
 
 import android.support.annotation.NonNull;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.SyncHttpClient;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -32,7 +29,6 @@ public class Requester {
         FTP, HTTP, HTTPS
     }
 
-    private RequestMethod method = RequestMethod.GET;
     private Thread requestThread = Thread.currentThread();
     private String url = "";
     private HashMap<String, String> parameters = new HashMap<>();
@@ -44,55 +40,13 @@ public class Requester {
 
     }
 
-    /**
-     * Legacy
-     *
-     *
-         public void request(RequestMethod method) {
-             if (method == RequestMethod.GET) {
-
-                 String endpoint = getUrlWithParameters();
-                 client.get(endpoint, this.responseHandler);
-             }
-         }
-     *
-     *
-         public void syncRequest(RequestMethod method) {
-             if (method == RequestMethod.GET) {
-
-                 String endpoint = getUrlWithParameters();
-                 syncClient.get(endpoint, this.responseHandler);
-             }
-         }
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     */
-
-
-
-    public void getAsync() {
-        requestThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getSync();
-            }
-        });
-        requestThread.start();
-    }
-
-    public void getSync() {
+    private void requestSync(RequestMethod method) {
         try {
             URL url = new URL(getUrlWithParameters());
 
             HttpURLConnection urlConnection = getHttpURLConnection(url, method);
 
+            urlConnection.setRequestProperty("Authorization", "");
             urlConnection.connect();
 
             BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -128,7 +82,36 @@ public class Requester {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    private void requestAsync(final RequestMethod method) {
+        requestThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                requestSync(method);
+            }
+        });
+        requestThread.start();
+    }
+
+    public void sync(RequestMethod method) {
+        requestSync(method);
+    }
+
+    public void async(RequestMethod method) {
+        requestAsync(method);
+    }
+
+    public void getSync() {
+        requestSync(RequestMethod.GET);
+    }
+
+    public void postAsync() {
+        requestAsync(RequestMethod.POST);
+    }
+
+    public void postSync() {
+        requestSync(RequestMethod.POST);
     }
 
     @NonNull
@@ -194,13 +177,5 @@ public class Requester {
 
     public void setParameter(String key, String parameter) {
         parameters.put(key, parameter);
-    }
-
-    public RequestMethod getMethod() {
-        return method;
-    }
-
-    public void setMethod(RequestMethod method) {
-        this.method = method;
     }
 }

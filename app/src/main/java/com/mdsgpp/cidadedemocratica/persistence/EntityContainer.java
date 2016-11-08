@@ -51,18 +51,22 @@ public class EntityContainer<T extends Entity> {
 
     public void add(T t) {
         data.add(t);
+        notifyDataUpdate();
     }
 
     public void addAll(Collection<T> t) {
         data.addAll(t);
+        notifyDataUpdate();
     }
 
     public void setData(Collection<T> t) {
         data = new ArrayList<>(t);
+        notifyDataUpdate();
     }
 
     public void clear() {
         data.clear();
+        notifyDataUpdate();
     }
 
     public void setDataUpdateListener(DataUpdateListener dataUpdateListener) {

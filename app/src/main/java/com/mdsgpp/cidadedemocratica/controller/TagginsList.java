@@ -108,7 +108,7 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
 
         Requester requester = new Requester(TagRequestResponseHandler.tagsEndpointUrl, tagRequestResponseHandler);
         requester.setParameter(proposalIdParameterKey, String.valueOf(proposal.getId()));
-        requester.getAsync();
+        requester.async(Requester.RequestMethod.GET);
     }
 
     @Override

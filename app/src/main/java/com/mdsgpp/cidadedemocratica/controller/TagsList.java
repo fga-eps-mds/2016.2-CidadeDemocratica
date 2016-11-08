@@ -101,7 +101,7 @@ public class TagsList extends AppCompatActivity implements RequestUpdateListener
 
         Requester requester = new Requester(TagRequestResponseHandler.tagsEndpointUrl, tagRequestResponseHandler);
         requester.setParameter("page", String.valueOf(TagRequestResponseHandler.nextPageToRequest));
-        requester.getAsync();
+        requester.async(Requester.RequestMethod.GET);
     }
 
     private void setDataUpdateListener(TagRequestResponseHandler tagRequestResponseHandler) {

@@ -83,7 +83,7 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
 
         Requester requester = new Requester(ProposalRequestResponseHandler.proposalsEndpointUrl, proposalRequestResponseHandler);
         requester.setParameter(tagIdParameterKey, String.valueOf(tag.getId()));
-        requester.getAsync();
+        requester.async(Requester.RequestMethod.GET);
     }
 
     @Override

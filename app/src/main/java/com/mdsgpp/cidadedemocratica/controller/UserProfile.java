@@ -92,7 +92,7 @@ public class UserProfile extends AppCompatActivity implements ListProposalFragme
 
         Requester requester = new Requester(ProposalRequestResponseHandler.proposalsEndpointUrl, proposalRequestResponseHandler);
         requester.setParameter(userIdParameterKey, String.valueOf(user.getId()));
-        requester.getAsync();
+        requester.async(Requester.RequestMethod.GET);
     }
 
     @Override
