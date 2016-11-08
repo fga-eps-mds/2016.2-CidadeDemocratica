@@ -11,8 +11,8 @@ import android.widget.TextView;
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.Tag;
-import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
 
+import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class TagDetailActivity extends AppCompatActivity implements OnFragmentInteractionListener, ListProposalFragment.OnFragmentInteractionListener, RequestUpdateListener {
 
     private Tag tag;
-    private DataContainer dataContainter = DataContainer.getInstance();
+    private EntityContainer<Tag> tagsContainer = EntityContainer.getInstance(Tag.class);
     private FragmentManager fragmentManager;
     private ProgressDialog progressDialog;
 
@@ -43,7 +43,7 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
 
         Bundle extras = getIntent().getExtras();
         Long tagId = extras.getLong("tagId");
-        this.tag = dataContainter.getTagForId(tagId);
+        this.tag = tagsContainer.getForId(tagId);
 
         TextView tagNameTextView = (TextView)findViewById(R.id.tagNameTextView);
         tagNameTextView.setText(this.tag.getName());

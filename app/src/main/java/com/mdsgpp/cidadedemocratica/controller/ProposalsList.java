@@ -10,7 +10,9 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.External.SlidingTabLayout;
 import com.mdsgpp.cidadedemocratica.R;
 
+import com.mdsgpp.cidadedemocratica.model.User;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
@@ -28,7 +30,7 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_proposals_list);
-        if (DataContainer.getInstance().getUsers().size() == 0) {
+        if (EntityContainer.getInstance(User.class).getAll().isEmpty()) {
             pullProposalsData();
         } else {
             loadProposalsList();

@@ -12,6 +12,7 @@ import android.widget.ListView;
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Tag;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
@@ -25,12 +26,14 @@ public class TagsList extends AppCompatActivity implements RequestUpdateListener
     private final TagListAdapter tagAdapter = new TagListAdapter(this, new ArrayList<Tag>());
     private int preLast;
 
+    EntityContainer<Tag> tagsContainer = EntityContainer.getInstance(Tag.class);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tags_list);
 
-        if (DataContainer.getInstance().getTags().size() == 0) {
+        if (tagsContainer.getAll().isEmpty()) {
             pullTagData();
         } else {
             loadTagsList();
@@ -61,8 +64,7 @@ public class TagsList extends AppCompatActivity implements RequestUpdateListener
     }
 
     private ArrayList<Tag> getTags() {
-        DataContainer dataContainer = DataContainer.getInstance();
-        return dataContainer.getTags();
+        return tagsContainer.getAll();
     }
 
     private void loadTagsList() {

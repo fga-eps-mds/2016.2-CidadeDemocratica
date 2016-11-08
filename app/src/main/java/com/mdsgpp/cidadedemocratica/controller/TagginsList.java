@@ -13,6 +13,7 @@ import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.Tag;
 import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
@@ -43,11 +44,12 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_taggins_list);
 
-        DataContainer dataContainer = DataContainer.getInstance();
+        EntityContainer<Proposal> proposalsContainer = EntityContainer.getInstance(Proposal.class);
+
         Bundle extras = getIntent().getExtras();
         long proposalId = extras.getLong("proposalId");
 
-        proposal = dataContainer.getProposalForId(proposalId);
+        proposal = proposalsContainer.getForId(proposalId);
 
         proposalTitleTextView = (TextView)findViewById(R.id.titleProposalID);
         proposalTitleTextView.setText(proposal.getTitle());
