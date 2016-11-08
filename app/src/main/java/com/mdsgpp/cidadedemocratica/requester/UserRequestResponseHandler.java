@@ -1,7 +1,7 @@
 package com.mdsgpp.cidadedemocratica.requester;
 
 import com.mdsgpp.cidadedemocratica.model.User;
-import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,8 +13,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import cz.msebera.android.httpclient.Header;
-
 /**
  * Created by andreanmasiro on 9/8/16.
  */
@@ -22,7 +20,7 @@ public class UserRequestResponseHandler extends RequestResponseHandler implement
 
     private final int success = 200;
 
-    DataContainer dataContainer = DataContainer.getInstance();
+    EntityContainer<User> usersContainer = EntityContainer.getInstance(User.class);
 
     private final String userNameKey = "nome";
     private final String userDescriptionKey = "descricao";
@@ -55,8 +53,8 @@ public class UserRequestResponseHandler extends RequestResponseHandler implement
             }
 
             Collections.sort(users, this);
-            users.removeAll(dataContainer.getUsers());
-            dataContainer.addUsers(users);
+            users.removeAll(usersContainer.getAll());
+            usersContainer.addAll(users);
             afterSuccess(users);
         }
     }

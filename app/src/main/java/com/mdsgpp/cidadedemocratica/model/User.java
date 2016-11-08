@@ -1,9 +1,6 @@
 package com.mdsgpp.cidadedemocratica.model;
 
-import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
-
 import java.util.ArrayList;
-import java.util.Comparator;
 
 /**
  * Created by andreanmasiro on 9/8/16.

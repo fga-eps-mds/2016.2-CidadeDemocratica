@@ -21,8 +21,8 @@ import com.mdsgpp.cidadedemocratica.controller.ProposalsList;
 import com.mdsgpp.cidadedemocratica.controller.TagginsList;
 import com.mdsgpp.cidadedemocratica.model.Entity;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
-import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
 import com.mdsgpp.cidadedemocratica.persistence.DataUpdateListener;
+import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 
 import java.util.ArrayList;
 
@@ -35,6 +35,7 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
     public ArrayList<Proposal> proposals;
 
     ProposalListAdapter proposalAdapter;
+    EntityContainer<Proposal> proposalsContainer = EntityContainer.getInstance(Proposal.class);
 
     int preLast = 0;
     public ListProposalFragment() {
@@ -46,10 +47,9 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
 
         ListProposalFragment fragment = new ListProposalFragment();
 
-        Bundle args = new Bundle();
         fragment.proposals = proposals;
 
-        DataContainer.getInstance().setDataUpdateListener(fragment);
+        EntityContainer.getInstance(Proposal.class).setDataUpdateListener(fragment);
 
         return fragment;
     }
@@ -157,14 +157,16 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
 
     @Override
     public void dataUpdated(Class<? extends Entity> entityType) {
-        Activity ac = getActivity();
-        if (ac != null) {
-            ac.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    proposalAdapter.updateData(DataContainer.getInstance().getProposals());
-                }
-            });
+        if (entityType == Proposal.class) {
+            Activity ac = getActivity();
+            if (ac != null) {
+                ac.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        proposalAdapter.updateData(proposalsContainer.getAll());
+                    }
+                });
+            }
         }
     }
 }

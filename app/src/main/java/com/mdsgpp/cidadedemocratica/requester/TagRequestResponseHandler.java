@@ -1,7 +1,7 @@
 package com.mdsgpp.cidadedemocratica.requester;
 
 import com.mdsgpp.cidadedemocratica.model.Tag;
-import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,14 +13,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import cz.msebera.android.httpclient.Header;
-
 /**
  * Created by andreanmasiro on 9/9/16.
  */
 public class TagRequestResponseHandler extends RequestResponseHandler implements Comparator<Tag> {
 
-    DataContainer dataContainer = DataContainer.getInstance();
+    EntityContainer<Tag> tagsContainer = EntityContainer.getInstance(Tag.class);
 
     private final String tagNameKey = "name";
     private final String tagIdKey = "id";
@@ -50,8 +48,8 @@ public class TagRequestResponseHandler extends RequestResponseHandler implements
             }
 
             Collections.sort(tags, this);
-            tags.removeAll(dataContainer.getTags());
-            dataContainer.addTags(tags);
+            tags.removeAll(tagsContainer.getAll());
+            tagsContainer.addAll(tags);
             afterSuccess(tags);
         }
 

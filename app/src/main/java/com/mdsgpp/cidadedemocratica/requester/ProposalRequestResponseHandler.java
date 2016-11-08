@@ -1,8 +1,7 @@
 package com.mdsgpp.cidadedemocratica.requester;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
-import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,15 +13,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.entity.mime.content.StringBody;
-
 /**
  * Created by andreanmasiro on 9/9/16.
  */
 public class ProposalRequestResponseHandler extends RequestResponseHandler implements Comparator<Proposal> {
 
-    DataContainer dataContainer = DataContainer.getInstance();
+    EntityContainer<Proposal> proposalsContainer = EntityContainer.getInstance(Proposal.class);
     public static final String proposalsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/proposals";
     public static int nextPageToRequest = 1;
 
@@ -64,8 +60,8 @@ public class ProposalRequestResponseHandler extends RequestResponseHandler imple
             }
 
             Collections.sort(proposals, this);
-            proposals.removeAll(dataContainer.getProposals());
-            dataContainer.addProposals(proposals);
+            proposals.removeAll(proposalsContainer.getAll());
+            proposalsContainer.addAll(proposals);
             afterSuccess(proposals);
         }
 

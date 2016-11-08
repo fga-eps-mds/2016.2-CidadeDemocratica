@@ -1,8 +1,7 @@
 package com.mdsgpp.cidadedemocratica.model;
-import android.provider.ContactsContract;
 import android.test.AndroidTestCase;
 
-import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 
 import java.util.ArrayList;
 import org.junit.Test;
@@ -24,12 +23,8 @@ public class UserTest extends AndroidTestCase {
     ArrayList<Tag> tags = new ArrayList<Tag>();
     ArrayList<Proposal> proposals  = new ArrayList<Proposal>();
 
-    DataContainer dataContainer = DataContainer.getInstance();
-
     @Override
     public void setUp() {
-
-        dataContainer.clearProposals();
 
         user = newUser();
 
@@ -42,8 +37,6 @@ public class UserTest extends AndroidTestCase {
         userIgual = new User("Name",14,1,0);
         userLarger = new User("User name",15,2,1);
         user.setMostUsedTags(tags);
-        dataContainer.addProposal(proposalTest);
-        dataContainer.addProposal(proposalTest2);
     }
 
     @Test
@@ -96,7 +89,7 @@ public class UserTest extends AndroidTestCase {
     }
     @Override
     protected void tearDown() throws Exception {
-        DataContainer.getInstance().clearProposals();
+        EntityContainer.getInstance(Proposal.class).clear();
     }
 
     private Tag newTag() {
