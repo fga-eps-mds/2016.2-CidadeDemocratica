@@ -1,73 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.mdsgpp.cidadedemocratica.controller.MainActivity"
-    android:background="@color/colorPrimaryDark">
-
-    <ImageButton
+    android:layout_height="match_parent">
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tags"
-        android:onClick="showTagsList"
-        android:id="@+id/button_tags"
-        android:background="@drawable/tagsbutton"
-        android:layout_marginLeft="39dp"
-        android:layout_marginStart="39dp"
-        android:layout_alignTop="@+id/buttom_proposalID"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="196dp"
+            android:id="@+id/tagsButton"
+            android:onClick="showTagsList"
+            android:layout_marginBottom="-9dp"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tag_icon"
+            android:elevation="2dp"
+            android:layout_centerInParent="true"/>
 
-    <ImageButton
-        android:onClick="showProposalList"
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/texto_Proposals"
-        android:id="@+id/buttom_proposalID"
-        android:layout_marginRight="38dp"
-        android:layout_marginEnd="38dp"
-        android:background="@drawable/proposalbutton"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_height="wrap_content">
 
-    <ImageButton
-        android:onClick="showUsersList"
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="196dp"
+            android:id="@+id/proposalButton"
+            android:onClick="showProposalList"
+            android:layout_marginBottom="-10dp"
+            android:layout_marginTop="-1dp"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/proposal_icon"
+            android:elevation="2dp"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/texto_Proposals"
-        android:id="@+id/buttom_userID"
-        android:background="@drawable/usersbutton"
-        android:layout_below="@+id/button_tags"
-        android:layout_centerHorizontal="true" />
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="196dp"
+            android:id="@+id/userButton"
+            android:padding="0dp"
+            android:onClick="showUsersList"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/user_icon"
+            android:elevation="2dp"
+            android:layout_centerInParent="true"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/iconImage"
-        android:background="@drawable/icon"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/buttom_userID"
-        android:layout_toStartOf="@+id/buttom_userID"
-        android:layout_marginRight="18dp"
-        android:layout_marginEnd="18dp"
-        android:layout_marginTop="23dp"/>
+    </RelativeLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/titleText"
-        android:text="Cidade Democrática"
-        android:textColor="@color/colorAccent"
-        android:textSize="24sp"
-        android:layout_marginTop="19dp"
-        android:layout_alignTop="@+id/iconImage"
-        android:layout_toRightOf="@+id/iconImage"
-        android:layout_toEndOf="@+id/iconImage" />
+    </LinearLayout>
 
-</RelativeLayout>
+
+
