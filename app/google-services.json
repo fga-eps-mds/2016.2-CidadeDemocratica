@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1002607378929",
+    "firebase_url": "https://cidade-democratica.firebaseio.com",
+    "project_id": "cidade-democratica",
+    "storage_bucket": "cidade-democratica.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1002607378929:android:4f262deb75c561b1",
+        "android_client_info": {
+          "package_name": "com.cidadedemocratica.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1002607378929-vr77bglsgkmmlsgt3nhdstnhih8irtq4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCJc1s3bn21CYIQA1TK-q3wTKhuh85V2Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

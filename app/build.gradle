@@ -91,3 +91,5 @@ def getVersionCodeTimestamp() {
     println sprintf("VersionCode: %d", code)
     return code
 }
+
+apply plugin: 'com.google.gms.google-services'
