@@ -27,5 +27,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="activity_tag_detail">Propostas com </string>
     <string name="app_name_activity_main">Cidade Democratica</string>
+<<<<<<< 00c397cf773f7152486c3d627d536cf5798f7c28
     <string name="relevance">Relevâcia: </string>
+=======
+>>>>>>> Updating initial screen
 </resources>
