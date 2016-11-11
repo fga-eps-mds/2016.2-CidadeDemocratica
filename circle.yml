@@ -3,6 +3,7 @@
 dependencies:
   pre:
     - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.3,android-23
+    - rvm use 2.2.1
     - sudo gem install fastlane --verbose
 
   override:
