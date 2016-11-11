@@ -3,6 +3,7 @@
 dependencies:
   pre:
     - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.3,android-23
+<<<<<<< ceb54fd3aa2bb5eb76edc4ba9ba6f6d32cfcc1de
 
 #   - sudo gem install fastlane --verbose
 
