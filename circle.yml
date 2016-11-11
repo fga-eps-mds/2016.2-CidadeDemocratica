@@ -1,8 +1,13 @@
 #Install android build tools, platforms
 #Supported versions here https://circleci.com/docs/android
+machine:
+  ruby:
+    version: 2.3.1p112
+
 dependencies:
   pre:
     - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.3,android-23
+    - sudo gem install net-ssh -v 2.9.2
     - sudo gem install fastlane --verbose
 
   override:
