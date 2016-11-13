@@ -3,8 +3,11 @@ package com.mdsgpp.cidadedemocratica.controller;
 import android.app.ProgressDialog;
 import android.net.Uri;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.widget.ImageView;
 
 import com.mdsgpp.cidadedemocratica.External.SlidingTabLayout;
 import com.mdsgpp.cidadedemocratica.R;
@@ -28,6 +31,7 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_proposals_list);
+        setTitle(R.string.texto_Proposals);
         if (EntityContainer.getInstance(User.class).getAll().isEmpty()) {
             pullProposalsData();
         } else {
