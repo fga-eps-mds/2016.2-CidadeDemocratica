@@ -15,7 +15,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
 
-import com.mdsgpp.cidadedemocratica.MainActivity;
+import com.mdsgpp.cidadedemocratica.controller.MainActivity;
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Entity;
 import com.mdsgpp.cidadedemocratica.model.Tag;
