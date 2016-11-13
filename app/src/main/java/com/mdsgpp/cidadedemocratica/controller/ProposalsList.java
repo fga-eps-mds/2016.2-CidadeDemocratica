@@ -33,7 +33,6 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         setContentView(R.layout.activity_proposals_list);
         setTitle(R.string.texto_Proposals);
         if (EntityContainer.getInstance(User.class).getAll().isEmpty()) {
-            pullProposalsData();
         } else {
             loadProposalsList();
         }

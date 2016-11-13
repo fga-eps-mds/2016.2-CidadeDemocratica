@@ -34,6 +34,7 @@ public class UsersList extends AppCompatActivity implements RequestUpdateListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users_list);
         setTitle(R.string.users);
+
         if (usersContainer.getAll().isEmpty()) {
             pullUsersData();
         } else {

@@ -32,6 +32,7 @@ public class TagsList extends AppCompatActivity implements RequestUpdateListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tags_list);
         setTitle(R.string.tags);
+
         if (tagsContainer.getAll().isEmpty()) {
             pullTagData();
         } else {
