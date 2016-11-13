@@ -20,7 +20,7 @@
             android:background="@drawable/tag_icon"
             android:elevation="2dp"
             android:layout_centerInParent="true"/>
-        
+
     </RelativeLayout>
 
     <RelativeLayout
