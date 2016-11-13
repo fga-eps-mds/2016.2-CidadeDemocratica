@@ -3,8 +3,11 @@ package com.mdsgpp.cidadedemocratica.requester;
 import android.test.ApplicationTestCase;
 import android.app.Application;
 
+import com.mdsgpp.cidadedemocratica.push.MyFirebaseInstanceIdService;
+
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +24,9 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
     String url = "http://cidadedemocraticaapi.herokuapp.com/api/v0/tags/1";
     String errorMessage = null;
 
+    String userToken = null;
+    private AuthenticateRequestResponseHandler authenticationHandler;
+
     public RequesterTest() {
         super(Application.class);
     }
@@ -30,12 +36,24 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
         requester = new Requester(url, responseHandler);
         responseHandler.setRequestUpdateListener(this);
         signal = new CountDownLatch(1);
+
+        if (userToken == null) {
+            getUserToken();
+        }
     }
 
     @Override
     protected void tearDown() throws Exception {
         response = null;
         errorMessage = null;
+    }
+
+    public void getUserToken() {
+        authenticationHandler = new AuthenticateRequestResponseHandler();
+        authenticationHandler.setRequestUpdateListener(this);
+        Requester r = new Requester(AuthenticateRequestResponseHandler.authenticateEndpointUrl, authenticationHandler);
+        r.sync(Requester.RequestMethod.POST);
+
     }
 
     @Test
@@ -64,8 +82,12 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
 
     @Override
     public void afterSuccess(RequestResponseHandler handler, Object response) {
-        this.response = response;
-        signal.countDown();
+        if (handler == authenticationHandler) {
+            userToken = (String) response;
+        } else {
+            this.response = response;
+            signal.countDown();
+        }
     }
 
     @Override
@@ -101,5 +123,38 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
     @Test
     public void testGetRequestResponseHandler() {
         assertEquals(this, responseHandler.getRequestUpdateListener());
+    }
+
+    @Test
+    public void testGetToken() {
+        String token = "3baisu288r9";
+        Requester.setUserToken(token);
+
+        assertEquals(token, Requester.getUserToken());
+    }
+
+    @Test
+    public void testSetHeader() {
+        HashMap<String, String> headers = new HashMap<>();
+
+        assertTrue(requester.getHeaders().isEmpty());
+
+        String k1 = "k1";
+        String k2 = "k2";
+        String k3 = "k3";
+
+        String v1 = "v1";
+        String v2 = "v2";
+        String v3 = "v3";
+
+        headers.put(k1, v1);
+        headers.put(k2, v2);
+        headers.put(k3, v3);
+
+        requester.setHeader(k1, v1);
+        requester.setHeader(k2, v2);
+        requester.setHeader(k3, v3);
+
+        assertEquals(headers, requester.getHeaders());
     }
 }
