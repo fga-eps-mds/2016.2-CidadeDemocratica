@@ -18,6 +18,11 @@ public class EntityContainerTest extends AndroidTestCase {
     EntityContainer<User> container = EntityContainer.getInstance(User.class);
 
     @Override
+    protected void setUp() throws Exception {
+        container.clear();
+    }
+
+    @Override
     protected void tearDown() throws Exception {
         container.clear();
     }
