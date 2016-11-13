@@ -3,7 +3,7 @@
 dependencies:
   pre:
     - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.3,android-23
-    - sudo gem install fastlane --verbose
+#   - sudo gem install fastlane --verbose
 
   override:
     - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
