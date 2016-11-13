@@ -51,7 +51,9 @@ public class MainActivity extends AppCompatActivity implements RequestUpdateList
     private String getToken() {
         SharedPreferences preferences = this.getSharedPreferences("sharedPreferences", Context.MODE_PRIVATE);
         String token = preferences.getString("userToken", "");
-
+        if(token.equals("")){
+            token = null;
+        }
         return token;
     }
 
