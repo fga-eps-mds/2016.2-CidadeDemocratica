@@ -17,17 +17,28 @@ public class AuthenticateRequestResponseHandler extends RequestResponseHandler {
 
     @Override
     public void onSuccess(int statusCode, Map<String, List<String>> headers, JSONObject response) {
+
         if (statusCode == 200) {
 
-            String token = null;
+            switch (headers.get("method")){
 
-            try {
-                token = response.getString("token");
-            } catch (JSONException e) {
-                e.printStackTrace();
+                case "GET":
+
+                    String token = null;
+
+                    try {
+                        token = response.getString("token");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (token != null) {
+                        afterSuccess(token);
+                    }
+
+                case "POST":
+
             }
-
-            afterSuccess(token);
         }
     }
 

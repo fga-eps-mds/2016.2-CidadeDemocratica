@@ -62,12 +62,7 @@ public class MainActivity extends AppCompatActivity implements RequestUpdateList
         handler.setRequestUpdateListener(this);
         Requester requester = new Requester(AuthenticateRequestResponseHandler.authenticateEndpointUrl, handler);
 
-        String pushId = MyFirebaseInstanceIdService.getId();
-        requester.setParameter("pushId", pushId);
-
-        System.out.println("********************************************************");
-        System.out.println(pushId);
-        requester.async(Requester.RequestMethod.POST);
+        requester.async(Requester.RequestMethod.GET);
     }
 
     @Override

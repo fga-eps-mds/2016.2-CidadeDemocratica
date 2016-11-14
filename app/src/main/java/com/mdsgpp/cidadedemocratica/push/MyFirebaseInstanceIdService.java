@@ -2,23 +2,19 @@ package com.mdsgpp.cidadedemocratica.push;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.mdsgpp.cidadedemocratica.requester.AuthenticateRequestResponseHandler;
+import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
+import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
+import com.mdsgpp.cidadedemocratica.requester.Requester;
 
 /**
  * Created by andreanmasiro on 10/11/16.
  */
 
-public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
+public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService implements RequestUpdateListener {
 
 
     private static FirebaseInstanceId firebaseInstanceId = FirebaseInstanceId.getInstance();
-
-
-    public static String getId() {
-        return firebaseInstanceId.getId();
-    }
-    public static String getToken() {
-        return firebaseInstanceId.getToken();
-    }
 
     @Override
     public void onTokenRefresh() {
@@ -32,7 +28,24 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
     }
 
     private void sendRegistrationToServer(String refreshedToken) {
+
+        AuthenticateRequestResponseHandler handler = new AuthenticateRequestResponseHandler();
+        handler.setRequestUpdateListener(this);
+        Requester requester = new Requester(AuthenticateRequestResponseHandler.authenticateEndpointUrl, handler);
+
+        requester.setParameter("pushId", refreshedToken);
+        requester.async(Requester.RequestMethod.POST);
+        System.out.println("Refreshed Token:");
         System.out.println(refreshedToken);
-        System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXXXXX");
+    }
+
+    @Override
+    public void afterSuccess(RequestResponseHandler handler, Object response) {
+
+    }
+
+    @Override
+    public void afterError(RequestResponseHandler handler, String message) {
+
     }
 }
