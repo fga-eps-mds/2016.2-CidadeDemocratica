@@ -19,9 +19,9 @@ public class AuthenticateRequestResponseHandler extends RequestResponseHandler {
     public void onSuccess(int statusCode, Map<String, List<String>> headers, JSONObject response) {
 
         if (statusCode == 200) {
-
-            switch (headers.get("method")){
-
+            String method = String.valueOf(headers.get("Method"));
+            System.out.println(method);
+            switch (method){
                 case "GET":
 
                     String token = null;
@@ -35,9 +35,9 @@ public class AuthenticateRequestResponseHandler extends RequestResponseHandler {
                     if (token != null) {
                         afterSuccess(token);
                     }
-
-                case "POST":
-
+                    break;
+                default:
+                    break;
             }
         }
     }
