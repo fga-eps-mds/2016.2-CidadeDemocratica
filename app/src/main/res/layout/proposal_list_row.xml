@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary">
+    android:background="#fff">
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,9 +22,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
         android:id="@+id/descriptionTextView"
-        android:textColor="@color/colorAccent"
         android:layout_marginLeft="15dp"
         android:maxLines="2"
+        android:textColor="#0a0909"
         android:layout_marginBottom="5dp"
         android:layout_marginRight="15dp" />
 </LinearLayout>

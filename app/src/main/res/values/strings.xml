@@ -25,7 +25,7 @@
     <string name="message_authenticate_success">Autenticado com sucesso</string>
     <string name="message_authenticate_fail">Falha na autenticação</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="activity_tag_detail">Propostas com </string>
+    <string name="activity_tag_detail">Propostas da  </string>
     <string name="app_name_activity_main">Cidade Democratica</string>
     <string name="relevance">Relevâcia: </string>
 
