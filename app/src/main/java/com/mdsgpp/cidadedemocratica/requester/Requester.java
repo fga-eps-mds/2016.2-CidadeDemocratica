@@ -50,58 +50,42 @@ public class Requester {
     private void requestSync(RequestMethod method) {
         try {
 
-            URL url = new URL(this.url);
-            if (method == RequestMethod.GET) {
-                url = new URL(getUrlWithParameters());
-            }
+            boolean hasParameters = method != RequestMethod.POST;
+            URL url = getUrl(hasParameters);
 
             HttpURLConnection urlConnection = getHttpURLConnection(url, method);
 
-            if (userToken != null) {
-                headers.put("Authorization", userToken);
-            }
-            for (String key : headers.keySet()) {
-                urlConnection.setRequestProperty(key, headers.get(key));
-            }
+            putHeaders(urlConnection);
 
-
-            urlConnection.connect();
 
             if (method == RequestMethod.POST) {
                 DataOutputStream wr = new DataOutputStream(urlConnection.getOutputStream());
                 wr.writeBytes(getParameters());
                 wr.flush();
                 wr.close();
+            } else {
+                urlConnection.connect();
             }
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                sb.append(line + "\n");
-                System.out.println("loading...");
-            }
-            System.out.println("loaded...");
-            br.close();
+            String jsonString = getResponseString(urlConnection);
 
-            String jsonString = sb.toString();
             JSONArray ja = null;
             JSONObject jo = null;
-            try {
+
+            if (jsonString.charAt(0) == '[') { //JSONArray
+
                 ja = new JSONArray(jsonString);
-            } catch (JSONException e) {
-                try {
-                    jo = new JSONObject(jsonString);
-                } catch (JSONException e1) {
-                    e1.printStackTrace();
-                }
+            } else if (jsonString.charAt(0) == '{') { //JSONObject
+
+                jo = new JSONObject(jsonString);
             }
 
             int responseCode = urlConnection.getResponseCode();
 
             Map<String, List<String>> headers = urlConnection.getHeaderFields();
 
-            if (responseCode >= 200 && responseCode - 200 < 100) {
+            boolean isSuccess = responseCode >= 200 && responseCode - 200 < 100;
+            if (isSuccess) {
                 if (ja != null) {
                     responseHandler.onSuccess(responseCode, headers, ja);
                 } else if (jo != null) {
@@ -116,6 +100,32 @@ public class Requester {
             responseHandler.onFailure(500, null, null);
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (JSONException e) {
+            //Not a json received
+        }
+    }
+
+    @NonNull
+    private String getResponseString(HttpURLConnection urlConnection) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            sb.append(line + "\n");
+            System.out.println("loading...");
+        }
+        System.out.println("loaded...");
+        br.close();
+
+        return sb.toString();
+    }
+
+    private void putHeaders(HttpURLConnection urlConnection) {
+        if (userToken != null) {
+            headers.put("Authorization", userToken);
+        }
+        for (String key : headers.keySet()) {
+            urlConnection.setRequestProperty(key, headers.get(key));
         }
     }
 
@@ -139,18 +149,23 @@ public class Requester {
 
     @NonNull
     private HttpURLConnection getHttpURLConnection(URL url, RequestMethod method) throws IOException {
-        HttpURLConnection urlConnection = null;
-        urlConnection = (HttpURLConnection) url.openConnection();
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
         urlConnection.setRequestMethod(getRequestMethodDescription(method));
-        urlConnection.setReadTimeout(10000 /* milliseconds */);
-        urlConnection.setConnectTimeout(15000 /* milliseconds */);
 
-        if (method == RequestMethod.GET) {
-            urlConnection.setDoOutput(false);
-        } else {
-            urlConnection.setDoOutput(true);
+        boolean doesOutput = false;
+
+        switch (method) {
+            case GET:
+                doesOutput = false;
+                break;
+            case POST:
+                doesOutput = true;
+                break;
         }
+        urlConnection.setDoOutput(doesOutput);
+        urlConnection.setDoInput(true);
+        urlConnection.setUseCaches(false);
 
 
         return urlConnection;
@@ -191,16 +206,23 @@ public class Requester {
         return description;
     }
 
-    public String getUrlWithParameters() {
-        String purl = this.url;
+    public URL getUrl(boolean hasParameters) throws MalformedURLException {
+        URL connectionUrl = null;
+        if (!hasParameters) {
+            connectionUrl = new URL(url);
+        } else {
+            String purl = this.url;
 
-        String prefix = "?";
-        String parameters = getParameters();
-        if (parameters.length() > 0) {
-            purl += prefix + parameters;
+            String prefix = "?";
+            String parameters = getParameters();
+            if (parameters.length() > 0) {
+                purl += prefix + parameters;
+            }
+
+            connectionUrl = new URL(purl);
         }
 
-        return purl;
+        return connectionUrl;
     }
 
     public String getParameters() {
