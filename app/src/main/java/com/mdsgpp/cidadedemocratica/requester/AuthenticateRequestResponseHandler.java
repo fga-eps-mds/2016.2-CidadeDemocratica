@@ -33,6 +33,7 @@ public class AuthenticateRequestResponseHandler extends RequestResponseHandler {
                afterSuccess(token);
             } else if (method.equals("POST")) {
 
+                super.onSuccess(statusCode, headers, response);
             }
         }
     }
