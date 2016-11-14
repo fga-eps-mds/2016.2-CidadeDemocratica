@@ -19,25 +19,20 @@ public class AuthenticateRequestResponseHandler extends RequestResponseHandler {
     public void onSuccess(int statusCode, Map<String, List<String>> headers, JSONObject response) {
 
         if (statusCode == 200) {
-            String method = String.valueOf(headers.get("Method"));
-            System.out.println(method);
-            switch (method){
-                case "GET":
+            List<String> methods = headers.get("Method");
+            String method = methods.get(0);
 
-                    String token = null;
+            if (method.equals("GET")) {
+                String token = null;
 
-                    try {
-                        token = response.getString("token");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    token = response.getString("token");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+               afterSuccess(token);
+            } else if (method.equals("POST")) {
 
-                    if (token != null) {
-                        afterSuccess(token);
-                    }
-                    break;
-                default:
-                    break;
             }
         }
     }
