@@ -3,8 +3,6 @@ package com.mdsgpp.cidadedemocratica.requester;
 import android.test.ApplicationTestCase;
 import android.app.Application;
 
-import com.mdsgpp.cidadedemocratica.push.MyFirebaseInstanceIdService;
-
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -38,7 +36,10 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
         signal = new CountDownLatch(1);
 
         if (userToken == null) {
-            getUserToken();
+            authenticationHandler = new AuthenticateRequestResponseHandler();
+            authenticationHandler.setRequestUpdateListener(this);
+            Requester r = new Requester(AuthenticateRequestResponseHandler.authenticateEndpointUrl, authenticationHandler);
+            r.sync(Requester.RequestMethod.GET);
         }
     }
 
@@ -46,14 +47,6 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
     protected void tearDown() throws Exception {
         response = null;
         errorMessage = null;
-    }
-
-    public void getUserToken() {
-        authenticationHandler = new AuthenticateRequestResponseHandler();
-        authenticationHandler.setRequestUpdateListener(this);
-        Requester r = new Requester(AuthenticateRequestResponseHandler.authenticateEndpointUrl, authenticationHandler);
-        r.sync(Requester.RequestMethod.POST);
-
     }
 
     @Test
@@ -114,10 +107,11 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
     @Test
     public void testSetParameters() {
 
-        assertEquals(requester.getUrlWithParameters(), url);
+
+        assertEquals(requester.getParameters(), "");
 
         requester.setParameter("id", String.valueOf(new Integer(10)));
-        assertEquals(requester.getUrlWithParameters(), url + "?id=10");
+        assertEquals(requester.getParameters(), "id=10");
     }
 
     @Test

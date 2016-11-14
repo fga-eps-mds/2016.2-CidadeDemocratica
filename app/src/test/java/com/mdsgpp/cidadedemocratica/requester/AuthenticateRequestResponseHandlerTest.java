@@ -8,6 +8,10 @@ import org.json.JSONObject;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by andreanmasiro on 13/11/16.
@@ -30,8 +34,10 @@ public class AuthenticateRequestResponseHandlerTest extends AndroidTestCase impl
     public void testOnSuccess() throws JSONException {
 
         JSONObject tokenJson = new JSONObject("{error: null, token: " + token + "}");
+        Map<String, List<String>> headers = new HashMap<>();
+        headers.put("Method", new ArrayList<String>(Arrays.asList("GET")));
 
-        handler.onSuccess(200, null, tokenJson);
+        handler.onSuccess(200, headers, tokenJson);
         assertEquals(token, response);
     }
 
