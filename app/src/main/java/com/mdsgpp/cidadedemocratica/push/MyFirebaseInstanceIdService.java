@@ -16,6 +16,9 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
     public static String getId() {
         return firebaseInstanceId.getId();
     }
+    public static String getToken() {
+        return firebaseInstanceId.getToken();
+    }
 
     @Override
     public void onTokenRefresh() {
@@ -30,5 +33,6 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
 
     private void sendRegistrationToServer(String refreshedToken) {
         System.out.println(refreshedToken);
+        System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXXXXX");
     }
 }
