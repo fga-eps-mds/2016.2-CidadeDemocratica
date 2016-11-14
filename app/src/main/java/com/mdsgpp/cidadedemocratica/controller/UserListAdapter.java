@@ -9,8 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.mdsgpp.cidadedemocratica.R;
-import com.mdsgpp.cidadedemocratica.model.Proposal;
-import com.mdsgpp.cidadedemocratica.model.ProposalListRow;
 import com.mdsgpp.cidadedemocratica.model.User;
 import com.mdsgpp.cidadedemocratica.model.UserListRow;
 
@@ -62,7 +60,7 @@ public class UserListAdapter extends BaseAdapter {
         }
 
         row.nameTextView.setText(currentUser.getName());
-        row.nameTextView.setTextColor(Color.WHITE);
+        row.nameTextView.setTextColor(Color.BLACK);
 
         return view;
     }
