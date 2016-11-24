@@ -29,5 +29,7 @@
     <string name="app_name_activity_main">Cidade Democratica</string>
     <string name="relevance">Relevâcia: </string>
     <string name="placeholder_tag_detail">Propostas da</string>
+    <string name="name_preferences_data">sharedPreferences</string>
+    <string name="key_user_token">userToken</string>
 
 </resources>
