@@ -2,17 +2,12 @@
 #Supported versions here https://circleci.com/docs/android
 machine:
   ruby:
-    version: 2.3.1p112
+    version: 2.3.0
 
 dependencies:
   pre:
-    - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.3,android-23
-    - sudo gem install net-ssh -v 2.9.2
-    - sudo gem install fastlane --verbose
-
-
-#   - sudo gem install fastlane --verbose
->>>>>>> 26f5a0791a8dfe2b8ba6732d59fc08cdaa3b1b79
+    - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.3,android-23,extra-android-m2repository,extra-android-support,extra-google-google_play_services,extra-google-m2repository
+    - gem install fastlane --verbose
 
   override:
     - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
