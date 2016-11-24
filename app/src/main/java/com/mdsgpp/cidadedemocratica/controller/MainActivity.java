@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.mdsgpp.cidadedemocratica.R;
+import com.mdsgpp.cidadedemocratica.push.MyFirebaseInstanceIdService;
 import com.mdsgpp.cidadedemocratica.requester.AuthenticateRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
@@ -17,6 +18,7 @@ import com.mdsgpp.cidadedemocratica.requester.Requester;
 public class MainActivity extends AppCompatActivity implements RequestUpdateListener {
 
     private ProgressDialog progressDialog;
+    private AuthenticateRequestResponseHandler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements RequestUpdateList
 
         setContentView(R.layout.activity_main);
         String token = getToken();
+
         if (token != null) {
             Requester.setUserToken(token);
         } else {
@@ -56,12 +59,17 @@ public class MainActivity extends AppCompatActivity implements RequestUpdateList
         return token;
     }
 
-        private void requestUserToken() {
-        AuthenticateRequestResponseHandler handler = new AuthenticateRequestResponseHandler();
+    private void requestUserToken() {
+        handler = new AuthenticateRequestResponseHandler();
         handler.setRequestUpdateListener(this);
         Requester requester = new Requester(AuthenticateRequestResponseHandler.authenticateEndpointUrl, handler);
 
         requester.async(Requester.RequestMethod.GET);
+    }
+
+    private void postFirebaseId() {
+        Requester requester = new Requester(AuthenticateRequestResponseHandler.authenticateEndpointUrl, handler);
+        requester.async(Requester.RequestMethod.POST);
     }
 
     @Override

@@ -50,8 +50,7 @@ public class Requester {
     private void requestSync(RequestMethod method) {
         try {
 
-            boolean hasParameters = method != RequestMethod.POST;
-            URL url = getUrl(hasParameters);
+            URL url = getUrl();
 
             HttpURLConnection urlConnection = getHttpURLConnection(url, method);
 
@@ -90,6 +89,8 @@ public class Requester {
                     responseHandler.onSuccess(responseCode, headers, ja);
                 } else if (jo != null) {
                     responseHandler.onSuccess(responseCode, headers, jo);
+                } else {
+                    responseHandler.onSuccess(responseCode, headers, jsonString);
                 }
             } else {
                 responseHandler.onFailure(responseCode, headers, ja);
@@ -136,6 +137,7 @@ public class Requester {
                 requestSync(method);
             }
         });
+
         requestThread.start();
     }
 
@@ -206,21 +208,17 @@ public class Requester {
         return description;
     }
 
-    public URL getUrl(boolean hasParameters) throws MalformedURLException {
-        URL connectionUrl = null;
-        if (!hasParameters) {
-            connectionUrl = new URL(url);
-        } else {
-            String purl = this.url;
+    public URL getUrl() throws MalformedURLException {
 
-            String prefix = "?";
-            String parameters = getParameters();
-            if (parameters.length() > 0) {
-                purl += prefix + parameters;
-            }
+        String purl = this.url;
 
-            connectionUrl = new URL(purl);
+        String prefix = "?";
+        String parameters = getParameters();
+        if (parameters.length() > 0) {
+            purl += prefix + parameters;
         }
+
+        URL connectionUrl = new URL(purl);
 
         return connectionUrl;
     }

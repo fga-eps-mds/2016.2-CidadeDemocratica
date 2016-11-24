@@ -19,6 +19,7 @@ public class AuthenticateRequestResponseHandler extends RequestResponseHandler {
     public void onSuccess(int statusCode, Map<String, List<String>> headers, JSONObject response) {
 
         if (statusCode == 200) {
+
             List<String> methods = headers.get("Method");
             String method = methods.get(0);
 
