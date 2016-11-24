@@ -1,11 +1,13 @@
 #Install android build tools, platforms
 #Supported versions here https://circleci.com/docs/android
+machine:
+  ruby:
+    version: 2.3.0
+
 dependencies:
   pre:
-    - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.3,android-23
-<<<<<<< ceb54fd3aa2bb5eb76edc4ba9ba6f6d32cfcc1de
-
-#   - sudo gem install fastlane --verbose
+    - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.3,android-23,extra-android-m2repository,extra-android-support,extra-google-google_play_services,extra-google-m2repository
+    - gem install fastlane --verbose
 
   override:
     - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
