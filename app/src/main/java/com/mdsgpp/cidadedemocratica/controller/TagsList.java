@@ -2,12 +2,17 @@ package com.mdsgpp.cidadedemocratica.controller;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Tag;
@@ -19,7 +24,7 @@ import com.mdsgpp.cidadedemocratica.requester.TagRequestResponseHandler;
 
 import java.util.ArrayList;
 
-public class TagsList extends AppCompatActivity implements RequestUpdateListener {
+public class TagsList extends AppCompatActivity implements RequestUpdateListener, MenuItem.OnMenuItemClickListener {
 
     private ProgressDialog progressDialog;
     private final TagListAdapter tagAdapter = new TagListAdapter(this, new ArrayList<Tag>());
@@ -129,5 +134,24 @@ public class TagsList extends AppCompatActivity implements RequestUpdateListener
     public void afterError(RequestResponseHandler handler, String message) {
         progressDialog.dismiss();
         FeedbackManager.createToast(this, message);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_graph, menu);
+        MenuItem graphItem = menu.findItem(R.id.action_graph);
+        graphItem.setOnMenuItemClickListener(this);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case R.id.action_graph:
+                //TODO: Chamar método para colocar o gráfico
+                break;
+        }
+        return false;
     }
 }
