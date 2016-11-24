@@ -46,7 +46,7 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
         this.tag = tagsContainer.getForId(tagId);
 
         TextView tagNameTextView = (TextView)findViewById(R.id.tagNameTextView);
-        tagNameTextView.setText(this.tag.getName());
+        tagNameTextView.setText(getString(R.string.placeholder_tag_detail) + " " + this.tag.getName());
 
         if (!loadedTagIds.contains(tag.getId())) {
             pullTaggingsData();

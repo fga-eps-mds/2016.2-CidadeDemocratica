@@ -28,5 +28,6 @@
     <string name="activity_tag_detail">Propostas da  </string>
     <string name="app_name_activity_main">Cidade Democratica</string>
     <string name="relevance">Relevâcia: </string>
+    <string name="placeholder_tag_detail">Propostas da</string>
 
 </resources>

@@ -12,17 +12,6 @@
        android:layout_marginTop="9dp"
        android:layout_height="50dp">
 
-       <TextView
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:textAppearance="?android:attr/textAppearanceLarge"
-           android:text="@string/activity_tag_detail"
-           android:id="@+id/proposalsWithTextView"
-           android:textStyle="bold"
-           android:layout_marginLeft="12dp"
-           android:layout_centerVertical="true"
-           android:textSize="18dp" />
-
 
        <TextView
            android:layout_width="wrap_content"
@@ -30,11 +19,11 @@
            android:textAppearance="?android:attr/textAppearanceLarge"
            android:text="Tag"
            android:id="@+id/tagNameTextView"
-           android:layout_margin="12dp"
            android:layout_toRightOf="@+id/proposalsWithTextView"
            android:textStyle="bold"
            android:layout_centerVertical="true"
-           android:textSize="18dp" />
+           android:textSize="18dp"
+           android:layout_margin="15dp" />
    </RelativeLayout>
 
     <RelativeLayout
