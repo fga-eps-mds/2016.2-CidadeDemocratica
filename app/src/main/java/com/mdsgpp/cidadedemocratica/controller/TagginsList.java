@@ -4,6 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -20,13 +23,14 @@ import com.mdsgpp.cidadedemocratica.requester.TagRequestResponseHandler;
 
 import java.util.ArrayList;
 
-public class TagginsList extends AppCompatActivity implements View.OnClickListener, RequestUpdateListener {
+public class TagginsList extends AppCompatActivity implements RequestUpdateListener, MenuItem.OnMenuItemClickListener {
 
     ListView tagginsListView;
     TextView proposalTitleTextView;
     TextView proposalDescripitionTextView;
     TextView relevanceTextView;
-    Button shareButton;
+    private MenuItem favoriteItem;
+    private Boolean isFavorite;
 
     Proposal proposal;
     private ProgressDialog progressDialog;
@@ -60,9 +64,6 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
         relevanceTextView.setText(String.valueOf(proposal.getRelevance()));
 
         tagginsListView = (ListView) findViewById(R.id.listaTagsDaPropostaID);
-
-        shareButton = (Button) findViewById(R.id.shareButton);
-        shareButton.setOnClickListener(this);
 
         if (!loadedProposalIds.contains(proposal.getId())) {
             pullTaggingsData();
@@ -134,12 +135,32 @@ public class TagginsList extends AppCompatActivity implements View.OnClickListen
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.shareButton:
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_like, menu);
+        favoriteItem = menu.findItem(R.id.action_favorite);
+        favoriteItem.setOnMenuItemClickListener(this);
+        isFavorite = false;
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case R.id.action_favorite:
+                //TODO: Chamar método para favoritar a proposta
+                if (isFavorite){
+                    isFavorite = false;
+                    favoriteItem.setIcon(R.drawable.favorite_icon);
+                }else {
+                    isFavorite = true;
+                    favoriteItem.setIcon(R.drawable.favorite_icon_filled);
+                }
+                break;
+            case R.id.action_share:
                 shareProposal();
                 break;
         }
-
+        return false;
     }
 }
