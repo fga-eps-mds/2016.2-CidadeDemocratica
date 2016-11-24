@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.User;
-import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
@@ -42,9 +42,11 @@ public class UserProfile extends AppCompatActivity implements ListProposalFragme
         setContentView(R.layout.activity_user_profile);
 
         Bundle extras = getIntent().getExtras();
-        DataContainer dataContainer = DataContainer.getInstance();
+
+        EntityContainer<User> usersContainer = EntityContainer.getInstance(User.class);
+
         long userId = extras.getLong("userId");
-        user = dataContainer.getUserForId(userId);
+        user = usersContainer.getForId(userId);
 
         userName = (TextView) findViewById(R.id.nameTextView);
         userName.setText(user.getName());
@@ -90,7 +92,7 @@ public class UserProfile extends AppCompatActivity implements ListProposalFragme
 
         Requester requester = new Requester(ProposalRequestResponseHandler.proposalsEndpointUrl, proposalRequestResponseHandler);
         requester.setParameter(userIdParameterKey, String.valueOf(user.getId()));
-        requester.getAsync();
+        requester.async(Requester.RequestMethod.GET);
     }
 
     @Override

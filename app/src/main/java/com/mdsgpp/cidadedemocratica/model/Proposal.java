@@ -5,9 +5,8 @@ import java.util.ArrayList;
 /**
  * Created by andreanmasiro on 9/8/16.
  */
-public class Proposal implements Comparable<Proposal> {
+public class Proposal extends Entity implements Comparable<Proposal> {
 
-    private long id = 0;
     private String title = "";
     private String content = "";
     private long relevance = 0;
@@ -16,7 +15,7 @@ public class Proposal implements Comparable<Proposal> {
     private ArrayList<Tag> tags = new ArrayList<Tag>();
 
     public Proposal(long id, String title, String content, long relevance, long userId) {
-        this.id = id;
+        super(id);
         this.title = title;
         this.content = content;
         this.relevance = relevance;
@@ -24,16 +23,12 @@ public class Proposal implements Comparable<Proposal> {
     }
 
     public Proposal(long id, String title, String content, long relevance, long userId, String slug) {
-        this.id = id;
+        super(id);
         this.title = title;
         this.content = content;
         this.relevance = relevance;
         this.slug = slug;
         this.userId = userId;
-    }
-
-    public long getId() {
-        return this.id;
     }
 
     public long getUserId() {

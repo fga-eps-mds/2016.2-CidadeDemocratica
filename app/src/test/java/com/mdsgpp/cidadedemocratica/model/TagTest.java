@@ -2,8 +2,6 @@ package com.mdsgpp.cidadedemocratica.model;
 
 import android.test.AndroidTestCase;
 
-import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
-
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -23,8 +21,6 @@ public class TagTest extends AndroidTestCase {
     Proposal proposalOne = newProposal();
     Proposal proposalTwo = new Proposal(0,"title","content",2,2);
     ArrayList<Proposal> proposalsList = new ArrayList<Proposal>();
-
-
 
     @Test
     public void testGetName() {
@@ -49,8 +45,6 @@ public class TagTest extends AndroidTestCase {
 
     @Test
     public void testGetProposals(){
-        DataContainer.getInstance().addProposal(proposalOne);
-        DataContainer.getInstance().addProposal(proposalTwo);
         proposalsList.add(proposalOne);
         proposalsList.add(proposalTwo);
 

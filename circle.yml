@@ -10,6 +10,10 @@ dependencies:
     - sudo gem install net-ssh -v 2.9.2
     - sudo gem install fastlane --verbose
 
+
+#   - sudo gem install fastlane --verbose
+>>>>>>> 26f5a0791a8dfe2b8ba6732d59fc08cdaa3b1b79
+
   override:
     - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
 

@@ -3,12 +3,11 @@ package com.mdsgpp.cidadedemocratica.requester;
 import android.test.ApplicationTestCase;
 import android.app.Application;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.junit.Test;
 
-import java.io.IOException;
+import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by andreanmasiro on 01/11/16.
@@ -23,6 +22,9 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
     String url = "http://cidadedemocraticaapi.herokuapp.com/api/v0/tags/1";
     String errorMessage = null;
 
+    String userToken = null;
+    private AuthenticateRequestResponseHandler authenticationHandler;
+
     public RequesterTest() {
         super(Application.class);
     }
@@ -32,18 +34,31 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
         requester = new Requester(url, responseHandler);
         responseHandler.setRequestUpdateListener(this);
         signal = new CountDownLatch(1);
+
+        if (userToken == null) {
+            authenticationHandler = new AuthenticateRequestResponseHandler();
+            authenticationHandler.setRequestUpdateListener(this);
+            Requester r = new Requester(AuthenticateRequestResponseHandler.authenticateEndpointUrl, authenticationHandler);
+            r.sync(Requester.RequestMethod.GET);
+        }
     }
 
     @Override
     protected void tearDown() throws Exception {
         response = null;
+        errorMessage = null;
     }
 
     @Test
-    public void testGet() throws InterruptedException {
-        requester.setMethod(Requester.RequestMethod.GET);
-        requester.getAsync();
-        signal.await();
+    public void testGetAsync() throws InterruptedException {
+        requester.async(Requester.RequestMethod.GET);
+        signal.await(5, TimeUnit.SECONDS);
+        assertNotNull(response);
+    }
+
+    @Test
+    public void testGetSync() {
+        requester.sync(Requester.RequestMethod.GET);
         assertNotNull(response);
     }
 
@@ -53,16 +68,19 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
         handler.setRequestUpdateListener(this);
 
         Requester requester = new Requester("http://www.naoexiste.com", handler);
-        requester.setMethod(Requester.RequestMethod.GET);
-        requester.getAsync();
+        requester.async(Requester.RequestMethod.GET);
         signal.await();
         assertNotNull(errorMessage);
     }
 
     @Override
     public void afterSuccess(RequestResponseHandler handler, Object response) {
-        this.response = response;
-        signal.countDown();
+        if (handler == authenticationHandler) {
+            userToken = (String) response;
+        } else {
+            this.response = response;
+            signal.countDown();
+        }
     }
 
     @Override
@@ -87,25 +105,50 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
     }
 
     @Test
-    public void testGetMethod() {
-        requester.setMethod(Requester.RequestMethod.GET);
-        assertEquals(requester.getMethod(), Requester.RequestMethod.GET);
-
-        requester.setMethod(Requester.RequestMethod.POST);
-        assertEquals(requester.getMethod(), Requester.RequestMethod.POST);
-    }
-
-    @Test
     public void testSetParameters() {
 
-        assertEquals(requester.getUrlWithParameters(), url);
+
+        assertEquals(requester.getParameters(), "");
 
         requester.setParameter("id", String.valueOf(new Integer(10)));
-        assertEquals(requester.getUrlWithParameters(), url + "?id=10");
+        assertEquals(requester.getParameters(), "id=10");
     }
 
     @Test
     public void testGetRequestResponseHandler() {
         assertEquals(this, responseHandler.getRequestUpdateListener());
+    }
+
+    @Test
+    public void testGetToken() {
+        String token = "3baisu288r9";
+        Requester.setUserToken(token);
+
+        assertEquals(token, Requester.getUserToken());
+    }
+
+    @Test
+    public void testSetHeader() {
+        HashMap<String, String> headers = new HashMap<>();
+
+        assertTrue(requester.getHeaders().isEmpty());
+
+        String k1 = "k1";
+        String k2 = "k2";
+        String k3 = "k3";
+
+        String v1 = "v1";
+        String v2 = "v2";
+        String v3 = "v3";
+
+        headers.put(k1, v1);
+        headers.put(k2, v2);
+        headers.put(k3, v3);
+
+        requester.setHeader(k1, v1);
+        requester.setHeader(k2, v2);
+        requester.setHeader(k3, v3);
+
+        assertEquals(headers, requester.getHeaders());
     }
 }

@@ -2,13 +2,12 @@ package com.mdsgpp.cidadedemocratica.requester;
 
 import android.support.annotation.NonNull;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.SyncHttpClient;
-
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -24,6 +23,8 @@ import java.util.Map;
  */
 public class Requester {
 
+    private static String userToken = null;
+
     public enum RequestMethod {
         POST, GET, PATCH, DELETE
     }
@@ -32,11 +33,13 @@ public class Requester {
         FTP, HTTP, HTTPS
     }
 
-    private RequestMethod method = RequestMethod.GET;
     private Thread requestThread = Thread.currentThread();
     private String url = "";
     private HashMap<String, String> parameters = new HashMap<>();
+    private HashMap<String, String> headers = new HashMap<>();
     private RequestResponseHandler responseHandler;
+
+
 
     public Requester(String url, RequestResponseHandler responseHandler) {
         this.url = url;
@@ -44,103 +47,126 @@ public class Requester {
 
     }
 
-    /**
-     * Legacy
-     *
-     *
-         public void request(RequestMethod method) {
-             if (method == RequestMethod.GET) {
-
-                 String endpoint = getUrlWithParameters();
-                 client.get(endpoint, this.responseHandler);
-             }
-         }
-     *
-     *
-         public void syncRequest(RequestMethod method) {
-             if (method == RequestMethod.GET) {
-
-                 String endpoint = getUrlWithParameters();
-                 syncClient.get(endpoint, this.responseHandler);
-             }
-         }
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     */
-
-
-
-    public void getAsync() {
-        requestThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getSync();
-            }
-        });
-        requestThread.start();
-    }
-
-    public void getSync() {
+    private void requestSync(RequestMethod method) {
         try {
-            URL url = new URL(getUrlWithParameters());
+
+            boolean hasParameters = method != RequestMethod.POST;
+            URL url = getUrl(hasParameters);
 
             HttpURLConnection urlConnection = getHttpURLConnection(url, method);
 
-            urlConnection.connect();
+            putHeaders(urlConnection);
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
 
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                sb.append(line + "\n");
-                System.out.println("loading...");
+            if (method == RequestMethod.POST) {
+                DataOutputStream wr = new DataOutputStream(urlConnection.getOutputStream());
+                wr.writeBytes(getParameters());
+                wr.flush();
+                wr.close();
+            } else {
+                urlConnection.connect();
             }
-            System.out.println("loaded...");
-            br.close();
 
-            String jsonString = sb.toString();
+            String jsonString = getResponseString(urlConnection);
 
-            JSONArray ja = new JSONArray(jsonString);
+            JSONArray ja = null;
+            JSONObject jo = null;
+
+            if (jsonString.charAt(0) == '[') { //JSONArray
+
+                ja = new JSONArray(jsonString);
+            } else if (jsonString.charAt(0) == '{') { //JSONObject
+
+                jo = new JSONObject(jsonString);
+            }
 
             int responseCode = urlConnection.getResponseCode();
 
             Map<String, List<String>> headers = urlConnection.getHeaderFields();
 
-            if (responseCode >= 200 && responseCode - 200 < 100) {
-                responseHandler.onSuccess(responseCode, headers, ja);
+            boolean isSuccess = responseCode >= 200 && responseCode - 200 < 100;
+            if (isSuccess) {
+                if (ja != null) {
+                    responseHandler.onSuccess(responseCode, headers, ja);
+                } else if (jo != null) {
+                    responseHandler.onSuccess(responseCode, headers, jo);
+                }
             } else {
                 responseHandler.onFailure(responseCode, headers, ja);
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
         } catch (UnknownHostException e) {
             responseHandler.onFailure(500, null, null);
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (JSONException e) {
+            //Not a json received
         }
+    }
 
+    @NonNull
+    private String getResponseString(HttpURLConnection urlConnection) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            sb.append(line + "\n");
+            System.out.println("loading...");
+        }
+        System.out.println("loaded...");
+        br.close();
+
+        return sb.toString();
+    }
+
+    private void putHeaders(HttpURLConnection urlConnection) {
+        if (userToken != null) {
+            headers.put("Authorization", userToken);
+        }
+        for (String key : headers.keySet()) {
+            urlConnection.setRequestProperty(key, headers.get(key));
+        }
+    }
+
+    private void requestAsync(final RequestMethod method) {
+        requestThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                requestSync(method);
+            }
+        });
+        requestThread.start();
+    }
+
+    public void sync(RequestMethod method) {
+        requestSync(method);
+    }
+
+    public void async(RequestMethod method) {
+        requestAsync(method);
     }
 
     @NonNull
     private HttpURLConnection getHttpURLConnection(URL url, RequestMethod method) throws IOException {
-        HttpURLConnection urlConnection = null;
-        urlConnection = (HttpURLConnection) url.openConnection();
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
         urlConnection.setRequestMethod(getRequestMethodDescription(method));
-        urlConnection.setReadTimeout(10000 /* milliseconds */);
-        urlConnection.setConnectTimeout(15000 /* milliseconds */);
 
-        urlConnection.setDoOutput(false);
+        boolean doesOutput = false;
+
+        switch (method) {
+            case GET:
+                doesOutput = false;
+                break;
+            case POST:
+                doesOutput = true;
+                break;
+        }
+        urlConnection.setDoOutput(doesOutput);
+        urlConnection.setDoInput(true);
+        urlConnection.setUseCaches(false);
+
 
         return urlConnection;
     }
@@ -180,27 +206,55 @@ public class Requester {
         return description;
     }
 
-    public String getUrlWithParameters() {
-        String purl = this.url;
+    public URL getUrl(boolean hasParameters) throws MalformedURLException {
+        URL connectionUrl = null;
+        if (!hasParameters) {
+            connectionUrl = new URL(url);
+        } else {
+            String purl = this.url;
 
-        String prefix = "?";
+            String prefix = "?";
+            String parameters = getParameters();
+            if (parameters.length() > 0) {
+                purl += prefix + parameters;
+            }
+
+            connectionUrl = new URL(purl);
+        }
+
+        return connectionUrl;
+    }
+
+    public String getParameters() {
+
+        String urlParameters = "";
+        String prefix = "";
+
         for (String key : parameters.keySet()) {
-            purl += prefix + key + "=" + parameters.get(key);
+            urlParameters += prefix + key + "=" + parameters.get(key);
             prefix = "&";
         }
 
-        return purl;
+        return urlParameters;
     }
 
     public void setParameter(String key, String parameter) {
         parameters.put(key, parameter);
     }
 
-    public RequestMethod getMethod() {
-        return method;
+    public HashMap<String, String> getHeaders() {
+        return headers;
     }
 
-    public void setMethod(RequestMethod method) {
-        this.method = method;
+    public void setHeader(String key, String value) {
+        headers.put(key, value);
+    }
+
+    public static String getUserToken() {
+        return userToken;
+    }
+
+    public static void setUserToken(String userToken) {
+        Requester.userToken = userToken;
     }
 }

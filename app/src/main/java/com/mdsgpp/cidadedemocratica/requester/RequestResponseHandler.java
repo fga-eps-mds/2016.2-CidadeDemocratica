@@ -22,6 +22,10 @@ public class RequestResponseHandler {
 
     public RequestUpdateListener requestUpdateListener;
 
+    public void onSuccess(int statusCode, Map<String, List<String>> headers, JSONObject response) {
+        afterSuccess(response);
+    }
+
     public void onSuccess(int statusCode, Map<String, List<String>> headers, JSONArray response) {
         afterSuccess(response);
     }

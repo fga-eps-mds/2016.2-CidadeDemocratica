@@ -11,7 +11,7 @@ import android.widget.ListView;
 
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.User;
-import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
@@ -25,13 +25,17 @@ public class UsersList extends AppCompatActivity implements RequestUpdateListene
     private ProgressDialog progressDialog;
     final UserListAdapter userAdapter = new UserListAdapter(this, new ArrayList<User>());
 
+    EntityContainer<User> usersContainer = EntityContainer.getInstance(User.class);
+
     private int preLast = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users_list);
-        if (DataContainer.getInstance().getUsers().size() == 0) {
+        setTitle(R.string.users);
+
+        if (usersContainer.getAll().isEmpty()) {
             pullUsersData();
         } else {
             loadUsersList();
@@ -82,8 +86,7 @@ public class UsersList extends AppCompatActivity implements RequestUpdateListene
     }
 
     private ArrayList<User> getUsersList(){
-        DataContainer dataContainer = DataContainer.getInstance();
-        return dataContainer.getUsers();
+        return usersContainer.getAll();
     }
 
     private void pullUsersData() {
@@ -97,7 +100,7 @@ public class UsersList extends AppCompatActivity implements RequestUpdateListene
         Requester requester = new Requester(UserRequestResponseHandler.usersEndpointUrl, userRequestResponseHandler);
         requester.setParameter("page", String.valueOf(UserRequestResponseHandler.nextPageToRequest));
         System.out.println("loading users...");
-        requester.getAsync();
+        requester.async(Requester.RequestMethod.GET);
     }
 
     private void createToast(String message){

@@ -9,6 +9,6 @@
         android:layout_height="match_parent"
         android:id="@+id/proposalsListId"
         android:layout_centerHorizontal="true"
-        android:background="@color/colorPrimary" />
+        android:background="#fff" />
 
 </FrameLayout>

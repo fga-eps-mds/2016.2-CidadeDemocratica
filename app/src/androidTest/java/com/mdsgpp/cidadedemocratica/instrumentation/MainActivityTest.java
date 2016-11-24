@@ -15,10 +15,13 @@ import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
 
-import com.mdsgpp.cidadedemocratica.MainActivity;
+import com.mdsgpp.cidadedemocratica.controller.MainActivity;
 import com.mdsgpp.cidadedemocratica.R;
-import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+import com.mdsgpp.cidadedemocratica.model.Entity;
+import com.mdsgpp.cidadedemocratica.model.Tag;
+import com.mdsgpp.cidadedemocratica.model.User;
 import com.mdsgpp.cidadedemocratica.persistence.DataUpdateListener;
+import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 
 
 import org.junit.Rule;
@@ -56,20 +59,10 @@ public class MainActivityTest {
         final CountDownLatch latch = new CountDownLatch(1);
 
 
-        DataContainer.getInstance().setDataUpdateListener(new DataUpdateListener() {
+        EntityContainer.getInstance(Tag.class).setDataUpdateListener(new DataUpdateListener() {
             @Override
-            public void tagsUpdated() {
+            public void dataUpdated(Class<? extends Entity> entityType) {
                 latch.countDown();
-            }
-
-            @Override
-            public void proposalsUpdated() {
-
-            }
-
-            @Override
-            public void usersUpdated() {
-
             }
         });
 
@@ -85,20 +78,9 @@ public class MainActivityTest {
         //List
         final CountDownLatch latch = new CountDownLatch(1);
 
-
-        DataContainer.getInstance().setDataUpdateListener(new DataUpdateListener() {
+        EntityContainer.getInstance(User.class).setDataUpdateListener(new DataUpdateListener() {
             @Override
-            public void tagsUpdated() {
-
-            }
-
-            @Override
-            public void proposalsUpdated() {
-
-            }
-
-            @Override
-            public void usersUpdated() {
+            public void dataUpdated(Class<? extends Entity> entityType) {
                 latch.countDown();
             }
         });

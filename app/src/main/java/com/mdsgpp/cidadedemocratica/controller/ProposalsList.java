@@ -3,14 +3,17 @@ package com.mdsgpp.cidadedemocratica.controller;
 import android.app.ProgressDialog;
 import android.net.Uri;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.widget.ImageView;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mdsgpp.cidadedemocratica.External.SlidingTabLayout;
 import com.mdsgpp.cidadedemocratica.R;
 
-import com.mdsgpp.cidadedemocratica.persistence.DataContainer;
+import com.mdsgpp.cidadedemocratica.model.User;
+import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
@@ -28,8 +31,9 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_proposals_list);
-        if (DataContainer.getInstance().getUsers().size() == 0) {
-            pullProposalsData();
+        setTitle(R.string.texto_Proposals);
+
+        if (EntityContainer.getInstance(User.class).getAll().isEmpty()) {
         } else {
             loadProposalsList();
         }
@@ -50,7 +54,7 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
 
         Requester requester = new Requester(ProposalRequestResponseHandler.proposalsEndpointUrl, proposalRequestResponseHandler);
         requester.setParameter("page", String.valueOf(ProposalRequestResponseHandler.nextPageToRequest));
-        requester.getAsync();
+        requester.async(Requester.RequestMethod.GET);
     }
 
     private void loadProposalsList() {
