@@ -31,6 +31,7 @@ public class TagginsList extends AppCompatActivity implements RequestUpdateListe
     TextView relevanceTextView;
     private MenuItem favoriteItem;
     private Boolean isFavorite;
+    private View header;
 
     Proposal proposal;
     private ProgressDialog progressDialog;
@@ -47,21 +48,7 @@ public class TagginsList extends AppCompatActivity implements RequestUpdateListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_taggins_list);
 
-        EntityContainer<Proposal> proposalsContainer = EntityContainer.getInstance(Proposal.class);
-
-        Bundle extras = getIntent().getExtras();
-        long proposalId = extras.getLong("proposalId");
-
-        proposal = proposalsContainer.getForId(proposalId);
-
-        proposalTitleTextView = (TextView)findViewById(R.id.titleProposalID);
-        proposalTitleTextView.setText(proposal.getTitle());
-
-        proposalDescripitionTextView = (TextView)findViewById(R.id.proposalDescripitionID);
-        proposalDescripitionTextView.setText(proposal.getContent());
-
-        relevanceTextView = (TextView)findViewById(R.id.relevanceTextView);
-        relevanceTextView.setText(String.valueOf(proposal.getRelevance()));
+        getInstanceViews();
 
         tagginsListView = (ListView) findViewById(R.id.listaTagsDaPropostaID);
 
@@ -70,6 +57,27 @@ public class TagginsList extends AppCompatActivity implements RequestUpdateListe
         } else {
             setTagsListViewAdapter(proposal.getTags());
         }
+
+    }
+
+    private void getInstanceViews(){
+        header = getLayoutInflater().inflate(R.layout.fragment_header_taggins, null, false);
+
+        EntityContainer<Proposal> proposalsContainer = EntityContainer.getInstance(Proposal.class);
+
+        Bundle extras = getIntent().getExtras();
+        long proposalId = extras.getLong("proposalId");
+
+        proposal = proposalsContainer.getForId(proposalId);
+
+        proposalTitleTextView = (TextView)header.findViewById(R.id.titleProposalID);
+        proposalTitleTextView.setText(proposal.getTitle());
+
+        proposalDescripitionTextView = (TextView)header.findViewById(R.id.proposalDescripitionID);
+        proposalDescripitionTextView.setText(proposal.getContent());
+
+        relevanceTextView = (TextView)header.findViewById(R.id.relevanceTextView);
+        relevanceTextView.setText(String.valueOf(proposal.getRelevance()));
 
     }
 
@@ -95,6 +103,7 @@ public class TagginsList extends AppCompatActivity implements RequestUpdateListe
             @Override
             public void run() {
                 tagginsListView.setAdapter(taggingsAdapter);
+                tagginsListView.addHeaderView(header);
             }
         });
     }
