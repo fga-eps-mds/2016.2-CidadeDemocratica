@@ -33,6 +33,7 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
     private ListView proposalListView;
 
     public ArrayList<Proposal> proposals;
+    private View header;
 
     ProposalListAdapter proposalAdapter;
     EntityContainer<Proposal> proposalsContainer = EntityContainer.getInstance(Proposal.class);
@@ -50,6 +51,15 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
         fragment.proposals = proposals;
 
         EntityContainer.getInstance(Proposal.class).setDataUpdateListener(fragment);
+
+        return fragment;
+    }
+
+    public static ListProposalFragment newInstance(ArrayList<Proposal> proposals, View header) {
+
+
+        ListProposalFragment fragment = ListProposalFragment.newInstance(proposals);
+        fragment.header = header;
 
         return fragment;
     }
@@ -78,6 +88,10 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
         });
 
         proposalListView.setAdapter(proposalAdapter);
+
+        if (header!=null){
+            proposalListView.addHeaderView(header);
+        }
 
         proposalListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -168,5 +182,9 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
                 });
             }
         }
+    }
+
+    public ListView getProposalListView() {
+        return proposalListView;
     }
 }
