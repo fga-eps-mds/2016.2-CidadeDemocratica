@@ -11,8 +11,8 @@ public class User extends Entity implements Comparable<User> {
     private String description = "";
     private long proposalCount = 0;
     private long relevance = 0;
-    private ArrayList<Proposal> proposals = new ArrayList<Proposal>();
-    private ArrayList<Tag> mostUsedTags = new ArrayList<Tag>();
+    private ArrayList<Proposal> proposals = new ArrayList<>();
+    private ArrayList<Tag> mostUsedTags = new ArrayList<>();
 
     public User(String name, long proposalCount, long id, long relevance) {
         super(id);
@@ -62,7 +62,9 @@ public class User extends Entity implements Comparable<User> {
     }
 
     @Override
-    public String toString(){return  this.getName();}
+    public String toString() {
+        return  this.getName();
+    }
 
     @Override
     public int compareTo(User user) {

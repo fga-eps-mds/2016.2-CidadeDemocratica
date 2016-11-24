@@ -31,16 +31,7 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
 
     @Override
     protected void setUp() throws Exception {
-        requester = new Requester(url, responseHandler);
-        responseHandler.setRequestUpdateListener(this);
         signal = new CountDownLatch(1);
-
-        if (userToken == null) {
-            authenticationHandler = new AuthenticateRequestResponseHandler();
-            authenticationHandler.setRequestUpdateListener(this);
-            Requester r = new Requester(AuthenticateRequestResponseHandler.authenticateEndpointUrl, authenticationHandler);
-            r.sync(Requester.RequestMethod.GET);
-        }
     }
 
     @Override
@@ -51,13 +42,19 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
 
     @Test
     public void testGetAsync() throws InterruptedException {
+        RequestResponseHandler handler = new RequestResponseHandler();
+        handler.setRequestUpdateListener(this);
+        requester = new Requester("https://google.com", handler);
         requester.async(Requester.RequestMethod.GET);
-        signal.await(5, TimeUnit.SECONDS);
+        signal.await(500, TimeUnit.SECONDS);
         assertNotNull(response);
     }
 
     @Test
     public void testGetSync() {
+        RequestResponseHandler handler = new RequestResponseHandler();
+        handler.setRequestUpdateListener(this);
+        requester = new Requester("https://google.com", handler);
         requester.sync(Requester.RequestMethod.GET);
         assertNotNull(response);
     }
@@ -71,6 +68,17 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
         requester.async(Requester.RequestMethod.GET);
         signal.await();
         assertNotNull(errorMessage);
+    }
+
+    @Test
+    public void testPost() {
+        RequestResponseHandler handler = new RequestResponseHandler();
+        handler.setRequestUpdateListener(this);
+
+        Requester r = new Requester("https://posttestserver.com/post.php", handler);
+        r.setParameter("test", "done");
+
+        r.sync(Requester.RequestMethod.POST);
     }
 
     @Override
@@ -107,16 +115,11 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
     @Test
     public void testSetParameters() {
 
-
+        requester = new Requester("", new RequestResponseHandler());
         assertEquals(requester.getParameters(), "");
 
         requester.setParameter("id", String.valueOf(new Integer(10)));
         assertEquals(requester.getParameters(), "id=10");
-    }
-
-    @Test
-    public void testGetRequestResponseHandler() {
-        assertEquals(this, responseHandler.getRequestUpdateListener());
     }
 
     @Test
@@ -129,6 +132,10 @@ public class RequesterTest extends ApplicationTestCase<Application> implements R
 
     @Test
     public void testSetHeader() {
+
+        requester = new Requester("", new RequestResponseHandler());
+        assertEquals(requester.getParameters(), "");
+
         HashMap<String, String> headers = new HashMap<>();
 
         assertTrue(requester.getHeaders().isEmpty());

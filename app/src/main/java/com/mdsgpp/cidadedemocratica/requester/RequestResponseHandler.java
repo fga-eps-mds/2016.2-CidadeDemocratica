@@ -30,6 +30,10 @@ public class RequestResponseHandler {
         afterSuccess(response);
     }
 
+    public void onSuccess(int statusCode, Map<String, List<String>> headers, String response) {
+        afterSuccess(response);
+    }
+
     public void onFailure(int statusCode, Map<String, List<String>> headers, JSONArray errorResponse) {
         String errorMessage = "Failed with status code: " + statusCode;
         System.out.println(errorMessage);
