@@ -7,6 +7,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.mdsgpp.cidadedemocratica.External.SlidingTabLayout;
@@ -21,7 +24,7 @@ import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.view.ListProposalFragment;
 
 
-public class ProposalsList extends AppCompatActivity implements ListProposalFragment.OnFragmentInteractionListener, RequestUpdateListener {
+public class ProposalsList extends AppCompatActivity implements ListProposalFragment.OnFragmentInteractionListener, RequestUpdateListener, MenuItem.OnMenuItemClickListener {
 
     private int numberOfTabs = 3;
     private ProgressDialog progressDialog;
@@ -34,6 +37,7 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         setTitle(R.string.texto_Proposals);
 
         if (EntityContainer.getInstance(User.class).getAll().isEmpty()) {
+            pullProposalsData();
         } else {
             loadProposalsList();
         }
@@ -107,5 +111,24 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
 
     public void afterError(RequestResponseHandler handler, String message) {
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_graph, menu);
+        MenuItem graphItem = menu.findItem(R.id.action_graph);
+        graphItem.setOnMenuItemClickListener(this);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case R.id.action_graph:
+                //TODO: Chamar método para colocar o gráfico
+                break;
+        }
+        return false;
     }
 }

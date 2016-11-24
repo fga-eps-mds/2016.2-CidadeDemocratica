@@ -64,9 +64,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="28dp"
         android:background="#fff"
-        android:layout_marginTop="3dp">
+        android:layout_marginTop="3dp"
+        android:layout_height="50dp">
         <TextView
             android:layout_marginLeft="13dp"
             android:layout_centerVertical="true"
@@ -74,7 +74,8 @@
             android:layout_height="wrap_content"
             android:text="@string/texto_Proposals"
             android:textColor="#080808"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textSize="18dp" />
     </RelativeLayout>
     <RelativeLayout
 

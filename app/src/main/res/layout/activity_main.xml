@@ -13,13 +13,32 @@
             android:id="@+id/tagsButton"
             android:onClick="showTagsList"
             android:layout_marginBottom="-9dp"
-            />
-        <ImageView
+            android:background="@drawable/background_button" />
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/tag_icon"
+            android:layout_centerVertical="true"
             android:elevation="2dp"
-            android:layout_centerInParent="true"/>
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tag_icon" />
+
+            <TextView
+                android:text="Tags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView3"
+                android:textAlignment="center"
+                android:textSize="25dp"
+                android:layout_marginTop="10dp"
+                android:textColor="@android:color/black"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
 
     </RelativeLayout>
 
@@ -33,13 +52,35 @@
             android:id="@+id/proposalButton"
             android:onClick="showProposalList"
             android:layout_marginBottom="-10dp"
-            android:layout_marginTop="-6dp"/>
-        <ImageView
+            android:layout_marginTop="-6dp"
+            android:background="@drawable/background_button" />
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/proposal_icon"
+            android:layout_centerVertical="true"
             android:elevation="2dp"
-            android:layout_centerInParent="true"/>
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/proposal_icon"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:text="Propostas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView4"
+                android:textAlignment="center"
+                android:textSize="25dp"
+                android:layout_marginTop="10dp"
+                android:textColor="@android:color/black"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -52,13 +93,33 @@
             android:padding="0dp"
             android:onClick="showUsersList"
             android:layout_marginTop="-6dp"
-            />
-        <ImageView
+            android:background="@drawable/background_button" />
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/user_icon"
+            android:layout_centerVertical="true"
             android:elevation="2dp"
-            android:layout_centerInParent="true"/>
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/user_icon"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:text="Usuários"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView5"
+                android:textAlignment="center"
+                android:textSize="25dp"
+                android:layout_marginTop="10dp"
+                android:textColor="@android:color/black"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
 
     </RelativeLayout>
 
