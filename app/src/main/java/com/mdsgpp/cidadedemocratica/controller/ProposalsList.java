@@ -64,11 +64,11 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         setContentView(R.layout.activity_proposals_list);
         setTitle(R.string.texto_Proposals);
 
-        if (EntityContainer.getInstance(User.class).getAll().isEmpty()) {
+        if (EntityContainer.getInstance(Proposal.class).getAll().isEmpty()) {
             pullProposalsData();
         }
         else {
-            updateUI(null);
+            pullStateByLocation();
         }
     }
 
@@ -161,6 +161,9 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
     }
 
     private void pullStateByLocation() {
+        if (progressDialog == null) {
+            progressDialog = FeedbackManager.createProgressDialog(this, getString(R.string.message_load_proposals));
+        }
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
