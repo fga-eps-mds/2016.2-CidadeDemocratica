@@ -19,7 +19,7 @@ import java.util.ArrayList;
  */
 public class ProposalListAdapter extends BaseAdapter {
 
-    private static ArrayList<Proposal> data;
+    private ArrayList<Proposal> data;
     private Context context;
 
     public ProposalListAdapter(Context context, ArrayList<Proposal> data){

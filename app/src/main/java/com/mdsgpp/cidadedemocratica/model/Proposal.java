@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by andreanmasiro on 9/8/16.
  */
-public class Proposal extends Entity implements Comparable<Proposal> {
+public class Proposal extends Entity {
 
     private String title = "";
     private String content = "";
@@ -65,13 +65,17 @@ public class Proposal extends Entity implements Comparable<Proposal> {
     }
 
     @Override
-    public int compareTo(Proposal proposal) {
-        if (this.getRelevance() > proposal.getRelevance()) {
-            return -1;
-        } else if (this.getRelevance() < proposal.getRelevance()) {
-            return 1;
+    public int compareTo(Entity entity) {
+        if (entity.getClass() == Proposal.class) {
+            if (this.getRelevance() > ((Proposal) entity).getRelevance()) {
+                return -1;
+            } else if (this.getRelevance() < ((Proposal) entity).getRelevance()) {
+                return 1;
+            } else {
+                return 0;
+            }
         } else {
-            return 0;
+            return super.compareTo(entity);
         }
     }
 }

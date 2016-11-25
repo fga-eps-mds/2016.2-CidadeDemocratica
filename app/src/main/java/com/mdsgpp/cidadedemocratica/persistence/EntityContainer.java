@@ -4,6 +4,7 @@ import com.mdsgpp.cidadedemocratica.model.Entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -76,6 +77,7 @@ public class EntityContainer<T extends Entity> {
     }
 
     public void notifyDataUpdate() {
+        Collections.sort(data);
         for (DataUpdateListener l : updateListeners) {
             l.dataUpdated(entityType);
         }

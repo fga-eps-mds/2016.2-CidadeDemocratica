@@ -26,7 +26,7 @@ import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 
 import java.util.ArrayList;
 
-public class ProposalsNearbyListFragment extends Fragment implements DataUpdateListener {
+public class ProposalsNearbyListFragment extends Fragment {
 
     private ListProposalFragment.OnFragmentInteractionListener mListener;
     private ListView proposalListView;
@@ -51,8 +51,6 @@ public class ProposalsNearbyListFragment extends Fragment implements DataUpdateL
         fragment.stateName = stateName;
         fragment.proposals = proposals;
 
-        EntityContainer.getInstance(Proposal.class).setDataUpdateListener(fragment);
-
         return fragment;
     }
 
@@ -68,7 +66,7 @@ public class ProposalsNearbyListFragment extends Fragment implements DataUpdateL
         View view = inflater.inflate(R.layout.fragment_proposals_nearby_list, container, false);
 
         stateTextView = (TextView) view.findViewById(R.id.stateName);
-        stateTextView.setText(getString(R.string.proposals_from_state) + stateName);
+        stateTextView.setText(getString(R.string.proposals_from_state) + " " + stateName);
 
         proposalAdapter = new ProposalListAdapter(getContext().getApplicationContext(), this.proposals);
 
@@ -98,33 +96,7 @@ public class ProposalsNearbyListFragment extends Fragment implements DataUpdateL
             }
         });
 
-        proposalListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
 
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                final int itemCountTrigger = totalItemCount/2;
-                final int lastItem = firstVisibleItem + visibleItemCount;
-
-                Activity ac = getActivity();
-                if (ac != null) {
-                    if (getActivity().getClass() == ProposalsList.class) {
-                        if(lastItem == totalItemCount - (itemCountTrigger > 15 ? 15 : itemCountTrigger)) {
-                            if(preLast != lastItem) {
-                                preLast = lastItem;
-                                ((ProposalsList)getActivity()).pullProposalsData();
-                            }
-
-                        }
-                    } else {
-
-                    }
-                }
-            }
-        });
         return view;
     }
 
@@ -158,20 +130,5 @@ public class ProposalsNearbyListFragment extends Fragment implements DataUpdateL
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    @Override
-    public void dataUpdated(Class<? extends Entity> entityType) {
-        if (entityType == Proposal.class) {
-            Activity ac = getActivity();
-            if (ac != null) {
-                ac.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        proposalAdapter.updateData(proposalsContainer.getAll());
-                    }
-                });
-            }
-        }
     }
 }

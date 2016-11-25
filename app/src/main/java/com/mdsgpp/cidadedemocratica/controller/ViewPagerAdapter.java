@@ -1,8 +1,11 @@
 package com.mdsgpp.cidadedemocratica.controller;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
@@ -15,10 +18,20 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
+import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
+import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
+import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
+import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.view.ListProposalFragment;
 import com.mdsgpp.cidadedemocratica.view.ProposalsNearbyListFragment;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -32,21 +45,20 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     ProposalsNearbyListFragment tabAroundHere;
     ListProposalFragment tabLocation;
     Context context;
-    CountDownLatch signal = new CountDownLatch(1);
-
+    ProgressDialog progressDialog;
+    ArrayList<Proposal> proposalsByState;
+    String stateName;
     EntityContainer<Proposal> proposalsContainer = EntityContainer.getInstance(Proposal.class);
 
-    public ViewPagerAdapter(FragmentManager fragmentManager, CharSequence titles[], int numberOfTabs, Context context) {
+    public ViewPagerAdapter(FragmentManager fragmentManager, CharSequence titles[], int numberOfTabs, String stateName, ArrayList<Proposal> proposalsByState) {
         super(fragmentManager);
 
         this.titles = titles;
         this.numberOfTabs = numberOfTabs;
-
-        this.context = context;
+        this.proposalsByState = proposalsByState;
+        this.stateName = stateName;
     }
 
-
-    @SuppressWarnings("MissingPermission")
     @Override
     public Fragment getItem(int position) {
         ArrayList<Proposal> proposals = proposalsContainer.getAll();
@@ -55,36 +67,10 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
                 tabAll = ListProposalFragment.newInstance(proposals);
             }
             return tabAll;
+
         } else if (position == 1) {
             if (tabAroundHere == null) {
-                LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-                String provider = LocationManager.GPS_PROVIDER;
-
-                LocationListener listener = new LocationListener() {
-                    @Override
-                    public void onLocationChanged(Location location) {
-                        updateLocation(location);
-                    }
-
-                    @Override
-                    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-                    }
-
-                    @Override
-                    public void onProviderEnabled(String s) {
-
-                    }
-
-                    @Override
-                    public void onProviderDisabled(String s) {
-
-                    }
-                };
-
-                //TODO: pegar localização, pegar propostas da localidade, instanciar tabAroundHere com o estado,
-                // retornar
-
+                tabAroundHere = ProposalsNearbyListFragment.newInstance(this.stateName,this.proposalsByState);
             }
             return  tabAroundHere;
         }
