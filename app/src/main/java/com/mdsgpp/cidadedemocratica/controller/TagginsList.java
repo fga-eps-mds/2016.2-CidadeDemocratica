@@ -190,6 +190,10 @@ public class TagginsList extends AppCompatActivity implements RequestUpdateListe
         SharedPreferences preferences = this.getSharedPreferences("sharedPreferences", Context.MODE_PRIVATE);
         Set<String> favoriteIds = preferences.getStringSet(favoriteProposalsKey, null);
 
+        if (favoriteIds == null) {
+            return false;
+        }
+
         String stringId = String.valueOf(proposal.getId());
         return favoriteIds.contains(stringId);
     }
