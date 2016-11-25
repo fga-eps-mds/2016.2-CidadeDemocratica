@@ -1,6 +1,6 @@
 package com.mdsgpp.cidadedemocratica.view;
 
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
@@ -29,11 +29,17 @@ import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProposalsNearbyListFragment extends Fragment {
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class ProposalsNearStateListFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+
 
     private ListProposalFragment.OnFragmentInteractionListener mListener;
     private ListView proposalListView;
     private TextView stateTextView;
+    private Spinner spinnerState;
 
     private String stateName;
 
@@ -42,13 +48,13 @@ public class ProposalsNearbyListFragment extends Fragment {
     ProposalListAdapter proposalAdapter;
 
     int preLast = 0;
-    public ProposalsNearbyListFragment() {
+    public ProposalsNearStateListFragment() {
         // Required empty public constructor
     }
 
-    public static ProposalsNearbyListFragment newInstance(String stateName, ArrayList<Proposal> proposals) {
+    public static ProposalsNearStateListFragment newInstance(String stateName, ArrayList<Proposal> proposals) {
 
-        ProposalsNearbyListFragment fragment = new ProposalsNearbyListFragment();
+        ProposalsNearStateListFragment fragment = new ProposalsNearStateListFragment();
 
         fragment.stateName = stateName;
         fragment.proposals = proposals;
@@ -65,10 +71,22 @@ public class ProposalsNearbyListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_proposals_nearby_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_proposals_near_state_list, container, false);
 
         stateTextView = (TextView) view.findViewById(R.id.stateName);
-        stateTextView.setText(getString(R.string.proposals_from_state) + " " + stateName);
+        stateTextView.setText(getString(R.string.proposals_from_state) + " ");
+
+        spinnerState = (Spinner) view.findViewById(R.id.spinnerState);
+        List<String> list = new ArrayList<String>();
+        list.add("DF");
+        list.add("GO");
+        list.add("SP");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, list);
+
+        spinnerState.setAdapter(dataAdapter);
+        spinnerState.setOnItemSelectedListener(this);
 
         proposalAdapter = new ProposalListAdapter(getContext().getApplicationContext(), this.proposals);
 
@@ -133,4 +151,16 @@ public class ProposalsNearbyListFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+        stateName = adapterView.getItemAtPosition(position).toString();
+        stateTextView.setText(getString(R.string.proposals_from_state) + " ");
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
 }

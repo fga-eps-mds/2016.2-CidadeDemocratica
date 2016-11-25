@@ -23,6 +23,7 @@ import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.view.ListProposalFragment;
+import com.mdsgpp.cidadedemocratica.view.ProposalsNearStateListFragment;
 import com.mdsgpp.cidadedemocratica.view.ProposalsNearbyListFragment;
 
 import org.json.JSONException;
@@ -43,7 +44,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     int numberOfTabs;
     ListProposalFragment tabAll;
     ProposalsNearbyListFragment tabAroundHere;
-    ListProposalFragment tabLocation;
+    ProposalsNearStateListFragment tabLocation;
     Context context;
     ProgressDialog progressDialog;
     ArrayList<Proposal> proposalsByState;
@@ -77,7 +78,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         else {
             if(tabLocation == null){
-                tabLocation = ListProposalFragment.newInstance(proposals);
+                tabLocation = ProposalsNearStateListFragment.newInstance(this.stateName,this.proposalsByState);
             }
             return  tabLocation;
         }
