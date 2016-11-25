@@ -20,6 +20,9 @@ import cz.msebera.android.httpclient.Header;
 
 public class RequestResponseHandler {
 
+    public static String endPoint = "http://cidadedemocraticaapi.herokuapp.com/api/v0";
+    public static String favoriteProposalsEndpoint = endPoint + "/favorite_proposals";
+
     public RequestUpdateListener requestUpdateListener;
 
     public void onSuccess(int statusCode, Map<String, List<String>> headers, JSONObject response) {

@@ -53,7 +53,7 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
         } else {
             loadProposalsList(tag.getProposals());
         }
-        
+
     }
 
     private void loadProposalsList(ArrayList<Proposal> proposals) {
