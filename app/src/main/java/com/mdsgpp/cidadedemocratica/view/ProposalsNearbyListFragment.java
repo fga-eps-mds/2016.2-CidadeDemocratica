@@ -1,6 +1,5 @@
 package com.mdsgpp.cidadedemocratica.view;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.controller.ProposalListAdapter;
@@ -25,41 +27,31 @@ import com.mdsgpp.cidadedemocratica.persistence.DataUpdateListener;
 import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 
 import java.util.ArrayList;
+import java.util.List;
 
+public class ProposalsNearbyListFragment extends Fragment {
 
-public class ListProposalFragment extends Fragment implements DataUpdateListener {
-
-    private OnFragmentInteractionListener mListener;
+    private ListProposalFragment.OnFragmentInteractionListener mListener;
     private ListView proposalListView;
+    private TextView stateTextView;
+
+    private String stateName;
 
     public ArrayList<Proposal> proposals;
-    private View header;
 
     ProposalListAdapter proposalAdapter;
-    EntityContainer<Proposal> proposalsContainer = EntityContainer.getInstance(Proposal.class);
 
     int preLast = 0;
-    public ListProposalFragment() {
+    public ProposalsNearbyListFragment() {
         // Required empty public constructor
     }
 
-    public static ListProposalFragment newInstance(ArrayList<Proposal> proposals) {
+    public static ProposalsNearbyListFragment newInstance(String stateName, ArrayList<Proposal> proposals) {
 
+        ProposalsNearbyListFragment fragment = new ProposalsNearbyListFragment();
 
-        ListProposalFragment fragment = new ListProposalFragment();
-
+        fragment.stateName = stateName;
         fragment.proposals = proposals;
-
-        EntityContainer.getInstance(Proposal.class).setDataUpdateListener(fragment);
-
-        return fragment;
-    }
-
-    public static ListProposalFragment newInstance(ArrayList<Proposal> proposals, View header) {
-
-
-        ListProposalFragment fragment = ListProposalFragment.newInstance(proposals);
-        fragment.header = header;
 
         return fragment;
     }
@@ -73,7 +65,10 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_proposals_nearby_list, container, false);
+
+        stateTextView = (TextView) view.findViewById(R.id.stateName);
+        stateTextView.setText(getString(R.string.proposals_from_state) + " " + stateName);
 
         proposalAdapter = new ProposalListAdapter(getContext().getApplicationContext(), this.proposals);
 
@@ -89,10 +84,6 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
 
         proposalListView.setAdapter(proposalAdapter);
 
-        if (header!=null){
-            proposalListView.addHeaderView(header);
-        }
-
         proposalListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -107,41 +98,15 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
             }
         });
 
-        proposalListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
 
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                final int itemCountTrigger = totalItemCount/2;
-                final int lastItem = firstVisibleItem + visibleItemCount;
-
-                Activity ac = getActivity();
-                if (ac != null) {
-                    if (getActivity().getClass() == ProposalsList.class) {
-                        if(lastItem == totalItemCount - (itemCountTrigger > 15 ? 15 : itemCountTrigger)) {
-                            if(preLast != lastItem) {
-                                preLast = lastItem;
-                                ((ProposalsList)getActivity()).pullProposalsData();
-                            }
-
-                        }
-                    } else {
-
-                    }
-                }
-            }
-        });
         return view;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof ListProposalFragment.OnFragmentInteractionListener) {
+            mListener = (ListProposalFragment.OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -167,24 +132,5 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    @Override
-    public void dataUpdated(Class<? extends Entity> entityType) {
-        if (entityType == Proposal.class) {
-            Activity ac = getActivity();
-            if (ac != null) {
-                ac.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        proposalAdapter.updateData(proposalsContainer.getAll());
-                    }
-                });
-            }
-        }
-    }
-
-    public ListView getProposalListView() {
-        return proposalListView;
     }
 }

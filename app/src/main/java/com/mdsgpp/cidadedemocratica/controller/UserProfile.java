@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ public class UserProfile extends AppCompatActivity implements ListProposalFragme
     TextView descriptionTextView;
     TextView relevanceTextView;
     ListView userProposals;
+    private View header;
 
     private ProgressDialog progressDialog;
     private ProposalRequestResponseHandler proposalRequestResponseHandler;
@@ -41,21 +43,7 @@ public class UserProfile extends AppCompatActivity implements ListProposalFragme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        Bundle extras = getIntent().getExtras();
-
-        EntityContainer<User> usersContainer = EntityContainer.getInstance(User.class);
-
-        long userId = extras.getLong("userId");
-        user = usersContainer.getForId(userId);
-
-        userName = (TextView) findViewById(R.id.nameTextView);
-        userName.setText(user.getName());
-
-        descriptionTextView = (TextView)findViewById(R.id.descriptionTextView);
-        descriptionTextView.setText(user.getDescription());
-
-        relevanceTextView = (TextView)findViewById(R.id.relevanceTextView);
-        relevanceTextView.setText(String.valueOf(user.getRelevance()));
+        getInstanceViews();
 
         if (!loadedUserIds.contains(user.getId())) {
             pullUsersProposals();
@@ -64,6 +52,26 @@ public class UserProfile extends AppCompatActivity implements ListProposalFragme
         }
 
     }
+
+    private void getInstanceViews(){
+        header = getLayoutInflater().inflate(R.layout.fragment_header_user_profile, null, false);
+
+        EntityContainer<User> usersContainer = EntityContainer.getInstance(User.class);
+
+        long userId = getIntent().getExtras().getLong("userId");
+        user = usersContainer.getForId(userId);
+
+        userName = (TextView) header.findViewById(R.id.nameTextView);
+        userName.setText(user.getName());
+
+        descriptionTextView = (TextView)header.findViewById(R.id.descriptionTextView);
+        descriptionTextView.setText(user.getDescription());
+
+        relevanceTextView = (TextView)header.findViewById(R.id.relevanceTextView);
+        relevanceTextView.setText(String.valueOf(user.getRelevance()));
+    }
+
+
 
     @Override
     public void onFragmentInteraction(Uri uri) {
@@ -78,7 +86,7 @@ public class UserProfile extends AppCompatActivity implements ListProposalFragme
             Toast.makeText(getApplicationContext(),"Usuário não possui propostas", Toast.LENGTH_SHORT);
         }
 
-        ListProposalFragment proposalFragment = ListProposalFragment.newInstance(proposals);
+        ListProposalFragment proposalFragment = ListProposalFragment.newInstance(proposals, header);
         getSupportFragmentManager().beginTransaction().replace(R.id.container, proposalFragment).commit();
     }
 

@@ -1,14 +1,15 @@
 package com.mdsgpp.cidadedemocratica.controller;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,6 +23,8 @@ import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.requester.TagRequestResponseHandler;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TagginsList extends AppCompatActivity implements RequestUpdateListener, MenuItem.OnMenuItemClickListener {
 
@@ -30,38 +33,26 @@ public class TagginsList extends AppCompatActivity implements RequestUpdateListe
     TextView proposalDescripitionTextView;
     TextView relevanceTextView;
     private MenuItem favoriteItem;
-    private Boolean isFavorite;
+    private View header;
 
     Proposal proposal;
     private ProgressDialog progressDialog;
     TagListAdapter taggingsAdapter;
 
     TagRequestResponseHandler tagRequestResponseHandler;
+    RequestResponseHandler favoriteRequestResponseHandler;
 
     private static ArrayList<Long> loadedProposalIds = new ArrayList<>();
 
     private static String proposalIdParameterKey = "proposal_id";
+    private String favoriteProposalsKey = "favoriteProposalsKey";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_taggins_list);
 
-        EntityContainer<Proposal> proposalsContainer = EntityContainer.getInstance(Proposal.class);
-
-        Bundle extras = getIntent().getExtras();
-        long proposalId = extras.getLong("proposalId");
-
-        proposal = proposalsContainer.getForId(proposalId);
-
-        proposalTitleTextView = (TextView)findViewById(R.id.titleProposalID);
-        proposalTitleTextView.setText(proposal.getTitle());
-
-        proposalDescripitionTextView = (TextView)findViewById(R.id.proposalDescripitionID);
-        proposalDescripitionTextView.setText(proposal.getContent());
-
-        relevanceTextView = (TextView)findViewById(R.id.relevanceTextView);
-        relevanceTextView.setText(String.valueOf(proposal.getRelevance()));
+        getInstanceViews();
 
         tagginsListView = (ListView) findViewById(R.id.listaTagsDaPropostaID);
 
@@ -70,6 +61,47 @@ public class TagginsList extends AppCompatActivity implements RequestUpdateListe
         } else {
             setTagsListViewAdapter(proposal.getTags());
         }
+
+        favoriteRequestResponseHandler = new RequestResponseHandler();
+        favoriteRequestResponseHandler.setRequestUpdateListener(this);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (favoriteItem != null) {
+            updateFavoriteIcon();
+        }
+    }
+
+    private void updateFavoriteIcon() {
+        if (isFavorite()) {
+            favoriteItem.setIcon(R.drawable.favorite_icon_filled);
+        } else {
+            favoriteItem.setIcon(R.drawable.favorite_icon);
+
+        }
+    }
+
+    private void getInstanceViews(){
+        header = getLayoutInflater().inflate(R.layout.fragment_header_taggins, null, false);
+
+        EntityContainer<Proposal> proposalsContainer = EntityContainer.getInstance(Proposal.class);
+
+        Bundle extras = getIntent().getExtras();
+        long proposalId = extras.getLong("proposalId");
+
+        proposal = proposalsContainer.getForId(proposalId);
+
+        proposalTitleTextView = (TextView)header.findViewById(R.id.titleProposalID);
+        proposalTitleTextView.setText(proposal.getTitle());
+
+        proposalDescripitionTextView = (TextView)header.findViewById(R.id.proposalDescripitionID);
+        proposalDescripitionTextView.setText(proposal.getContent());
+
+        relevanceTextView = (TextView)header.findViewById(R.id.relevanceTextView);
+        relevanceTextView.setText(String.valueOf(proposal.getRelevance()));
 
     }
 
@@ -95,6 +127,7 @@ public class TagginsList extends AppCompatActivity implements RequestUpdateListe
             @Override
             public void run() {
                 tagginsListView.setAdapter(taggingsAdapter);
+                tagginsListView.addHeaderView(header);
             }
         });
     }
@@ -115,23 +148,29 @@ public class TagginsList extends AppCompatActivity implements RequestUpdateListe
     @Override
     public void afterSuccess(RequestResponseHandler handler, Object response) {
 
-        final TagginsList self = this;
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                progressDialog.dismiss();
-                FeedbackManager.createToast(self, getString(R.string.message_success_load_tags));
-            }
-        });
+        if (handler == tagRequestResponseHandler) {
+            final TagginsList self = this;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.dismiss();
+                    FeedbackManager.createToast(self, getString(R.string.message_success_load_tags));
+                }
+            });
 
-        ArrayList<Tag> tags = (ArrayList<Tag>) response;
-        proposal.setTags(tags);
+            ArrayList<Tag> tags = (ArrayList<Tag>) response;
+            proposal.setTags(tags);
 
-        setTagsListViewAdapter(tags);
+            setTagsListViewAdapter(tags);
+        } else if (handler == favoriteRequestResponseHandler) {
+
+            System.out.print("(un)favoriting proposal");
+        }
     }
 
     @Override
     public void afterError(RequestResponseHandler handler, String message) {
+
     }
 
     @Override
@@ -140,21 +179,34 @@ public class TagginsList extends AppCompatActivity implements RequestUpdateListe
         inflater.inflate(R.menu.menu_like, menu);
         favoriteItem = menu.findItem(R.id.action_favorite);
         favoriteItem.setOnMenuItemClickListener(this);
-        isFavorite = false;
+
+        updateFavoriteIcon();
+
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private boolean isFavorite() {
+
+        SharedPreferences preferences = this.getSharedPreferences("sharedPreferences", Context.MODE_PRIVATE);
+        Set<String> favoriteIds = preferences.getStringSet(favoriteProposalsKey, null);
+
+        if (favoriteIds == null) {
+            return false;
+        }
+
+        String stringId = String.valueOf(proposal.getId());
+        return favoriteIds.contains(stringId);
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.action_favorite:
-                //TODO: Chamar método para favoritar a proposta
-                if (isFavorite){
-                    isFavorite = false;
-                    favoriteItem.setIcon(R.drawable.favorite_icon);
-                }else {
-                    isFavorite = true;
+                favoriteProposal();
+                if (isFavorite()){
                     favoriteItem.setIcon(R.drawable.favorite_icon_filled);
+                }else {
+                    favoriteItem.setIcon(R.drawable.favorite_icon);
                 }
                 break;
             case R.id.action_share:
@@ -163,4 +215,32 @@ public class TagginsList extends AppCompatActivity implements RequestUpdateListe
         }
         return false;
     }
+
+    private void favoriteProposal() {
+        Requester requester = new Requester(RequestResponseHandler.favoriteProposalsEndpoint, favoriteRequestResponseHandler);
+        requester.setParameter("id", String.valueOf(proposal.getId()));
+        requester.async(Requester.RequestMethod.POST);
+        recordFavoriteProposal();
+    }
+
+    private void recordFavoriteProposal() {
+        SharedPreferences preferences = this.getSharedPreferences("sharedPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        Set<String> favoriteIds = preferences.getStringSet(favoriteProposalsKey, null);
+
+        if (favoriteIds == null) {
+            favoriteIds = new HashSet<>();
+        }
+        String stringId = String.valueOf(proposal.getId());
+        if (favoriteIds.contains(stringId)) {
+            favoriteIds.remove(stringId);
+        } else {
+            favoriteIds.add(stringId);
+        }
+
+        editor.putStringSet(favoriteProposalsKey, favoriteIds);
+        editor.apply();
+    }
+
 }

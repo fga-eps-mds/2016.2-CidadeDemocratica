@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by andreanmasiro on 9/8/16.
  */
-public class User extends Entity implements Comparable<User> {
+public class User extends Entity {
 
     private String name = "";
     private String description = "";
@@ -67,13 +67,17 @@ public class User extends Entity implements Comparable<User> {
     }
 
     @Override
-    public int compareTo(User user) {
-        if (this.getRelevance() < user.getRelevance()) {
-            return 1;
-        } else if (this.getRelevance() > user.getRelevance()) {
-            return -1;
+    public int compareTo(Entity entity) {
+        if (entity.getClass() == User.class) {
+            if (this.getRelevance() < ((User) entity).getRelevance()) {
+                return 1;
+            } else if (this.getRelevance() > ((User) entity).getRelevance()) {
+                return -1;
+            } else {
+                return 0;
+            }
         } else {
-            return 0;
+            return super.compareTo(entity);
         }
     }
 }

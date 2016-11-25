@@ -77,10 +77,10 @@ public class MainActivity extends AppCompatActivity implements RequestUpdateList
 
         final MainActivity self = this;
         if (String.class.isInstance(response)) {
-            SharedPreferences preferences = this.getSharedPreferences("sharedPreferences", Context.MODE_PRIVATE);
+            SharedPreferences preferences = this.getSharedPreferences(getString(R.string.name_preferences_data), Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
 
-            editor.putString("userToken", (String) response);
+            editor.putString(getString(R.string.key_user_token), (String) response);
             editor.apply();
 
             Requester.setUserToken((String) response);
