@@ -80,4 +80,13 @@ public class User extends Entity {
             return super.compareTo(entity);
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o.getClass() == User.class) {
+            return ((User) o).getId() == getId();
+        } else {
+            return super.equals(o);
+        }
+    }
 }
