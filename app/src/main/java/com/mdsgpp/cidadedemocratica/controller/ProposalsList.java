@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
@@ -168,14 +169,36 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        Location actualLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        Location actualLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+        if (actualLocation==null){
+            actualLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (actualLocation==null){
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        FeedbackManager.createToast(getApplicationContext(),"Habilite sua localização para ver as propostas");
+                        progressDialog.dismiss();
+                    }
+                });
+            }else {
+                getStateByLocation(actualLocation);
+            }
+        }else {
+            getStateByLocation(actualLocation);
+        }
+
+    }
+
+    private void getStateByLocation(Location location){
 
         Geocoder geocoder;
         List<Address> addresses;
         geocoder = new Geocoder(this, Locale.getDefault());
 
         try {
-            addresses = geocoder.getFromLocation(actualLocation.getLatitude(), actualLocation.getLongitude(), 10);
+            addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 10);
             for (Address address: addresses) {
                 String postalCode = address.getPostalCode();
                 if (postalCode != null) {
@@ -186,8 +209,8 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
                     break;
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
     }
 
@@ -223,5 +246,14 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
 
     private void setProposalsByState(ArrayList<Proposal> proposals){
         this.proposalsByState = proposals;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
     }
 }
