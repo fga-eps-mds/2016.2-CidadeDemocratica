@@ -75,9 +75,14 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
-        proposalAdapter = new ProposalListAdapter(getContext().getApplicationContext(), this.proposals);
+        ArrayList<Object> objects = new ArrayList<>();
+        objects.add("Favoritos");
+        objects.add("Todos");
+        objects.addAll(this.proposals);
 
-        proposalAdapter.updateData(proposals);
+        proposalAdapter = new ProposalListAdapter(getContext().getApplicationContext(), objects);
+
+        proposalAdapter.updateData(objects);
         proposalListView = (ListView) view.findViewById(R.id.proposalsListId);
 
         proposalAdapter.registerDataSetObserver(new DataSetObserver() {
@@ -177,7 +182,10 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
                 ac.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        proposalAdapter.updateData(proposalsContainer.getAll());
+                        ArrayList<Object> objects = new ArrayList<>();
+                        objects.add("Favoritos");
+                        objects.addAll(proposalsContainer.getAll());
+                        proposalAdapter.updateData(objects);
                     }
                 });
             }
