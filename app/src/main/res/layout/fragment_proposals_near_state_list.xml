@@ -31,7 +31,9 @@
             android:id="@+id/spinnerState"
             android:layout_gravity="right"
             android:gravity="right"
-            android:spinnerMode="dialog" />
+            android:spinnerMode="dialog"
+            android:entries="@array/states_array"
+            android:prompt="@string/title_spinner"/>
 
     </LinearLayout>
 

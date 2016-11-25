@@ -1,6 +1,7 @@
 package com.mdsgpp.cidadedemocratica.view;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
@@ -18,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mdsgpp.cidadedemocratica.R;
+import com.mdsgpp.cidadedemocratica.controller.FeedbackManager;
 import com.mdsgpp.cidadedemocratica.controller.ProposalListAdapter;
 import com.mdsgpp.cidadedemocratica.controller.ProposalsList;
 import com.mdsgpp.cidadedemocratica.controller.TagginsList;
@@ -25,6 +27,10 @@ import com.mdsgpp.cidadedemocratica.model.Entity;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.persistence.DataUpdateListener;
 import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
+import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
+import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
+import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
+import com.mdsgpp.cidadedemocratica.requester.Requester;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,21 +39,25 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProposalsNearStateListFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class ProposalsNearStateListFragment extends Fragment implements RequestUpdateListener {
 
 
     private ListProposalFragment.OnFragmentInteractionListener mListener;
     private ListView proposalListView;
     private TextView stateTextView;
     private Spinner spinnerState;
+    private ProgressDialog progressDialog;
 
     private String stateName;
+    private final String proposalStateKey = "federal_unity_code";
 
     public ArrayList<Proposal> proposals;
 
     ProposalListAdapter proposalAdapter;
 
     int preLast = 0;
+    private ProposalRequestResponseHandler proposalLocationRequestResponseHandler;
+
     public ProposalsNearStateListFragment() {
         // Required empty public constructor
     }
@@ -77,28 +87,29 @@ public class ProposalsNearStateListFragment extends Fragment implements AdapterV
         stateTextView.setText(getString(R.string.proposals_from_state) + " ");
 
         spinnerState = (Spinner) view.findViewById(R.id.spinnerState);
-        List<String> list = new ArrayList<String>();
-        list.add("DF");
-        list.add("GO");
-        list.add("SP");
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_dropdown_item, list);
+        spinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                String stateSelected = adapterView.getItemAtPosition(position).toString();
+                if (stateSelected!=stateName){
+                    stateName = stateSelected;
+                    stateTextView.setText(getString(R.string.proposals_from_state) + " ");
+                    requestProposalsFromState();
+                }
 
-        spinnerState.setAdapter(dataAdapter);
-        spinnerState.setOnItemSelectedListener(this);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         proposalAdapter = new ProposalListAdapter(getContext().getApplicationContext(), this.proposals);
 
         proposalAdapter.updateData(proposals);
         proposalListView = (ListView) view.findViewById(R.id.proposalsListId);
-
-        proposalAdapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged() {
-                proposalListView.smoothScrollToPosition(preLast);
-            }
-        });
 
         proposalListView.setAdapter(proposalAdapter);
 
@@ -152,14 +163,30 @@ public class ProposalsNearStateListFragment extends Fragment implements AdapterV
         void onFragmentInteraction(Uri uri);
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-        stateName = adapterView.getItemAtPosition(position).toString();
-        stateTextView.setText(getString(R.string.proposals_from_state) + " ");
+    private void requestProposalsFromState(){
+//        if (progressDialog==null) {
+            progressDialog = FeedbackManager.createProgressDialog(getActivity(), "Carregando propostas de " + stateName);
+//        }
+        proposalLocationRequestResponseHandler = new ProposalRequestResponseHandler();
+        proposalLocationRequestResponseHandler.setRequestUpdateListener(this);
+        Requester requester = new Requester(ProposalRequestResponseHandler.proposalsEndpointUrl, proposalLocationRequestResponseHandler);
+        requester.setParameter(proposalStateKey,stateName);
+        requester.async(Requester.RequestMethod.GET);
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
+    public void afterSuccess(RequestResponseHandler handler, final Object response) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                proposalAdapter.updateData((ArrayList<Proposal>)response);
+            }
+        });
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void afterError(RequestResponseHandler handler, String message) {
 
     }
 
