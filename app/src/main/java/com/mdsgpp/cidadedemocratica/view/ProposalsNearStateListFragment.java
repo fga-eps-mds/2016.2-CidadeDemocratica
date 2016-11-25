@@ -179,7 +179,8 @@ public class ProposalsNearStateListFragment extends Fragment implements RequestU
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                proposalAdapter.updateData((ArrayList<Proposal>)response);
+                proposals = (ArrayList<Proposal>)response;
+                proposalAdapter.updateData(proposals);
             }
         });
         progressDialog.dismiss();

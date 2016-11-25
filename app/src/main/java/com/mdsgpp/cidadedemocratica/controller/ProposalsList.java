@@ -67,9 +67,9 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         if (EntityContainer.getInstance(User.class).getAll().isEmpty()) {
             pullProposalsData();
         }
-//        } else {
-//            loadProposalsList();
-//        }
+        else {
+            updateUI(null);
+        }
     }
 
 
