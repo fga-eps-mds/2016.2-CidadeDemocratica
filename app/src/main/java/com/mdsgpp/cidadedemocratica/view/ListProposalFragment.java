@@ -23,8 +23,13 @@ import com.mdsgpp.cidadedemocratica.model.Entity;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.persistence.DataUpdateListener;
 import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
+import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
+import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
+import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
+import com.mdsgpp.cidadedemocratica.requester.Requester;
 
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 
 public class ListProposalFragment extends Fragment implements DataUpdateListener {
@@ -33,7 +38,9 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
     private ListView proposalListView;
 
     public ArrayList<Proposal> proposals;
+    public ArrayList<Proposal> favoriteProposals;
     private View header;
+    private CountDownLatch countDownLatch = new CountDownLatch(1);
 
     ProposalListAdapter proposalAdapter;
     EntityContainer<Proposal> proposalsContainer = EntityContainer.getInstance(Proposal.class);
@@ -73,10 +80,15 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         View view = inflater.inflate(R.layout.fragment_list, container, false);
+
+        getProposalsFavorite();
 
         ArrayList<Object> objects = new ArrayList<>();
         objects.add("Favoritos");
+        objects.add(this.favoriteProposals);
         objects.add("Todos");
         objects.addAll(this.proposals);
 
@@ -159,6 +171,8 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
         mListener = null;
     }
 
+
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -184,6 +198,8 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
                     public void run() {
                         ArrayList<Object> objects = new ArrayList<>();
                         objects.add("Favoritos");
+                        objects.add(favoriteProposals);
+                        objects.add("Todos");
                         objects.addAll(proposalsContainer.getAll());
                         proposalAdapter.updateData(objects);
                     }
@@ -194,5 +210,25 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
 
     public ListView getProposalListView() {
         return proposalListView;
+    }
+
+
+
+    private void getProposalsFavorite(){
+        Requester requester = new Requester(RequestResponseHandler.favoriteProposalsEndpoint, new ProposalRequestResponseHandler(){
+            @Override
+            protected void afterSuccess(Object response) {
+                favoriteProposals = (ArrayList<Proposal>) response;
+                countDownLatch.countDown();
+                super.afterSuccess(response);
+            }
+
+            @Override
+            protected void afterError(String message) {
+                super.afterError(message);
+            }
+        });
+        countDownLatch.countDown();
+        requester.async(Requester.RequestMethod.GET);
     }
 }
