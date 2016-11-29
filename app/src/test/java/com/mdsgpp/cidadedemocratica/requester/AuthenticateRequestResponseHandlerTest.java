@@ -48,6 +48,33 @@ public class AuthenticateRequestResponseHandlerTest extends AndroidTestCase impl
         assertEquals(String.valueOf(statusCode), errorMessage);
     }
 
+    @Test (expected = JSONException.class)
+    public void testOnSuccessException() {
+        JSONObject tokenJson = null;
+        try {
+            tokenJson = new JSONObject("{error: null" + "}");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Map<String, List<String>> headers = new HashMap<>();
+        headers.put("Method", new ArrayList<String>(Arrays.asList("GET")));
+
+        handler.onSuccess(200, headers, tokenJson);
+    }
+
+    @Test
+    public void testOnSuccessPost() throws JSONException {
+
+        String response = "response";
+        Map<String, List<String>> headers = new HashMap<>();
+        headers.put("Method", new ArrayList<>(Arrays.asList("POST")));
+
+
+        handler.onSuccess(200, headers, response);
+        assertEquals(this.response, response);
+    }
+
     @Override
     public void afterSuccess(RequestResponseHandler handler, Object response) {
         this.response = (String) response;
