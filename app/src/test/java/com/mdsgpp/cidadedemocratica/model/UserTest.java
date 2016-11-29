@@ -4,6 +4,8 @@ import android.test.AndroidTestCase;
 import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 
 import java.util.ArrayList;
+import java.util.Objects;
+
 import org.junit.Test;
 
 /**
@@ -87,6 +89,18 @@ public class UserTest extends AndroidTestCase {
         assertEquals(-1,userLarger.compareTo(user));
         assertEquals(0,user.compareTo(userIgual));
     }
+
+    @Test
+    public void testIsEqual() {
+        User u1 = newUser();
+        User u2 = newUser();
+
+        assertEquals(u1.equals(u2), u1.getId() == u2.getId());
+
+        Object o = new Object();
+        assertFalse(u1.equals(o));
+    }
+
     @Override
     protected void tearDown() throws Exception {
         EntityContainer.getInstance(Proposal.class).clear();

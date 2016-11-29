@@ -78,4 +78,13 @@ public class Proposal extends Entity {
             return super.compareTo(entity);
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o.getClass() == Proposal.class) {
+            return ((Proposal) o).getId() == getId();
+        } else {
+            return super.equals(o);
+        }
+    }
 }

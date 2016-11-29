@@ -59,6 +59,22 @@ public class TagTest extends AndroidTestCase {
         assertEquals(0,tag.compareTo(tagIgual));
     }
 
+    @Test
+    public void testIsEqual() {
+        Tag t1 = newTagRand();
+        Tag t2 = newTagRand();
+
+        assertEquals(t1.equals(t2), t1.getId() == t2.getId());
+
+        Object o = new Object();
+
+        assertFalse(t1.equals(o));
+    }
+
+    long id = 0;
+    private Tag newTagRand() {
+        return new Tag(id++, "", 0, 0);
+    }
     private Tag newTag() {
         return new Tag(tagId, tagName, tagNumberOfAppearances, tagRelevance);
     }

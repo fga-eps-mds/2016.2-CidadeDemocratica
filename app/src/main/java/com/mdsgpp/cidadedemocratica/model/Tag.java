@@ -58,4 +58,14 @@ public class Tag extends Entity {
             return super.compareTo(entity);
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o.getClass()==Tag.class){
+
+            return ((Tag) o).getId() == getId();
+        } else {
+            return super.equals(o);
+        }
+    }
 }

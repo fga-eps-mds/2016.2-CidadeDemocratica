@@ -38,7 +38,7 @@ public class TagsList extends AppCompatActivity implements RequestUpdateListener
         setContentView(R.layout.activity_tags_list);
         setTitle(R.string.tags);
 
-        if (tagsContainer.getAll().isEmpty()) {
+        if (tagsContainer.getAll().size() < 30) {
             pullTagData();
         } else {
             loadTagsList();

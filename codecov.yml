@@ -26,3 +26,5 @@ status:
 ignore:
     - app/src/main/java/com/mdsgpp/cidadedemocratica/External/*
     - app/src/main/java/com/mdsgpp/cidadedemocratica/controller/*
+    - app/src/main/java/com/mdsgpp/cidadedemocratica/view/*
+    - app/src/main/java/com/mdsgpp/cidadedemocratica/push/*

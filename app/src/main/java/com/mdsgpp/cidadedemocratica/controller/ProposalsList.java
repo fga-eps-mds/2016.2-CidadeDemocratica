@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
@@ -51,9 +52,11 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
     CountDownLatch signal = new CountDownLatch(1);
     private ProposalRequestResponseHandler proposalRequestResponseHandler;
     private ProposalRequestResponseHandler proposalLocationRequestResponseHandler;
+    private ProposalRequestResponseHandler proposalFavoriteRequestResponseHandler;
     private RequestResponseHandler requestResponseHandler;
     private String stateUser;
     private ArrayList<Proposal> proposalsByState;
+    private ArrayList<Proposal> proposalsFavorite;
 
     private final String urlApiGetState = "http://api.postmon.com.br/v1/cep/";
     private final String proposalStateKey = "federal_unity_code";
@@ -96,7 +99,7 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
                 getString(R.string.titulo_tab_localidade)};
 
         if (adapter == null) {
-            adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles, numberOfTabs, stateUser, proposalsByState);
+            adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles, numberOfTabs, stateUser, proposalsByState, proposalsFavorite);
         }
 
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
@@ -122,12 +125,15 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
             if (ProposalRequestResponseHandler.nextPageToRequest==1){
                 pullStateByLocation();
             }else {
-                updateUI(null);
+                updateUIFavorite(null);
             }
         }else if (handler==requestResponseHandler){
             pullProposalByLocation(response);
         }else if (handler==proposalLocationRequestResponseHandler){
-            updateUI((ArrayList<Proposal>)response);
+            updateUIState((ArrayList<Proposal>)response);
+            pullProposalsFavorite();
+        }else if (handler==proposalFavoriteRequestResponseHandler){
+            updateUIFavorite((ArrayList<Proposal>)response);
         }
 
 
@@ -168,26 +174,56 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        Location actualLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        Location actualLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+        if (actualLocation==null){
+            actualLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (actualLocation==null){
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        FeedbackManager.createToast(getApplicationContext(),"Habilite sua localização para ver as propostas");
+                        progressDialog.dismiss();
+                    }
+                });
+            }else {
+                getStateByLocation(actualLocation);
+            }
+        }else {
+            getStateByLocation(actualLocation);
+        }
+
+    }
+
+    private void getStateByLocation(Location location){
 
         Geocoder geocoder;
         List<Address> addresses;
         geocoder = new Geocoder(this, Locale.getDefault());
 
         try {
-            addresses = geocoder.getFromLocation(actualLocation.getLatitude(), actualLocation.getLongitude(), 10);
+            addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 10);
+            String postalCode = null;
             for (Address address: addresses) {
-                String postalCode = address.getPostalCode();
-                if (postalCode != null) {
-                    requestResponseHandler = new RequestResponseHandler();
-                    requestResponseHandler.setRequestUpdateListener(this);
-                    Requester requester = new Requester(urlApiGetState+postalCode, requestResponseHandler);
-                    requester.async(Requester.RequestMethod.GET);
+                String pCode = address.getPostalCode();
+                if (pCode != null && pCode.length() >= 8) {
+                    postalCode = pCode;
                     break;
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            if (postalCode == null) {
+                postalCode = "72241808";
+            }
+
+            requestResponseHandler = new RequestResponseHandler();
+            requestResponseHandler.setRequestUpdateListener(this);
+            Requester requester = new Requester(urlApiGetState+postalCode, requestResponseHandler);
+            requester.async(Requester.RequestMethod.GET);
+
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
     }
 
@@ -205,14 +241,32 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         }
     }
 
-    private void updateUI(final ArrayList<Proposal> proposals){
+    private void pullProposalsFavorite(){
+        proposalFavoriteRequestResponseHandler = new ProposalRequestResponseHandler();
+        proposalFavoriteRequestResponseHandler.setRequestUpdateListener(this);
+        Requester requester = new Requester(RequestResponseHandler.favoriteProposalsEndpoint, proposalFavoriteRequestResponseHandler);
+        requester.async(Requester.RequestMethod.GET);
+    }
+
+    private void updateUIState(final ArrayList<Proposal> proposals){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (proposals!=null){
+                    setProposalsByState(proposals);
+                }
+            }
+        });
+    }
+
+    private void updateUIFavorite(final ArrayList<Proposal> proposals){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 progressDialog.dismiss();
                 createToast(getString(R.string.message_success_load_proposals));
                 if (proposals!=null){
-                    setProposalsByState(proposals);
+                    setProposalsFavorite(proposals);
                 }
                 loadProposalsList();
             }
@@ -221,7 +275,22 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         ProposalRequestResponseHandler.nextPageToRequest++;
     }
 
+
+
     private void setProposalsByState(ArrayList<Proposal> proposals){
         this.proposalsByState = proposals;
+    }
+
+    public void setProposalsFavorite(ArrayList<Proposal> proposalsFavorite) {
+        this.proposalsFavorite = proposalsFavorite;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
     }
 }

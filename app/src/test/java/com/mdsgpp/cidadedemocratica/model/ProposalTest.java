@@ -82,6 +82,23 @@ public class ProposalTest extends AndroidTestCase {
         assertEquals(slug, proposal.getSlug());
     }
 
+    @Test
+    public void testIsEqual() {
+        Proposal p1 = newProposalRand();
+        Proposal p2 = newProposalRand();
+
+        assertEquals(p1.equals(p2), p1.getId() == p2.getId());
+
+        Object o = new Object();
+
+        assertFalse(p1.equals(o));
+    }
+
+    long id = 0;
+    private Proposal newProposalRand() {
+        return new Proposal(id++, proposalTitle, proposalContent, proposalRelevance, proposalIdOfUser);
+    }
+
     private Proposal newProposal() {
         return new Proposal(proposalId, proposalTitle, proposalContent, proposalRelevance, proposalIdOfUser);
     }
