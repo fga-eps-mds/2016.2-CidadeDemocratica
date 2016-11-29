@@ -68,8 +68,9 @@ public class EntityContainerTest extends AndroidTestCase {
         assertFalse(container.getAll().containsAll(users1));
     }
 
+    long id = 0;
     private User newUser() {
-        return new User("", 0, 0, 0);
+        return new User("", 0, id++, 0);
     }
 
     private User newUser(long id) {

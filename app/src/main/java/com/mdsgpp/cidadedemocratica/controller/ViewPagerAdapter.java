@@ -48,16 +48,19 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     Context context;
     ProgressDialog progressDialog;
     ArrayList<Proposal> proposalsByState;
+    ArrayList<Proposal> proposalsFavorite;
     String stateName;
     EntityContainer<Proposal> proposalsContainer = EntityContainer.getInstance(Proposal.class);
 
-    public ViewPagerAdapter(FragmentManager fragmentManager, CharSequence titles[], int numberOfTabs, String stateName, ArrayList<Proposal> proposalsByState) {
+    public ViewPagerAdapter(FragmentManager fragmentManager, CharSequence titles[], int numberOfTabs, String stateName,
+                            ArrayList<Proposal> proposalsByState, ArrayList<Proposal> proposalsFavorite) {
         super(fragmentManager);
 
         this.titles = titles;
         this.numberOfTabs = numberOfTabs;
         this.proposalsByState = proposalsByState;
         this.stateName = stateName;
+        this.proposalsFavorite = proposalsFavorite;
     }
 
     @Override

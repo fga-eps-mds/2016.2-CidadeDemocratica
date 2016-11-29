@@ -60,9 +60,8 @@ public class ProposalRequestResponseHandler extends RequestResponseHandler imple
             }
 
             Collections.sort(proposals, this);
-            proposals.removeAll(proposalsContainer.getAll());
-            proposalsContainer.addAll(proposals);
             afterSuccess(proposals);
+            proposalsContainer.addAll(proposals);
         }
 
     }

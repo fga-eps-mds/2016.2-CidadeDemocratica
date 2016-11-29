@@ -70,12 +70,9 @@ public class ProposalsNearbyListFragment extends Fragment {
         stateTextView = (TextView) view.findViewById(R.id.stateName);
         stateTextView.setText(getString(R.string.proposals_from_state) + " " + stateName);
 
-        ArrayList<Object> objects = new ArrayList<>();
-        objects.addAll(this.proposals);
+        proposalAdapter = new ProposalListAdapter(getContext().getApplicationContext(), this.proposals);
 
-        proposalAdapter = new ProposalListAdapter(getContext().getApplicationContext(), objects);
-
-        proposalAdapter.updateData(objects);
+        proposalAdapter.updateData(proposals);
         proposalListView = (ListView) view.findViewById(R.id.proposalsListId);
 
         proposalAdapter.registerDataSetObserver(new DataSetObserver() {

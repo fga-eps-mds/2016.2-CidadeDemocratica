@@ -106,12 +106,9 @@ public class ProposalsNearStateListFragment extends Fragment implements RequestU
             }
         });
 
-        ArrayList<Object> objects = new ArrayList<>();
-        objects.addAll(this.proposals);
+        proposalAdapter = new ProposalListAdapter(getContext().getApplicationContext(), this.proposals);
 
-        proposalAdapter = new ProposalListAdapter(getContext().getApplicationContext(), objects);
-
-        proposalAdapter.updateData(objects);
+        proposalAdapter.updateData(proposals);
         proposalListView = (ListView) view.findViewById(R.id.proposalsListId);
 
         proposalListView.setAdapter(proposalAdapter);
@@ -183,9 +180,7 @@ public class ProposalsNearStateListFragment extends Fragment implements RequestU
             @Override
             public void run() {
                 proposals = (ArrayList<Proposal>)response;
-                ArrayList<Object> objects = new ArrayList<>();
-                objects.addAll(proposals);
-                proposalAdapter.updateData(objects);
+                proposalAdapter.updateData(proposals);
             }
         });
         progressDialog.dismiss();

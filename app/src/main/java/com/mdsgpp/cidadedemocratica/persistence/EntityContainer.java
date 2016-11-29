@@ -56,6 +56,7 @@ public class EntityContainer<T extends Entity> {
     }
 
     public void addAll(Collection<T> t) {
+        t.removeAll(data);
         data.addAll(t);
         notifyDataUpdate();
     }

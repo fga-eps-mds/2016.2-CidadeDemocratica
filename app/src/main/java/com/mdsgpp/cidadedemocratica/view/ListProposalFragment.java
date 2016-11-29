@@ -17,6 +17,7 @@ import android.widget.ListView;
 
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.controller.ProposalListAdapter;
+import com.mdsgpp.cidadedemocratica.controller.ProposalListSectionAdapter;
 import com.mdsgpp.cidadedemocratica.controller.ProposalsList;
 import com.mdsgpp.cidadedemocratica.controller.TagginsList;
 import com.mdsgpp.cidadedemocratica.model.Entity;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
 
-public class ListProposalFragment extends Fragment implements DataUpdateListener {
+public class ListProposalFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private ListView proposalListView;
@@ -42,7 +43,7 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
     private View header;
     private CountDownLatch countDownLatch = new CountDownLatch(1);
 
-    ProposalListAdapter proposalAdapter;
+    ProposalListAdapter proposalListAdapter;
     EntityContainer<Proposal> proposalsContainer = EntityContainer.getInstance(Proposal.class);
 
     int preLast = 0;
@@ -57,8 +58,6 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
 
         fragment.proposals = proposals;
 
-        EntityContainer.getInstance(Proposal.class).setDataUpdateListener(fragment);
-
         return fragment;
     }
 
@@ -67,6 +66,17 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
 
         ListProposalFragment fragment = ListProposalFragment.newInstance(proposals);
         fragment.header = header;
+
+        return fragment;
+    }
+
+    public static ListProposalFragment newInstance(ArrayList<Proposal> proposals, ArrayList<Proposal> proposalsFavorite) {
+
+
+        ListProposalFragment fragment = new ListProposalFragment();
+
+        fragment.proposals = proposals;
+        fragment.favoriteProposals = proposalsFavorite;
 
         return fragment;
     }
@@ -84,27 +94,25 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
-        getProposalsFavorite();
+        if (favoriteProposals!=null){
 
-        ArrayList<Object> objects = new ArrayList<>();
-        objects.add("Favoritos");
-        objects.add(this.favoriteProposals);
-        objects.add("Todos");
-        objects.addAll(this.proposals);
+        }else {
+        }
 
-        proposalAdapter = new ProposalListAdapter(getContext().getApplicationContext(), objects);
-
-        proposalAdapter.updateData(objects);
         proposalListView = (ListView) view.findViewById(R.id.proposalsListId);
 
-        proposalAdapter.registerDataSetObserver(new DataSetObserver() {
+        proposalListAdapter = new ProposalListAdapter(getContext().getApplicationContext(), this.proposals);
+        proposalListAdapter.updateData(proposals);
+
+
+        proposalListAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
                 proposalListView.smoothScrollToPosition(preLast);
             }
         });
 
-        proposalListView.setAdapter(proposalAdapter);
+        proposalListView.setAdapter(proposalListAdapter);
 
         if (header!=null){
             proposalListView.addHeaderView(header);
@@ -113,7 +121,7 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
         proposalListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Proposal proposalClicked = (Proposal)proposalAdapter.getItem(i);
+                Proposal proposalClicked = (Proposal)proposalListAdapter.getItem(i);
                 Long id = proposalClicked.getId();
                 String proposalName = proposalClicked.getTitle();
 
@@ -172,7 +180,6 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
     }
 
 
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -188,47 +195,7 @@ public class ListProposalFragment extends Fragment implements DataUpdateListener
         void onFragmentInteraction(Uri uri);
     }
 
-    @Override
-    public void dataUpdated(Class<? extends Entity> entityType) {
-        if (entityType == Proposal.class) {
-            Activity ac = getActivity();
-            if (ac != null) {
-                ac.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ArrayList<Object> objects = new ArrayList<>();
-                        objects.add("Favoritos");
-                        objects.add(favoriteProposals);
-                        objects.add("Todos");
-                        objects.addAll(proposalsContainer.getAll());
-                        proposalAdapter.updateData(objects);
-                    }
-                });
-            }
-        }
-    }
-
     public ListView getProposalListView() {
         return proposalListView;
-    }
-
-
-
-    private void getProposalsFavorite(){
-        Requester requester = new Requester(RequestResponseHandler.favoriteProposalsEndpoint, new ProposalRequestResponseHandler(){
-            @Override
-            protected void afterSuccess(Object response) {
-                favoriteProposals = (ArrayList<Proposal>) response;
-                countDownLatch.countDown();
-                super.afterSuccess(response);
-            }
-
-            @Override
-            protected void afterError(String message) {
-                super.afterError(message);
-            }
-        });
-        countDownLatch.countDown();
-        requester.async(Requester.RequestMethod.GET);
     }
 }

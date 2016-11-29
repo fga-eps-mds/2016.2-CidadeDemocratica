@@ -62,10 +62,8 @@ public class Tag extends Entity {
     @Override
     public boolean equals(Object o) {
         if (o.getClass()==Tag.class){
-            boolean equals = name.equals(((Tag)o).name);
-            equals &= numberOfAppearances == ((Tag)o).numberOfAppearances;
-            equals &= relevance == ((Tag)o).relevance;
-            return equals;
+
+            return ((Tag) o).getId() == getId();
         } else {
             return super.equals(o);
         }
