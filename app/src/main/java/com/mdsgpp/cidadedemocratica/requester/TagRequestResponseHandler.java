@@ -27,6 +27,7 @@ public class TagRequestResponseHandler extends RequestResponseHandler implements
     public static int nextPageToRequest = 1;
 
     public static final String tagsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/tags";
+    public static final String tagUserCountByStateEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/tag_use_count_by_state";
 
     @Override
     public void onSuccess(int statusCode, Map<String, List<String>> headers, JSONArray response) {

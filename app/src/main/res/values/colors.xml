@@ -4,4 +4,12 @@
     <color name="colorPrimaryDark">#00ADD8</color>
     <color name="colorAccent">#ffffff</color>
     <color name="gray_background">#eeeeee</color>
+
+    <!--Colours Chart-->
+    <color name="colorChart1">#e6001b</color>
+    <color name="colorChart2">#189a53</color>
+    <color name="colorChart3">#f83f84</color>
+    <color name="colorChart4">#533aa6</color>
+    <color name="colorChart5">#f8ca69</color>
+
 </resources>
