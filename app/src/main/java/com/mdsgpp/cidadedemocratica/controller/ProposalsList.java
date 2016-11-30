@@ -1,7 +1,6 @@
 package com.mdsgpp.cidadedemocratica.controller;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -52,10 +51,11 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
     private RequestResponseHandler locationRequestResponseHandler;
     private String stateUser;
     private ArrayList<Proposal> proposalsByState;
-    private ArrayList<Proposal> proposalsFavorite;
+    private ArrayList<Proposal> favoriteProposals = new ArrayList<>();
 
     private final String urlApiGetState = "http://api.postmon.com.br/v1/cep/";
     private final String proposalStateKey = "federal_unity_code";
+    private ViewPager pager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,10 +95,10 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
                 getString(R.string.titulo_tab_localidade)};
 
         if (adapter == null) {
-            adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles, numberOfTabs, stateUser, proposalsByState, proposalsFavorite);
+            adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles, numberOfTabs, stateUser, proposalsByState, favoriteProposals);
         }
 
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
 
         SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.tabs);
@@ -121,15 +121,16 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
             if (ProposalRequestResponseHandler.nextPageToRequest==1){
                 pullStateByLocation();
             }else {
-                updateUIFavorite(null);
+                updateUIFavorite();
             }
         }else if (handler== locationRequestResponseHandler){
             pullProposalByLocation(response);
         }else if (handler==proposalLocationRequestResponseHandler){
             updateUIState((ArrayList<Proposal>)response);
-            pullProposalsFavorite();
+            pullFavoriteProposals();
         }else if (handler==proposalFavoriteRequestResponseHandler){
-            updateUIFavorite((ArrayList<Proposal>)response);
+            setFavoriteProposals((ArrayList<Proposal>) response);
+            updateUIFavorite();
         }
 
 
@@ -244,7 +245,7 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         }
     }
 
-    private void pullProposalsFavorite(){
+    private void pullFavoriteProposals() {
         proposalFavoriteRequestResponseHandler = new ProposalRequestResponseHandler();
         proposalFavoriteRequestResponseHandler.setRequestUpdateListener(this);
         Requester requester = new Requester(RequestResponseHandler.favoriteProposalsEndpoint, proposalFavoriteRequestResponseHandler);
@@ -262,14 +263,14 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         });
     }
 
-    private void updateUIFavorite(final ArrayList<Proposal> proposals){
+    private void updateUIFavorite() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 progressDialog.dismiss();
                 createToast(getString(R.string.message_success_load_proposals));
-                if (proposals!=null){
-                    setProposalsFavorite(proposals);
+                if (favoriteProposals != null){
+
                 }
                 loadProposalsList();
             }
@@ -284,8 +285,16 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         this.proposalsByState = proposals;
     }
 
-    public void setProposalsFavorite(ArrayList<Proposal> proposalsFavorite) {
-        this.proposalsFavorite = proposalsFavorite;
+    public void setFavoriteProposals(ArrayList<Proposal> favoriteProposals) {
+        this.favoriteProposals.clear();
+        this.favoriteProposals.addAll(favoriteProposals);
+        if (pager != null) {
+            ViewPagerAdapter pagerAdapter = ((ViewPagerAdapter) pager.getAdapter());
+            if (pagerAdapter != null) {
+                pagerAdapter.setFavoriteProposals(favoriteProposals);
+            }
+        }
+
     }
 
     @Override

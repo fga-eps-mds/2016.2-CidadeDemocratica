@@ -28,19 +28,19 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     Context context;
     ProgressDialog progressDialog;
     ArrayList<Proposal> proposalsByState;
-    ArrayList<Proposal> proposalsFavorite;
+    ArrayList<Proposal> favoriteProposals;
     String stateName;
     EntityContainer<Proposal> proposalsContainer = EntityContainer.getInstance(Proposal.class);
 
     public ViewPagerAdapter(FragmentManager fragmentManager, CharSequence titles[], int numberOfTabs, String stateName,
-                            ArrayList<Proposal> proposalsByState, ArrayList<Proposal> proposalsFavorite) {
+                            ArrayList<Proposal> proposalsByState, ArrayList<Proposal> favoriteProposals) {
         super(fragmentManager);
 
         this.titles = titles;
         this.numberOfTabs = numberOfTabs;
         this.proposalsByState = proposalsByState;
         this.stateName = stateName;
-        this.proposalsFavorite = proposalsFavorite;
+        this.favoriteProposals = favoriteProposals;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         ArrayList<Proposal> proposals = proposalsContainer.getAll();
         if (position == 0) {
             if (tabAll == null) {
-                tabAll = ListProposalFragment.newInstance(proposals);
+                tabAll = ListProposalFragment.newInstance(proposals, favoriteProposals);
             }
             return tabAll;
 
@@ -65,6 +65,11 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             }
             return  tabLocation;
         }
+    }
+
+    public void setFavoriteProposals(ArrayList<Proposal> favoriteProposals) {
+        this.favoriteProposals = favoriteProposals;
+
     }
 
     @Override

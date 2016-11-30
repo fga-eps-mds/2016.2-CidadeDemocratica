@@ -17,11 +17,13 @@ import android.widget.ListView;
 
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.controller.ProposalListAdapter;
+import com.mdsgpp.cidadedemocratica.controller.ProposalListSectionAdapter;
 import com.mdsgpp.cidadedemocratica.controller.ProposalsList;
 import com.mdsgpp.cidadedemocratica.controller.TagginsList;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
@@ -36,7 +38,7 @@ public class ListProposalFragment extends Fragment {
     private View header;
     private CountDownLatch countDownLatch = new CountDownLatch(1);
 
-    ProposalListAdapter proposalListAdapter;
+    ProposalListSectionAdapter proposalListAdapter;
     EntityContainer<Proposal> proposalsContainer = EntityContainer.getInstance(Proposal.class);
 
     int preLast = 0;
@@ -94,8 +96,12 @@ public class ListProposalFragment extends Fragment {
 
         proposalListView = (ListView) view.findViewById(R.id.proposalsListId);
 
-        proposalListAdapter = new ProposalListAdapter(getContext().getApplicationContext(), this.proposals);
-        proposalListAdapter.updateData(proposals);
+        ArrayList<Object> adapterData = getAdapterData();
+
+
+
+        proposalListAdapter = new ProposalListSectionAdapter(getContext().getApplicationContext(), adapterData);
+//        proposalListAdapter.updateData(proposals);
 
 
         proposalListAdapter.registerDataSetObserver(new DataSetObserver() {
@@ -158,6 +164,16 @@ public class ListProposalFragment extends Fragment {
         return view;
     }
 
+    private ArrayList<Object> getAdapterData() {
+        ArrayList<Object> adapterData = new ArrayList<>();
+        adapterData.add("Favoritas");
+        adapterData.addAll(favoriteProposals);
+        adapterData.add("Todas");
+        adapterData.addAll(proposals);
+
+        return adapterData;
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -175,6 +191,10 @@ public class ListProposalFragment extends Fragment {
         mListener = null;
     }
 
+    public void setFavoriteProposals(ArrayList<Proposal> favoriteProposals) {
+        this.favoriteProposals = favoriteProposals;
+        proposalListAdapter.updateData(getAdapterData());
+    }
 
     /**
      * This interface must be implemented by activities that contain this
