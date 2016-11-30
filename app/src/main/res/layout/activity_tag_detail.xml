@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".controller.TagDetailActivity"
     android:background="@color/colorPrimary">
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/chartTagDetail"
@@ -53,5 +48,4 @@
             android:layout_height="match_parent"
             android:id="@+id/container"></FrameLayout>
     </RelativeLayout>
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

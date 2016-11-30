@@ -89,13 +89,15 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
 
     private void createChart(){
 
-        String[] stateNames = new String[chartData.size()];
-        int i = 0;
-        for (Pair<String, Integer> record : chartData) {
-            stateNames[i++] = record.first;
+        int count = chartData.size() > 10 ? 10 : chartData.size();
+
+        String[] stateNames = new String[count];
+        for (int i=0; i<count; ++i) {
+            Pair<String, Integer> record = chartData.get(i);
+            stateNames[i] = record.first;
         }
 
-        StateAxisValueFormatter stateAxisValueFormatter = new StateAxisValueFormatter(barChart,stateNames);
+        StateAxisValueFormatter stateAxisValueFormatter = new StateAxisValueFormatter(stateNames);
 
         barChart.setDrawBarShadow(false);
         barChart.setDrawValueAboveBar(true);
@@ -113,7 +115,7 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
         xl.setGridLineWidth(0.3f);
         xl.setTextSize(13f);
         xl.setTextColor(Color.BLACK);
-        xl.setLabelCount(10);
+        xl.setLabelCount(count);
         xl.setValueFormatter(stateAxisValueFormatter);
 
         YAxis yl = barChart.getAxisLeft();
@@ -130,6 +132,7 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
         Legend l = barChart.getLegend();
         l.setDirection(Legend.LegendDirection.LEFT_TO_RIGHT);
         l.setFormSize(11f);
+        l.setTextSize(11f);
         l.setXEntrySpace(4f);
         //l.setTypeface(typeface);
         // mChart.setDrawLegend(false);
@@ -144,7 +147,7 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
             yVals.add(new BarEntry(i,chartData.get(i).second));
         }
 
-        String nameLegend = "Quantidade de usos da tag " + this.tag.getName() + " por estado";
+        String nameLegend = "Quantidade de usos da tag por estado";
         BarDataSet barDataSet = new BarDataSet(yVals, nameLegend);
 
         int[] colors = new int[]{getResources().getColor(R.color.colorChart1),
@@ -229,7 +232,9 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    progressDialog.dismiss();
+                    if(progressDialog != null) {
+                        progressDialog.dismiss();
+                    }
                     loadProposalsList(proposals);
                 }
             });
@@ -239,5 +244,14 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
     @Override
     public void afterError(RequestResponseHandler handler, String message) {
 
+    }
+
+    @Override
+    public void onPause(){
+
+        super.onPause();
+        if(progressDialog != null) {
+            progressDialog.dismiss();
+        }
     }
 }
