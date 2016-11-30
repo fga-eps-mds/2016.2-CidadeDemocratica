@@ -41,6 +41,7 @@ public class SelectStateActivity extends AppCompatActivity implements AdapterVie
     private RequestResponseHandler chartDataHandler;
     private ArrayList<Integer> chartDataValue = new ArrayList<>();
     private ArrayList<String> chartDataName = new ArrayList<>();
+    private String stateSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +57,11 @@ public class SelectStateActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        String stateSelected = ((AppCompatTextView) view).getText().toString();
-        pullChartData(stateSelected);
+        stateSelected = ((AppCompatTextView) view).getText().toString();
+        pullChartData();
     }
 
-    private void pullChartData(String stateSelected) {
+    private void pullChartData() {
         progressDialog = FeedbackManager.createProgressDialog(this,getString(R.string.placeholder_loading_chart));
 
         chartDataHandler = new RequestResponseHandler();
@@ -88,6 +89,9 @@ public class SelectStateActivity extends AppCompatActivity implements AdapterVie
 
                 chartDataName.add(captalizeString(name));
                 chartDataValue.add(count);
+                if (chartDataName.size()==10){
+                    break;
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -98,6 +102,7 @@ public class SelectStateActivity extends AppCompatActivity implements AdapterVie
         Bundle bundle = new Bundle();
         bundle.putIntegerArrayList(ChartActivity.keyValue,chartDataValue);
         bundle.putStringArrayList(ChartActivity.keyName,chartDataName);
+        bundle.putString(ChartActivity.keyState,stateSelected);
         Intent intent = new Intent(getApplicationContext(), ChartActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);

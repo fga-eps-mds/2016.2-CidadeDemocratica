@@ -22,6 +22,7 @@ public class ChartActivity extends AppCompatActivity {
 
     public static String keyName = "name";
     public static String keyValue = "value";
+    public static String keyState = "state";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,7 @@ public class ChartActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         chartDataName = extras.getStringArrayList(keyName);
         chartDataValue = extras.getIntegerArrayList(keyValue);
+        setTitle(extras.getString(keyState));
 
         populateChart();
     }
