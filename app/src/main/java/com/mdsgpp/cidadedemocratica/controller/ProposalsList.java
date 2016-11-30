@@ -3,6 +3,7 @@ package com.mdsgpp.cidadedemocratica.controller;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -160,7 +161,8 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.action_graph:
-                //TODO: Chamar método para colocar o gráfico
+                Intent intent = new Intent(getApplicationContext(), SelectChartActivity.class);
+                startActivity(intent);
                 break;
         }
         return false;

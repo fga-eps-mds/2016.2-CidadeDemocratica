@@ -22,7 +22,7 @@ import com.mdsgpp.cidadedemocratica.requester.UserRequestResponseHandler;
 
 import java.util.ArrayList;
 
-public class UsersList extends AppCompatActivity implements RequestUpdateListener, MenuItem.OnMenuItemClickListener {
+public class UsersList extends AppCompatActivity implements RequestUpdateListener{
 
     private ListView usersListView;
     private ProgressDialog progressDialog;
@@ -128,25 +128,6 @@ public class UsersList extends AppCompatActivity implements RequestUpdateListene
     public void afterError(RequestResponseHandler handler, String message) {
         progressDialog.dismiss();
         createToast(message);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_graph, menu);
-        MenuItem graphItem = menu.findItem(R.id.action_graph);
-        graphItem.setOnMenuItemClickListener(this);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem menuItem) {
-        switch (menuItem.getItemId()){
-            case R.id.action_graph:
-                //TODO: Chamar método para colocar o gráfico
-                break;
-        }
-        return false;
     }
 
 }

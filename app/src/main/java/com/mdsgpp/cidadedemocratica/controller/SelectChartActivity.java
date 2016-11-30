@@ -2,21 +2,14 @@ package com.mdsgpp.cidadedemocratica.controller;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.BarChart;
 import com.mdsgpp.cidadedemocratica.R;
-import com.mdsgpp.cidadedemocratica.model.Proposal;
-import com.mdsgpp.cidadedemocratica.model.Tag;
-import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
@@ -29,35 +22,35 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
-public class SelectStateActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, RequestUpdateListener {
+public class SelectChartActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, RequestUpdateListener {
 
-    private ListView statesListView;
+    private ListView typesChartListView;
 
     private ProgressDialog progressDialog;
-    private String federalUnityCodeParameterKey = "federal_unity_code";
+
+    private String typeChartSelect;
 
     private RequestResponseHandler chartDataHandler;
-    private ArrayList<Integer> chartDataValue = new ArrayList<>();
+    private ArrayList<Integer> chartDataValueRelevance = new ArrayList<>();
+    private ArrayList<Integer> chartDataValueProposal = new ArrayList<>();
     private ArrayList<String> chartDataName = new ArrayList<>();
-    private String stateSelected;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_state);
+        setContentView(R.layout.activity_select_chart);
 
-        statesListView = (ListView) findViewById(R.id.statesListView);
-        statesListView.setOnItemClickListener(this);
+        typesChartListView = (ListView) findViewById(R.id.typesChartsListView);
+        typesChartListView.setOnItemClickListener(this);
 
-        setTitle(getString(R.string.name_activity_select_state));
-
+        setTitle(getString(R.string.name_activity_select_chart));
     }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        stateSelected = ((AppCompatTextView) view).getText().toString();
+        typeChartSelect = ((AppCompatTextView) view).getText().toString();
         pullChartData();
     }
 
@@ -67,8 +60,7 @@ public class SelectStateActivity extends AppCompatActivity implements AdapterVie
         chartDataHandler = new RequestResponseHandler();
         chartDataHandler.setRequestUpdateListener(this);
 
-        Requester requester = new Requester(TagRequestResponseHandler.tagStateUseCountEndpointUrl, chartDataHandler);
-        requester.setParameter(federalUnityCodeParameterKey, stateSelected);
+        Requester requester = new Requester(ProposalRequestResponseHandler.proposalsStateCountRelevanceEndpointUrl, chartDataHandler);
         requester.async(Requester.RequestMethod.GET);
     }
 
@@ -76,7 +68,8 @@ public class SelectStateActivity extends AppCompatActivity implements AdapterVie
     public void afterSuccess(RequestResponseHandler handler, Object response) {
 
         progressDialog.dismiss();
-        chartDataValue = new ArrayList<>();
+        chartDataValueProposal = new ArrayList<>();
+        chartDataValueRelevance = new ArrayList<>();
         chartDataName = new ArrayList<>();
 
         JSONArray data = (JSONArray) response;
@@ -84,11 +77,13 @@ public class SelectStateActivity extends AppCompatActivity implements AdapterVie
         for (int i = 0; i < data.length(); ++i) {
             try {
                 JSONObject jsonObject = (JSONObject) data.get(i);
-                String name = jsonObject.getString("name");
-                int count = jsonObject.getInt("tag_count");
+                String stateAbrev = jsonObject.getString("state_abrev");
+                int proposalsRelevanceSum = jsonObject.getInt("proposals_relevance_sum");
+                int proposalCount = jsonObject.getInt("proposal_count");
 
-                chartDataName.add(captalizeString(name));
-                chartDataValue.add(count);
+                chartDataName.add(stateAbrev);
+                chartDataValueProposal.add(proposalCount);
+                chartDataValueRelevance.add(proposalsRelevanceSum);
                 if (chartDataName.size()==10){
                     break;
                 }
@@ -97,12 +92,20 @@ public class SelectStateActivity extends AppCompatActivity implements AdapterVie
             }
         }
 
-        Collections.reverse(chartDataValue);
+        Collections.reverse(chartDataValueProposal);
+        Collections.reverse(chartDataValueRelevance);
         Collections.reverse(chartDataName);
+
         Bundle bundle = new Bundle();
-        bundle.putIntegerArrayList(ChartActivity.keyValue,chartDataValue);
+
+        if (typeChartSelect.equals(getResources().getStringArray(R.array.types_charts_array)[0])){
+            bundle.putIntegerArrayList(ChartActivity.keyValue,chartDataValueProposal);
+        }else {
+            bundle.putIntegerArrayList(ChartActivity.keyValue,chartDataValueRelevance);
+        }
+
         bundle.putStringArrayList(ChartActivity.keyName,chartDataName);
-        bundle.putString(ChartActivity.keyTitle,stateSelected);
+        bundle.putString(ChartActivity.keyTitle,typeChartSelect);
         Intent intent = new Intent(getApplicationContext(), ChartActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);
@@ -113,10 +116,6 @@ public class SelectStateActivity extends AppCompatActivity implements AdapterVie
     public void afterError(RequestResponseHandler handler, String message) {
         progressDialog.dismiss();
         FeedbackManager.createToast(this,message);
-    }
-
-    private String captalizeString(String stringToCaptalize){
-        return stringToCaptalize.substring(0, 1).toUpperCase() + stringToCaptalize.substring(1);
     }
 
 }

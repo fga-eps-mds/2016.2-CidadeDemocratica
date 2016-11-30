@@ -52,7 +52,8 @@
             android:resource="@color/colorAccent" />
 
         <activity android:name=".controller.SelectStateActivity" />
-        <activity android:name=".controller.ChartActivity"></activity>
+        <activity android:name=".controller.ChartActivity" />
+        <activity android:name=".controller.SelectChartActivity"></activity>
     </application>
 
 </manifest>

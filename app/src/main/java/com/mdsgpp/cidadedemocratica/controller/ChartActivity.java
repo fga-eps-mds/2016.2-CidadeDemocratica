@@ -19,10 +19,11 @@ public class ChartActivity extends AppCompatActivity {
     private List<Pair<String, Integer>> chartData = new ArrayList<>();
     private ArrayList<Integer> chartDataValue = new ArrayList<>();
     private ArrayList<String> chartDataName = new ArrayList<>();
+    private String title;
 
     public static String keyName = "name";
     public static String keyValue = "value";
-    public static String keyState = "state";
+    public static String keyTitle = "title";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,8 @@ public class ChartActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         chartDataName = extras.getStringArrayList(keyName);
         chartDataValue = extras.getIntegerArrayList(keyValue);
-        setTitle(extras.getString(keyState));
+        title = extras.getString(keyTitle);
+        setTitle(title);
 
         populateChart();
     }
@@ -46,7 +48,7 @@ public class ChartActivity extends AppCompatActivity {
         barChart.setVisibility(View.GONE);
         horizontalBarChart.setVisibility(View.VISIBLE);
         generateChartData();
-        CharterGenerator.createBarChart(horizontalBarChart,chartData,getString(R.string.name_chart_tag_state),this);
+        CharterGenerator.createBarChart(horizontalBarChart,chartData,title,this);
         horizontalBarChart.animateY(2500);
     }
 

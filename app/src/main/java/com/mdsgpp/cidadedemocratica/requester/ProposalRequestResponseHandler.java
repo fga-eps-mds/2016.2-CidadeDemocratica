@@ -20,6 +20,7 @@ public class ProposalRequestResponseHandler extends RequestResponseHandler imple
 
     EntityContainer<Proposal> proposalsContainer = EntityContainer.getInstance(Proposal.class);
     public static final String proposalsEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/proposals";
+    public static final String proposalsStateCountRelevanceEndpointUrl = "http://cidadedemocraticaapi.herokuapp.com/api/v0/states_proposals_count_and_relavance_sum";
     public static int nextPageToRequest = 1;
 
     private final String jsonProposalType = "Proposta";
