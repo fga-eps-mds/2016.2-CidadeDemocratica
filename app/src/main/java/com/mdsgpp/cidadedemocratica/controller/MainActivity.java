@@ -1,9 +1,11 @@
 package com.mdsgpp.cidadedemocratica.controller;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -28,6 +30,9 @@ public class MainActivity extends AppCompatActivity implements RequestUpdateList
 
         if (token != null) {
             Requester.setUserToken(token);
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         } else {
             progressDialog = FeedbackManager.createProgressDialog(this, getString(R.string.message_authenticate));
             requestUserToken();
@@ -66,11 +71,6 @@ public class MainActivity extends AppCompatActivity implements RequestUpdateList
         requester.async(Requester.RequestMethod.GET);
     }
 
-    private void postFirebaseId() {
-        Requester requester = new Requester(AuthenticateRequestResponseHandler.authenticateEndpointUrl, handler);
-        requester.async(Requester.RequestMethod.POST);
-    }
-
     @Override
     public void afterSuccess(RequestResponseHandler handler, Object response) {
 
@@ -88,6 +88,9 @@ public class MainActivity extends AppCompatActivity implements RequestUpdateList
                 @Override
                 public void run() {
                     FeedbackManager.createToast(self, getString(R.string.message_authenticate_success));
+                    ActivityCompat.requestPermissions(self,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                                    Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
                 }
             });
 

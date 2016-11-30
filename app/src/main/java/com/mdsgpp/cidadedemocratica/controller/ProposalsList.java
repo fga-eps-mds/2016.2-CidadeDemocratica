@@ -1,6 +1,7 @@
 package com.mdsgpp.cidadedemocratica.controller;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -48,7 +49,7 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
     private ProposalRequestResponseHandler proposalRequestResponseHandler;
     private ProposalRequestResponseHandler proposalLocationRequestResponseHandler;
     private ProposalRequestResponseHandler proposalFavoriteRequestResponseHandler;
-    private RequestResponseHandler requestResponseHandler;
+    private RequestResponseHandler locationRequestResponseHandler;
     private String stateUser;
     private ArrayList<Proposal> proposalsByState;
     private ArrayList<Proposal> proposalsFavorite;
@@ -122,7 +123,7 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
             }else {
                 updateUIFavorite(null);
             }
-        }else if (handler==requestResponseHandler){
+        }else if (handler== locationRequestResponseHandler){
             pullProposalByLocation(response);
         }else if (handler==proposalLocationRequestResponseHandler){
             updateUIState((ArrayList<Proposal>)response);
@@ -163,12 +164,21 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
     }
 
     private void pullStateByLocation() {
+
         if (progressDialog == null) {
             progressDialog = FeedbackManager.createProgressDialog(this, getString(R.string.message_load_proposals));
         }
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    FeedbackManager.createToast(getApplicationContext(),"Habilite sua localização para ver as propostas");
+                    progressDialog.dismiss();
+                }
+            });
+
         }
 
         Location actualLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -176,13 +186,7 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         if (actualLocation==null){
             actualLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (actualLocation==null){
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        FeedbackManager.createToast(getApplicationContext(),"Habilite sua localização para ver as propostas");
-                        progressDialog.dismiss();
-                    }
-                });
+                getStateByLocation(null);
             }else {
                 getStateByLocation(actualLocation);
             }
@@ -194,33 +198,36 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
 
     private void getStateByLocation(Location location){
 
-        Geocoder geocoder;
-        List<Address> addresses;
-        geocoder = new Geocoder(this, Locale.getDefault());
+        String postalCode = null;
+        if (location != null) {
+            Geocoder geocoder;
+            List<Address> addresses;
+            geocoder = new Geocoder(this, Locale.getDefault());
 
-        try {
-            addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 10);
-            String postalCode = null;
-            for (Address address: addresses) {
-                String pCode = address.getPostalCode();
-                if (pCode != null && pCode.length() >= 8) {
-                    postalCode = pCode;
-                    break;
+            try {
+                addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 10);
+
+                for (Address address : addresses) {
+                    String pCode = address.getPostalCode();
+                    if (pCode != null && pCode.length() >= 8) {
+                        postalCode = pCode;
+                        break;
+                    }
                 }
+
+            } catch (IOException e1) {
+                e1.printStackTrace();
             }
-
-            if (postalCode == null) {
-                postalCode = "72241808";
-            }
-
-            requestResponseHandler = new RequestResponseHandler();
-            requestResponseHandler.setRequestUpdateListener(this);
-            Requester requester = new Requester(urlApiGetState+postalCode, requestResponseHandler);
-            requester.async(Requester.RequestMethod.GET);
-
-        } catch (IOException e1) {
-            e1.printStackTrace();
         }
+
+        if (postalCode == null) {
+            postalCode = "72241808";
+        }
+
+        locationRequestResponseHandler = new RequestResponseHandler();
+        locationRequestResponseHandler.setRequestUpdateListener(this);
+        Requester requester = new Requester(urlApiGetState+postalCode, locationRequestResponseHandler);
+        requester.async(Requester.RequestMethod.GET);
     }
 
     private void pullProposalByLocation(Object response){
