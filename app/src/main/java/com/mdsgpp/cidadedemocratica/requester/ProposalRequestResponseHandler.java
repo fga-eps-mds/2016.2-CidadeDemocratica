@@ -30,6 +30,7 @@ public class ProposalRequestResponseHandler extends RequestResponseHandler imple
     private final String proposalRelevanceKey = "relevancia";
     private final String proposalUserIdKey = "user_id";
     private final String proposalSlugKey = "slug";
+    private final String proposalStateAbbrevKey = "state_abrev";
 
     @Override
     public void onSuccess(int statusCode, Map<String, List<String>> headers, JSONArray response) {
@@ -48,9 +49,10 @@ public class ProposalRequestResponseHandler extends RequestResponseHandler imple
                     long relevance = topicJson.getLong(proposalRelevanceKey);
                     long userId = topicJson.getLong(proposalUserIdKey);
                     String slug = topicJson.getString(proposalSlugKey);
+                    String stateAbbrev = topicJson.getString(proposalStateAbbrevKey);
 
 
-                    Proposal proposal = new Proposal(id, title, content, relevance, userId, slug);
+                    Proposal proposal = new Proposal(id, title, content, relevance, userId, slug, stateAbbrev);
 
                     proposals.add(proposal);
 

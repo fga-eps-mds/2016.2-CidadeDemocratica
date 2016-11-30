@@ -20,11 +20,13 @@ import com.mdsgpp.cidadedemocratica.controller.FeedbackManager;
 import com.mdsgpp.cidadedemocratica.controller.ProposalListAdapter;
 import com.mdsgpp.cidadedemocratica.controller.TagginsList;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
+import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 
@@ -39,9 +41,12 @@ public class ProposalsNearStateListFragment extends Fragment implements RequestU
     private TextView stateTextView;
     private Spinner spinnerState;
     private ProgressDialog progressDialog;
+    private EntityContainer<Proposal> proposalsContainer = EntityContainer.getInstance(Proposal.class);
 
     private String stateName;
     private final String proposalStateKey = "federal_unity_code";
+
+    private ArrayList<String> loadedStates = new ArrayList<>();
 
     public ArrayList<Proposal> proposals;
 
@@ -156,22 +161,30 @@ public class ProposalsNearStateListFragment extends Fragment implements RequestU
     }
 
     private void requestProposalsFromState(){
-//        if (progressDialog==null) {
+        if (!loadedStates.contains(stateName)) {
             progressDialog = FeedbackManager.createProgressDialog(getActivity(), "Carregando propostas de " + stateName);
-//        }
-        proposalLocationRequestResponseHandler = new ProposalRequestResponseHandler();
-        proposalLocationRequestResponseHandler.setRequestUpdateListener(this);
-        Requester requester = new Requester(ProposalRequestResponseHandler.proposalsEndpointUrl, proposalLocationRequestResponseHandler);
-        requester.setParameter(proposalStateKey,stateName);
-        requester.async(Requester.RequestMethod.GET);
+
+            proposalLocationRequestResponseHandler = new ProposalRequestResponseHandler();
+            proposalLocationRequestResponseHandler.setRequestUpdateListener(this);
+
+            Requester requester = new Requester(ProposalRequestResponseHandler.proposalsEndpointUrl, proposalLocationRequestResponseHandler);
+            requester.setParameter(proposalStateKey, stateName);
+
+            requester.async(Requester.RequestMethod.GET);
+            loadedStates.add(stateName);
+
+        } else {
+            afterSuccess(null, loadedProposalsFromState());
+        }
     }
 
     @Override
-    public void afterSuccess(RequestResponseHandler handler, final Object response) {
+    public void afterSuccess(RequestResponseHandler handler, Object response) {
+        final Object finalResponse = response;
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                proposals = (ArrayList<Proposal>)response;
+                proposals = (ArrayList<Proposal>)finalResponse;
                 proposalAdapter.updateData(proposals);
             }
         });
@@ -183,4 +196,16 @@ public class ProposalsNearStateListFragment extends Fragment implements RequestU
 
     }
 
+    private ArrayList<Proposal> loadedProposalsFromState() {
+        try {
+            ArrayList<Proposal> proposals = proposalsContainer.getForField("stateAbbrev", stateName);
+            return proposals;
+        } catch (NoSuchMethodException e) {
+            return null;
+        } catch (InvocationTargetException e) {
+            return null;
+        } catch (IllegalAccessException e) {
+            return null;
+        }
+    }
 }

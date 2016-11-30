@@ -19,7 +19,7 @@ public class TagTest extends AndroidTestCase {
     final String tagName = "name";
     final long tagNumberOfAppearances = 10;
     Proposal proposalOne = newProposal();
-    Proposal proposalTwo = new Proposal(0,"title","content",2,2);
+    Proposal proposalTwo = new Proposal(0,"title","content",2,2, "", "");
     ArrayList<Proposal> proposalsList = new ArrayList<Proposal>();
 
     @Test
@@ -80,6 +80,6 @@ public class TagTest extends AndroidTestCase {
     }
     private User newUser() {return new User("Name", 0, 0,0);}
     private Proposal newProposal() {
-        return new Proposal(0, "title", "content", 0, 0);
+        return new Proposal(0, "title", "content", 0, 0, "", "");
     }
 }

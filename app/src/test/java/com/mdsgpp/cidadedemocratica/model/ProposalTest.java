@@ -18,9 +18,9 @@ public class ProposalTest extends AndroidTestCase {
     private final long proposalRelevance = 11000;
     private final long proposalIdOfUser = 0;
     Proposal proposalDefault = newProposal();
-    Proposal proposalLower = new Proposal(12,"Title","superContent",10999,32);
-    Proposal proposalIgual = new Proposal(32,"SomeTitle","important",11000,1);
-    Proposal proposalLarger = new Proposal(2,"Important title","content",12000,3);
+    Proposal proposalLower = new Proposal(12,"Title","superContent",10999,32, "", "");
+    Proposal proposalIgual = new Proposal(32,"SomeTitle","important",11000,1, "", "");
+    Proposal proposalLarger = new Proposal(2,"Important title","content",12000,3, "", "");
 
 
     @Test
@@ -95,15 +95,15 @@ public class ProposalTest extends AndroidTestCase {
 
     long id = 0;
     private Proposal newProposalRand() {
-        return new Proposal(id++, proposalTitle, proposalContent, proposalRelevance, proposalIdOfUser);
+        return new Proposal(id++, proposalTitle, proposalContent, proposalRelevance, proposalIdOfUser, "", "");
     }
 
     private Proposal newProposal() {
-        return new Proposal(proposalId, proposalTitle, proposalContent, proposalRelevance, proposalIdOfUser);
+        return new Proposal(proposalId, proposalTitle, proposalContent, proposalRelevance, proposalIdOfUser, "", "");
     }
 
     private Proposal newProposal(String slug) {
-        return new Proposal(proposalId, proposalTitle, proposalContent, proposalRelevance, proposalIdOfUser, slug);
+        return new Proposal(proposalId, proposalTitle, proposalContent, proposalRelevance, proposalIdOfUser, slug, "");
     }
 
     private Tag newTag() {

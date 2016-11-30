@@ -2,10 +2,13 @@ package com.mdsgpp.cidadedemocratica.persistence;
 
 import android.test.AndroidTestCase;
 
+import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.User;
 
 import org.junit.Test;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -15,43 +18,44 @@ import java.util.Arrays;
 
 public class EntityContainerTest extends AndroidTestCase {
 
-    EntityContainer<User> container = EntityContainer.getInstance(User.class);
+    EntityContainer<User> userContainer = EntityContainer.getInstance(User.class);
+    EntityContainer<Proposal> proposalContainer = EntityContainer.getInstance(Proposal.class);
 
     @Override
     protected void setUp() throws Exception {
-        container.clear();
+        userContainer.clear();
     }
 
     @Override
     protected void tearDown() throws Exception {
-        container.clear();
+        userContainer.clear();
     }
 
     @Test
     public void testGetAll() {
 
-        assertTrue(container.getAll().isEmpty());
+        assertTrue(userContainer.getAll().isEmpty());
 
         ArrayList<User> users = new ArrayList<>(Arrays.asList(newUser(), newUser(), newUser()));
-        container.setData(users);
+        userContainer.setData(users);
 
-        assertEquals(users, container.getAll());
+        assertEquals(users, userContainer.getAll());
     }
 
     @Test
     public void testGetForId() {
-        assertTrue(container.getAll().isEmpty());
+        assertTrue(userContainer.getAll().isEmpty());
 
         ArrayList<User> users = new ArrayList<>(Arrays.asList(newUser(), newUser(), newUser()));
-        container.setData(users);
+        userContainer.setData(users);
 
         long id = 90;
 
-        assertNull(container.getForId(id));
+        assertNull(userContainer.getForId(id));
 
-        container.add(newUser(id));
+        userContainer.add(newUser(id));
 
-        assertNotNull(container.getForId(id));
+        assertNotNull(userContainer.getForId(id));
     }
 
     @Test
@@ -60,12 +64,35 @@ public class EntityContainerTest extends AndroidTestCase {
         ArrayList<User> users1 = new ArrayList<>(Arrays.asList(newUser(), newUser(), newUser()));
         ArrayList<User> users2 = new ArrayList<>(Arrays.asList(newUser(), newUser(), newUser()));
 
-        container.setData(users1);
-        assertTrue(container.getAll().containsAll(users1));
+        userContainer.setData(users1);
+        assertTrue(userContainer.getAll().containsAll(users1));
 
-        container.setData(users2);
-        assertTrue(container.getAll().containsAll(users2));
-        assertFalse(container.getAll().containsAll(users1));
+        userContainer.setData(users2);
+        assertTrue(userContainer.getAll().containsAll(users2));
+        assertFalse(userContainer.getAll().containsAll(users1));
+    }
+
+    @Test
+    public void testGetForField() {
+        Proposal p1 = newProposal("AC");
+        Proposal p2 = newProposal("DF");
+        Proposal p3 = newProposal("SP");
+
+        proposalContainer.add(p1);
+        proposalContainer.add(p2);
+        proposalContainer.add(p3);
+
+        try {
+            String stateAbbrev = "AC";
+            ArrayList<Proposal> proposals = proposalContainer.getForField("stateAbbrev", stateAbbrev);
+            assertEquals(proposals.get(0).getStateAbbrev(), stateAbbrev);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     long id = 0;
@@ -75,5 +102,9 @@ public class EntityContainerTest extends AndroidTestCase {
 
     private User newUser(long id) {
         return new User("", 0, id, 0);
+    }
+
+    private Proposal newProposal(String stateAbbrev) {
+        return new Proposal(id++, "", "", 0, 0, "", stateAbbrev);
     }
 }

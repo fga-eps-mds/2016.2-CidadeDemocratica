@@ -48,8 +48,8 @@ public class ProposalRequestResponseHandlerTest extends AndroidTestCase implemen
 
     @Test
     public void testCompareProposal() {
-        Proposal p1 = new Proposal(0, "", "", 0, 0);
-        Proposal p2 = new Proposal(0, "", "", 0, 0);
+        Proposal p1 = new Proposal(0, "", "", 0, 0, "", "");
+        Proposal p2 = new Proposal(0, "", "", 0, 0, "", "");
 
         assertEquals(p1.compareTo(p2), handler.compare(p1, p2));
     }

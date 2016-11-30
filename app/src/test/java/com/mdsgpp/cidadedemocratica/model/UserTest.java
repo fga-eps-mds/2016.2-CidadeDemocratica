@@ -32,7 +32,7 @@ public class UserTest extends AndroidTestCase {
         ciclismo = newTag();
         tags.add(ciclismo);
         proposalTest = newProposal();
-        proposalTest2 = new Proposal(0,"Titulo","content_2",1,1);
+        proposalTest2 = new Proposal(0,"Titulo","content_2",1,1, "", "");
         proposals.add(proposalTest);
 
         userIgual = new User("Name",14,1,0);
@@ -110,7 +110,7 @@ public class UserTest extends AndroidTestCase {
     }
 
     private Proposal newProposal() {
-        return new Proposal(0, "title", "content", 0, 0);
+        return new Proposal(0, "title", "content", 0, 0, "", "");
     }
     private User newUser() {return new User("Name", 0, 0,0);}
 }

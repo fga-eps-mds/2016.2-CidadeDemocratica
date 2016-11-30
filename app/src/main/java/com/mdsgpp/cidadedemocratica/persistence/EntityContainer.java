@@ -2,6 +2,8 @@ package com.mdsgpp.cidadedemocratica.persistence;
 
 import com.mdsgpp.cidadedemocratica.model.Entity;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -50,6 +52,24 @@ public class EntityContainer<T extends Entity> {
         return record;
     }
 
+    public ArrayList<T> getForField(String field, Object value) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        ArrayList<T> records = new ArrayList<>();
+
+        String capitalizedField = field.substring(0, 1).toUpperCase() + field.substring(1);
+        String getterName = "get" + capitalizedField;
+
+        Method fieldGetter = entityType.getMethod(getterName);
+
+        for (T element : data) {
+            Object fieldGot = fieldGetter.invoke(element);
+            if (fieldGot.equals(value)) {
+                records.add(element);
+            }
+        }
+
+        return records;
+    }
+
     public void add(T t) {
         data.add(t);
         notifyDataUpdate();
@@ -57,7 +77,11 @@ public class EntityContainer<T extends Entity> {
 
     public void addAll(Collection<T> t) {
         t.removeAll(data);
-        data.addAll(t);
+        for (T element : t) {
+            if (!data.contains(element)) {
+                data.add(element);
+            }
+        }
         notifyDataUpdate();
     }
 

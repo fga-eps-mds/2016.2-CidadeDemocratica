@@ -12,23 +12,17 @@ public class Proposal extends Entity {
     private long relevance = 0;
     private long userId = 0;
     private String slug ="";
+    private String stateAbbrev = "";
     private ArrayList<Tag> tags = new ArrayList<Tag>();
 
-    public Proposal(long id, String title, String content, long relevance, long userId) {
-        super(id);
-        this.title = title;
-        this.content = content;
-        this.relevance = relevance;
-        this.userId = userId;
-    }
-
-    public Proposal(long id, String title, String content, long relevance, long userId, String slug) {
+    public Proposal(long id, String title, String content, long relevance, long userId, String slug, String stateAbbrev) {
         super(id);
         this.title = title;
         this.content = content;
         this.relevance = relevance;
         this.slug = slug;
         this.userId = userId;
+        this.stateAbbrev = stateAbbrev;
     }
 
     public long getUserId() {
@@ -49,6 +43,10 @@ public class Proposal extends Entity {
 
     public long getRelevance() {
         return this.relevance;
+    }
+
+    public String getStateAbbrev() {
+        return stateAbbrev;
     }
 
     public ArrayList<Tag> getTags() {
