@@ -121,14 +121,17 @@ public class ListProposalFragment extends Fragment {
         proposalListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Proposal proposalClicked = (Proposal)proposalListAdapter.getItem(i);
-                Long id = proposalClicked.getId();
-                String proposalName = proposalClicked.getTitle();
+                if (header!=null){
+                    i--;
+                }
+                if (i>=0){
+                    Proposal proposalClicked = (Proposal)proposalListAdapter.getItem(i);
+                    Long id = proposalClicked.getId();
 
-                Intent intent = new Intent(getActivity().getApplicationContext(),TagginsList.class);
-                intent.putExtra("proposalId", id);
-                startActivity(intent);
-
+                    Intent intent = new Intent(getActivity().getApplicationContext(),TagginsList.class);
+                    intent.putExtra("proposalId", id);
+                    startActivity(intent);
+                }
             }
         });
 

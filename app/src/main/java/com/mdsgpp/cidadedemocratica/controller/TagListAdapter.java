@@ -59,7 +59,7 @@ public class TagListAdapter extends BaseAdapter {
             row = (TagListRow) view.getTag();
         }
 
-        row.nameTextView.setText(currentTag.getName());
+        row.nameTextView.setText(captalizeString(currentTag.getName()));
         row.nameTextView.setTextColor(Color.BLACK);
 
         return view;
@@ -68,5 +68,9 @@ public class TagListAdapter extends BaseAdapter {
     public void updateData(ArrayList<Tag> data) {
         this.data = data;
         notifyDataSetChanged();
+    }
+
+    private String captalizeString(String stringToCaptalize){
+        return stringToCaptalize.substring(0, 1).toUpperCase() + stringToCaptalize.substring(1);
     }
 }
