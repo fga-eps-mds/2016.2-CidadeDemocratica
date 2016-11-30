@@ -32,7 +32,11 @@
     <string name="name_preferences_data">sharedPreferences</string>
     <string name="key_user_token">userToken</string>
     <string name="proposals_from_state"> Propostas de</string>
+    <string name="name_activity_select_state">Estados</string>
+    <string name="placeholder_select_state">Selecione um Estado:</string>
+    <string name="placeholder_loading_chart">Carregando dados do gráfico...</string>
     <string name="name_chart_tag_detail">Número de usos da tag por Estado</string>
+    <string name="name_chart_tag_state">Tags mais utilizadas no Estado</string>
 
     <string name="title_spinner">Escolha um estado:</string>
     <string-array name="states_array">

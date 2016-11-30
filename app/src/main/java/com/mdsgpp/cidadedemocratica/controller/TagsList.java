@@ -149,7 +149,8 @@ public class TagsList extends AppCompatActivity implements RequestUpdateListener
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.action_graph:
-                //TODO: Chamar método para colocar o gráfico
+                Intent intent = new Intent(getApplicationContext(), SelectStateActivity.class);
+                startActivity(intent);
                 break;
         }
         return false;

@@ -1,10 +1,13 @@
 package com.mdsgpp.cidadedemocratica.controller;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.util.Pair;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.Chart;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -25,6 +28,23 @@ public class CharterGenerator {
 
     public static void createBarChart(BarChart barChart, List<Pair<String, Integer>> chartData, String title, Context context){
 
+        barChart.setDrawBarShadow(false);
+        barChart.setDrawValueAboveBar(true);
+        barChart.setPinchZoom(false);
+        barChart.setDrawGridBackground(true);
+        barChart.setScaleEnabled(false);
+        barChart.getAxisRight().setEnabled(false);
+
+        YAxis yl = barChart.getAxisLeft();
+        yl.setDrawAxisLine(true);
+        yl.setDrawGridLines(false);
+        yl.setGridLineWidth(0.3f);
+
+        createChart(barChart,chartData,title,context);
+    }
+
+    private static void createChart(Chart barChart, List<Pair<String, Integer>> chartData, String title, Context context){
+
         int count = chartData.size() > 10 ? 10 : chartData.size();
 
         String[] stateNames = new String[count];
@@ -35,13 +55,7 @@ public class CharterGenerator {
 
         StateAxisValueFormatter stateAxisValueFormatter = new StateAxisValueFormatter(stateNames);
 
-        barChart.setDrawBarShadow(false);
-        barChart.setDrawValueAboveBar(true);
-        barChart.setPinchZoom(false);
-        barChart.setDrawGridBackground(true);
-        barChart.setScaleEnabled(false);
         barChart.getDescription().setEnabled(false);
-        barChart.getAxisRight().setEnabled(false);
         barChart.setTouchEnabled(false);
 
         XAxis xl = barChart.getXAxis();
@@ -49,15 +63,10 @@ public class CharterGenerator {
         xl.setDrawAxisLine(true);
         xl.setDrawGridLines(true);
         xl.setGridLineWidth(0.3f);
-        xl.setTextSize(13f);
+        xl.setTextSize(11f);
         xl.setTextColor(Color.BLACK);
         xl.setLabelCount(count);
         xl.setValueFormatter(stateAxisValueFormatter);
-
-        YAxis yl = barChart.getAxisLeft();
-        yl.setDrawAxisLine(true);
-        yl.setDrawGridLines(false);
-        yl.setGridLineWidth(0.3f);
 
         // setting data
         Legend l = barChart.getLegend();
@@ -66,11 +75,10 @@ public class CharterGenerator {
         l.setTextSize(11f);
         l.setXEntrySpace(4f);
 
-
         setData(barChart, chartData, title,context);
     }
 
-    private static void setData(BarChart barChart, List<Pair<String, Integer>> chartData, String title, Context context) {
+    private static void setData(Chart barChart, List<Pair<String, Integer>> chartData, String title, Context context) {
 
         ArrayList<BarEntry> yVals = new ArrayList<>();
 

@@ -78,7 +78,7 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
     private void getInstanceViews() {
         header = getLayoutInflater().inflate(R.layout.header_tag_detail, null, false);
         tagNameTextView = (TextView) header.findViewById(R.id.tagNameTextView);
-        barChart = (BarChart) header.findViewById(R.id.chartTagDetail);
+        barChart = (BarChart) header.findViewById(R.id.barChart);
     }
 
     private void setInstanceViews(){

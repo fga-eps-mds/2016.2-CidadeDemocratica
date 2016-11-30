@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_select_state"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.mdsgpp.cidadedemocratica.controller.SelectStateActivity"
     android:background="@color/colorPrimary">
-
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        layout="@layout/activity_chart" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Propostas da Tag"
+            android:text="@string/placeholder_select_state"
             android:id="@+id/tagNameTextView"
             android:textStyle="bold"
             android:textSize="18dp"
@@ -35,4 +33,10 @@
             android:layout_centerVertical="true" />
     </RelativeLayout>
 
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/statesListView"
+        android:entries="@array/states_array"
+        android:background="@android:color/white" />
 </LinearLayout>
