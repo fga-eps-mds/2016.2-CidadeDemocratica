@@ -11,7 +11,6 @@ import java.lang.reflect.Method;
 
 import android.support.test.runner.AndroidJUnitRunner;
 
-import com.mdsgpp.cidadedemocratica.BuildConfig;
 
 public class JUnitJacocoTestRunner extends AndroidJUnitRunner {
     static {

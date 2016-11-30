@@ -2,7 +2,6 @@ package com.mdsgpp.cidadedemocratica.requester;
 
 import android.test.AndroidTestCase;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;

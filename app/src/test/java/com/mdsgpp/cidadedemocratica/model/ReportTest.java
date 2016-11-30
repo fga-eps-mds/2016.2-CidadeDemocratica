@@ -2,10 +2,6 @@ package com.mdsgpp.cidadedemocratica.model;
 
 import android.test.AndroidTestCase;
 
-import com.mdsgpp.cidadedemocratica.model.Report;
-
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 /**

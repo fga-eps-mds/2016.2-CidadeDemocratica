@@ -4,7 +4,6 @@ import android.test.AndroidTestCase;
 import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import org.junit.Test;
 

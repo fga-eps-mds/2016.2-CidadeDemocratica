@@ -1,9 +1,7 @@
 package com.mdsgpp.cidadedemocratica.model;
 
 import org.junit.Test;
-import android.test.AndroidTestCase;
-import java.net.PortUnreachableException;
-import java.util.ArrayList;
+
 
 import static org.junit.Assert.assertEquals;
 

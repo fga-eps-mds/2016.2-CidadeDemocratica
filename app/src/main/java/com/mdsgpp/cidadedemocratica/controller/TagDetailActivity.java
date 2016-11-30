@@ -1,23 +1,16 @@
 package com.mdsgpp.cidadedemocratica.controller;
 
 import android.app.ProgressDialog;
-import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.mdsgpp.cidadedemocratica.External.StateAxisValueFormatter;
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
 import com.mdsgpp.cidadedemocratica.model.Tag;
@@ -35,9 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TagDetailActivity extends AppCompatActivity implements OnFragmentInteractionListener, ListProposalFragment.OnFragmentInteractionListener, RequestUpdateListener {
 
@@ -45,6 +36,8 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
     private EntityContainer<Tag> tagsContainer = EntityContainer.getInstance(Tag.class);
     private FragmentManager fragmentManager;
     private ProgressDialog progressDialog;
+    private View header;
+    private TextView tagNameTextView;
 
     private BarChart barChart;
 
@@ -67,8 +60,7 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
         Long tagId = extras.getLong("tagId");
         this.tag = tagsContainer.getForId(tagId);
 
-        TextView tagNameTextView = (TextView)findViewById(R.id.tagNameTextView);
-        tagNameTextView.setText(getString(R.string.placeholder_tag_detail) + " " + this.tag.getName());
+        getInstanceViews();
 
         if (!loadedTagIds.contains(tag.getId())) {
             pullTagDetailData();
@@ -76,90 +68,31 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
             loadProposalsList(tag.getProposals());
         }
 
-        barChart = (BarChart) findViewById(R.id.chartTagDetail);
         pullChartData();
+
+        setTitle(captalizeString(this.tag.getName()));
+
+        setInstanceViews();
+    }
+
+    private void getInstanceViews() {
+        header = getLayoutInflater().inflate(R.layout.header_tag_detail, null, false);
+        tagNameTextView = (TextView) header.findViewById(R.id.tagNameTextView);
+        barChart = (BarChart) header.findViewById(R.id.barChart);
+    }
+
+    private void setInstanceViews(){
+        tagNameTextView.setText(getString(R.string.placeholder_tag_detail) + " " + this.tag.getName());
     }
 
     private void loadProposalsList(ArrayList<Proposal> proposals) {
 
         getSupportFragmentManager().beginTransaction().
-                replace(R.id.container, ListProposalFragment.newInstance(proposals)).
+                replace(R.id.container, ListProposalFragment.newInstance(proposals, header)).
                 commit();
     }
 
-    private void createChart(){
 
-        String[] stateNames = new String[chartData.size()];
-        int i = 0;
-        for (Pair<String, Integer> record : chartData) {
-            stateNames[i++] = record.first;
-        }
-
-        StateAxisValueFormatter stateAxisValueFormatter = new StateAxisValueFormatter(barChart,stateNames);
-
-        barChart.setDrawBarShadow(false);
-        barChart.setDrawValueAboveBar(true);
-        barChart.setPinchZoom(false);
-        barChart.setDrawGridBackground(true);
-        barChart.setScaleEnabled(false);
-        barChart.getDescription().setEnabled(false);
-        barChart.getAxisRight().setEnabled(false);
-        barChart.setTouchEnabled(false);
-
-        XAxis xl = barChart.getXAxis();
-        xl.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xl.setDrawAxisLine(true);
-        xl.setDrawGridLines(true);
-        xl.setGridLineWidth(0.3f);
-        xl.setTextSize(13f);
-        xl.setTextColor(Color.BLACK);
-        xl.setLabelCount(10);
-        xl.setValueFormatter(stateAxisValueFormatter);
-
-        YAxis yl = barChart.getAxisLeft();
-        yl.setDrawAxisLine(true);
-        yl.setDrawGridLines(false);
-        yl.setGridLineWidth(0.3f);
-        //yl.setTypeface(typeface);
-        //yl.setTextSize();
-        //yl.setTextColor(Color.GREEN);
-
-        setData(barChart);
-
-        // setting data
-        Legend l = barChart.getLegend();
-        l.setDirection(Legend.LegendDirection.LEFT_TO_RIGHT);
-        l.setFormSize(11f);
-        l.setXEntrySpace(4f);
-        //l.setTypeface(typeface);
-        // mChart.setDrawLegend(false);
-    }
-
-    private void setData(BarChart barChart) {
-
-        ArrayList<BarEntry> yVals = new ArrayList<>();
-
-        int count = chartData.size() > 10 ? 10 : chartData.size();
-        for (int i = 0; i < count; i++) { //10 top states
-            yVals.add(new BarEntry(i,chartData.get(i).second));
-        }
-
-        String nameLegend = "Quantidade de usos da tag " + this.tag.getName() + " por estado";
-        BarDataSet barDataSet = new BarDataSet(yVals, nameLegend);
-
-        int[] colors = new int[]{getResources().getColor(R.color.colorChart1),
-                getResources().getColor(R.color.colorChart2),
-                getResources().getColor(R.color.colorChart3),
-                getResources().getColor(R.color.colorChart4),
-                getResources().getColor(R.color.colorChart5)};
-
-        barDataSet.setColors(colors);
-
-        BarData data = new BarData(barDataSet);
-        data.setValueTextSize(12f);
-
-        barChart.setData(data);
-    }
 
     @Override
     public void onFragmentInteraction(Fragment fragment) {
@@ -213,7 +146,8 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
                 }
             }
 
-            createChart();
+            CharterGenerator.createBarChart(barChart,chartData,getString(R.string.name_chart_tag_detail),this);
+
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -229,7 +163,9 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    progressDialog.dismiss();
+                    if(progressDialog != null) {
+                        progressDialog.dismiss();
+                    }
                     loadProposalsList(proposals);
                 }
             });
@@ -239,5 +175,18 @@ public class TagDetailActivity extends AppCompatActivity implements OnFragmentIn
     @Override
     public void afterError(RequestResponseHandler handler, String message) {
 
+    }
+
+    @Override
+    public void onPause(){
+
+        super.onPause();
+        if(progressDialog != null) {
+            progressDialog.dismiss();
+        }
+    }
+
+    private String captalizeString(String stringToCaptalize){
+        return stringToCaptalize.substring(0, 1).toUpperCase() + stringToCaptalize.substring(1);
     }
 }

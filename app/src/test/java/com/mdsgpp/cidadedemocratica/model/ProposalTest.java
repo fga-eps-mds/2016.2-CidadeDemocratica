@@ -4,7 +4,6 @@ import android.test.AndroidTestCase;
 
 import org.junit.Test;
 
-import java.net.PortUnreachableException;
 import java.util.ArrayList;
 
 /**

@@ -17,17 +17,10 @@ import android.widget.ListView;
 
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.controller.ProposalListAdapter;
-import com.mdsgpp.cidadedemocratica.controller.ProposalListSectionAdapter;
 import com.mdsgpp.cidadedemocratica.controller.ProposalsList;
 import com.mdsgpp.cidadedemocratica.controller.TagginsList;
-import com.mdsgpp.cidadedemocratica.model.Entity;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
-import com.mdsgpp.cidadedemocratica.persistence.DataUpdateListener;
 import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
-import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
-import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
-import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
-import com.mdsgpp.cidadedemocratica.requester.Requester;
 
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
@@ -121,14 +114,17 @@ public class ListProposalFragment extends Fragment {
         proposalListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Proposal proposalClicked = (Proposal)proposalListAdapter.getItem(i);
-                Long id = proposalClicked.getId();
-                String proposalName = proposalClicked.getTitle();
+                if (header!=null){
+                    i--;
+                }
+                if (i>=0){
+                    Proposal proposalClicked = (Proposal)proposalListAdapter.getItem(i);
+                    Long id = proposalClicked.getId();
 
-                Intent intent = new Intent(getActivity().getApplicationContext(),TagginsList.class);
-                intent.putExtra("proposalId", id);
-                startActivity(intent);
-
+                    Intent intent = new Intent(getActivity().getApplicationContext(),TagginsList.class);
+                    intent.putExtra("proposalId", id);
+                    startActivity(intent);
+                }
             }
         });
 
