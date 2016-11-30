@@ -2,22 +2,14 @@ package com.mdsgpp.cidadedemocratica.controller;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.BarChart;
 import com.mdsgpp.cidadedemocratica.R;
-import com.mdsgpp.cidadedemocratica.model.Proposal;
-import com.mdsgpp.cidadedemocratica.model.Tag;
-import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
-import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
@@ -29,7 +21,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public class SelectStateActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, RequestUpdateListener {
 
@@ -102,7 +93,7 @@ public class SelectStateActivity extends AppCompatActivity implements AdapterVie
         Bundle bundle = new Bundle();
         bundle.putIntegerArrayList(ChartActivity.keyValue,chartDataValue);
         bundle.putStringArrayList(ChartActivity.keyName,chartDataName);
-        bundle.putString(ChartActivity.keyTitle,stateSelected);
+        bundle.putString(ChartActivity.keyTitle,"Tags mais utilizadas no " + stateSelected);
         Intent intent = new Intent(getApplicationContext(), ChartActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);

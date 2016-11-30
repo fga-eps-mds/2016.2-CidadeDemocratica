@@ -14,7 +14,6 @@ import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
-import com.mdsgpp.cidadedemocratica.requester.TagRequestResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -17,17 +17,10 @@ import android.widget.ListView;
 
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.controller.ProposalListAdapter;
-import com.mdsgpp.cidadedemocratica.controller.ProposalListSectionAdapter;
 import com.mdsgpp.cidadedemocratica.controller.ProposalsList;
 import com.mdsgpp.cidadedemocratica.controller.TagginsList;
-import com.mdsgpp.cidadedemocratica.model.Entity;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
-import com.mdsgpp.cidadedemocratica.persistence.DataUpdateListener;
 import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
-import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
-import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
-import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
-import com.mdsgpp.cidadedemocratica.requester.Requester;
 
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;

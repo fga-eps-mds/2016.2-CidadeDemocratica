@@ -8,32 +8,26 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
 import com.mdsgpp.cidadedemocratica.External.SlidingTabLayout;
 import com.mdsgpp.cidadedemocratica.R;
 
 import com.mdsgpp.cidadedemocratica.model.Proposal;
-import com.mdsgpp.cidadedemocratica.model.User;
 import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
 import com.mdsgpp.cidadedemocratica.view.ListProposalFragment;
-import com.mdsgpp.cidadedemocratica.view.ProposalsNearbyListFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;

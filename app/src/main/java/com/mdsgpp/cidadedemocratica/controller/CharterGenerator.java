@@ -1,13 +1,11 @@
 package com.mdsgpp.cidadedemocratica.controller;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.util.Pair;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.Chart;
-import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;

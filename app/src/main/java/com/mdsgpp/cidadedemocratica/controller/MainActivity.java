@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.mdsgpp.cidadedemocratica.R;
-import com.mdsgpp.cidadedemocratica.push.MyFirebaseInstanceIdService;
 import com.mdsgpp.cidadedemocratica.requester.AuthenticateRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;

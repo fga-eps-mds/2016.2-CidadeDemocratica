@@ -4,16 +4,13 @@ package com.mdsgpp.cidadedemocratica.view;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,19 +18,14 @@ import android.widget.TextView;
 import com.mdsgpp.cidadedemocratica.R;
 import com.mdsgpp.cidadedemocratica.controller.FeedbackManager;
 import com.mdsgpp.cidadedemocratica.controller.ProposalListAdapter;
-import com.mdsgpp.cidadedemocratica.controller.ProposalsList;
 import com.mdsgpp.cidadedemocratica.controller.TagginsList;
-import com.mdsgpp.cidadedemocratica.model.Entity;
 import com.mdsgpp.cidadedemocratica.model.Proposal;
-import com.mdsgpp.cidadedemocratica.persistence.DataUpdateListener;
-import com.mdsgpp.cidadedemocratica.persistence.EntityContainer;
 import com.mdsgpp.cidadedemocratica.requester.ProposalRequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestResponseHandler;
 import com.mdsgpp.cidadedemocratica.requester.RequestUpdateListener;
 import com.mdsgpp.cidadedemocratica.requester.Requester;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
