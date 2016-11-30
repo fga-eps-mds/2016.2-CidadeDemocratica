@@ -69,7 +69,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     public void setFavoriteProposals(ArrayList<Proposal> favoriteProposals) {
         this.favoriteProposals = favoriteProposals;
-
+        tabAll.setFavoriteProposals(favoriteProposals);
     }
 
     @Override

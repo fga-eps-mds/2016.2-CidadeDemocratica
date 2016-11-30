@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -36,6 +37,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 
@@ -52,9 +54,11 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
     private String stateUser;
     private ArrayList<Proposal> proposalsByState;
     private ArrayList<Proposal> favoriteProposals = new ArrayList<>();
+    EntityContainer<Proposal> proposalsContainer = EntityContainer.getInstance(Proposal.class);
 
     private final String urlApiGetState = "http://api.postmon.com.br/v1/cep/";
     private final String proposalStateKey = "federal_unity_code";
+    private String favoriteProposalsKey = "favoriteProposalsKey";
     private ViewPager pager;
 
     @Override
@@ -63,7 +67,7 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         setContentView(R.layout.activity_proposals_list);
         setTitle(R.string.texto_Proposals);
 
-        if (EntityContainer.getInstance(Proposal.class).getAll().isEmpty()) {
+        if (proposalsContainer.getAll().isEmpty()) {
             pullProposalsData();
         }
         else {
@@ -71,6 +75,28 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        SharedPreferences preferences = this.getSharedPreferences("sharedPreferences", Context.MODE_PRIVATE);
+        Set<String> favoriteIds = preferences.getStringSet(favoriteProposalsKey, null);
+
+        if (favoriteIds != null) {
+
+            ArrayList<Proposal> favoriteProposals = new ArrayList<>();
+            for (String id : favoriteIds) {
+                long longId = Long.parseLong(id);
+                Proposal proposal = proposalsContainer.getForId(longId);
+
+                if (proposal != null) {
+                    favoriteProposals.add(proposal);
+                }
+            }
+            setFavoriteProposals(favoriteProposals);
+        }
+
+    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
@@ -289,7 +315,7 @@ public class ProposalsList extends AppCompatActivity implements ListProposalFrag
         this.favoriteProposals.clear();
         this.favoriteProposals.addAll(favoriteProposals);
         if (pager != null) {
-            ViewPagerAdapter pagerAdapter = ((ViewPagerAdapter) pager.getAdapter());
+            ViewPagerAdapter pagerAdapter = adapter;
             if (pagerAdapter != null) {
                 pagerAdapter.setFavoriteProposals(favoriteProposals);
             }
