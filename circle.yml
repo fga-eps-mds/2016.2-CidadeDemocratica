@@ -47,7 +47,7 @@ deployment:
   production: # just a label; label names are completely up to you
     branch: production
     commands:
-      - fastlane release
+      - fastlane deploy
 
   beta:
     branch: beta
