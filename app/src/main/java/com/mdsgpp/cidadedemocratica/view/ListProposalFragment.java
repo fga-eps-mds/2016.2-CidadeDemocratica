@@ -166,8 +166,10 @@ public class ListProposalFragment extends Fragment {
 
     private ArrayList<Object> getAdapterData() {
         ArrayList<Object> adapterData = new ArrayList<>();
-        adapterData.add("Favoritas");
-        adapterData.addAll(favoriteProposals);
+        if(favoriteProposals!=null){
+            adapterData.add("Favoritas");
+            adapterData.addAll(favoriteProposals);
+        }
         adapterData.add("Todas");
         adapterData.addAll(proposals);
 
